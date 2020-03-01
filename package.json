@@ -1,0 +1,31 @@
+{
+  "name": "tool-bench",
+  "version": "1.0.0",
+  "description": "Just a web page of some handy utilities",
+  "repository": "git@github.com:nobody-65534/ToolBench.git",
+  "author": "4piu <16668056+4piu@users.noreply.github.com>",
+  "license": "UNLISENCED",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode production --module-bind js=babel-loader",
+    "start": "webpack-dev-server --mode development --open"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "html-webpack-plugin": "^3.2.0",
+    "html-loader": "^0.5.5",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.13.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
