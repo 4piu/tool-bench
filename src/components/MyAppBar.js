@@ -63,32 +63,36 @@ const styles = theme => ({
 });
 
 class MyAppBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            title: "Tool Bench",
-            isHome: true
-        }
-    }
+    static propTypes = {
+        title: PropTypes.string.isRequired,
+        isHome: PropTypes.bool.isRequired,
+        changeActivity: PropTypes.func.isRequired
+    };
+
+    handleBackClick = () => {
+        this.props.changeActivity('home');
+    };
+
     render() {
         const {classes} = this.props;
         return (
             <div className={classes.root}>
                 <AppBar position="static">
                     <Toolbar>
-                        {!this.state.isHome &&
+                        {!this.props.isHome &&
                         <IconButton
                             edge="start"
                             className={classes.menuButton}
                             color="inherit"
                             aria-label="open drawer"
+                            onClick={this.handleBackClick}
                         >
                             <ArrowBackIcon/>
                         </IconButton>}
                         <Typography className={classes.title} variant="h6" noWrap>
-                            {this.state.title}
+                            {this.props.title}
                         </Typography>
-                        {this.state.isHome &&
+                        {this.props.isHome &&
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon/>
@@ -108,9 +112,5 @@ class MyAppBar extends React.Component {
         );
     }
 }
-
-MyAppBar.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(MyAppBar);
