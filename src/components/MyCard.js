@@ -8,8 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import WrenchIcon from '../assets/img/wrench.svg';
 
 const styles = theme => ({
-    root: {
-    },
     banner: {
         height: 100,
         backgroundColor: props => props.backgroundColor,
@@ -43,7 +41,7 @@ class MyCard extends React.Component {
         const {classes} = this.props;
 
         return (
-            <Card className={classes.root}>
+            <Card>
                 <CardActionArea>
                     <div className={classes.banner}>
                         <img className={classes.icon} src={this.props.image} alt={this.props.title}/>

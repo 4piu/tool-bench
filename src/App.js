@@ -1,6 +1,5 @@
 import React from "react";
 import CssBaseline from '@material-ui/core/CssBaseline';
-import MyAppBar from "./components/MyAppBar";
 import {Helmet} from "react-helmet";
 import logo from "./assets/img/logo.png";
 import Layout from "./components/Layout";
@@ -8,7 +7,7 @@ import Layout from "./components/Layout";
 const tools = [
     {
         name: "uuid-generator",
-        file: () => import("./components/tools/UuidGenerator.js"),
+        loader: () => import("./components/tools/UuidGenerator.js"),
         title: "UUID Generator",
         description: "Generate UUIDv1 & UUIDv4",
         icon: undefined,
@@ -16,11 +15,32 @@ const tools = [
     },
     {
         name: "password-generator",
-        file: () => import("./components/tools/PasswordGenerator.js"),
+        loader: () => import("./components/tools/PasswordGenerator.js"),
         title: "Password Generator",
         description: "Generate strong password",
         icon: undefined,
         color: 'grey'
+    },
+    {
+        name: "test-fail",
+        loader: () => {
+            const fakeModule = 'YouShallNotPass';
+            return import(fakeModule);
+        },
+        title: "I will fail",
+        description: "Test purpose component",
+        icon: undefined,
+        color: 'black'
+    },
+    {
+        name: "test-timeout",
+        loader: () => {
+            return new Promise((resolve) => {});
+        },
+        title: "I will timeout",
+        description: "Test purpose component",
+        icon: undefined,
+        color: 'black'
     }
 ];
 
@@ -59,10 +79,6 @@ export default class App extends React.Component {
 
                 <CssBaseline/>
 
-                <MyAppBar
-                    title={this.state.activity === 'home' ? 'Tool bench' : tools.filter(x => (x.name === this.state.activity))[0].title}
-                    isHome={this.state.activity === 'home'}
-                    changeActivity={this.changeActivity}/>
                 <Layout
                     activityList={tools}
                     activity={this.state.activity}

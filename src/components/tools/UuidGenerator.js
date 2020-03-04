@@ -1,8 +1,24 @@
 import React from "react";
+import PropTypes from "prop-types";
+import MyAppBar from "../MyAppBar";
 
 class UuidGenerator extends React.Component {
+
+    static propTypes = {
+        title: PropTypes.string.isRequired,
+        changeActivity: PropTypes.func.isRequired
+    };
+
     render() {
-        return <div>Alan please add details</div>;
+        return (
+            <React.Fragment>
+                <MyAppBar
+                    title={this.props.title}
+                    isHome={false}
+                    changeActivity={this.props.changeActivity}/>
+                <div>Alan please add details</div>
+            </React.Fragment>
+        );
     }
 }
 

@@ -1,12 +1,11 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import Backdrop from "@material-ui/core/Backdrop";
 import MyCard from "./MyCard";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Loadable from "react-loadable";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import path from "path";
+import MyAppBar from "./MyAppBar";
+import MyAlert from "./MyAlert";
 
 const styles = theme => ({
     root: {
@@ -28,45 +27,83 @@ class Layout extends React.Component {
 
     render() {
         const {classes} = this.props;
+        const props = this.props;
 
-        if (this.props.activity === 'home') return (
-            <Grid container spacing={2} className={classes.root}>
-                {this.props.activityList.map(item => (
-                    <Grid key={item.name}
-                          data-id={item.name}
-                          onClick={this.handleCardClick}
-                          item xs={12} sm={6} md={4} lg={3} xl={2}>
-                        <MyCard
-                            title={item.title}
-                            description={item.description}
-                            image={item.icon}
-                            backgroundColor={item.color}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+        // Show card list
+        if (props.activity === 'home') return (
+            <React.Fragment>
+                <MyAppBar
+                    title={"Tool bench"}
+                    isHome={true}
+                    changeActivity={props.changeActivity}/>
+                <Grid container spacing={2} className={classes.root}>
+                    {this.props.activityList.map(item => (
+                        <Grid key={item.name}
+                              data-id={item.name}
+                              onClick={this.handleCardClick}
+                              item xs={12} sm={6} md={4} lg={3} xl={2}>
+                            <MyCard
+                                title={item.title}
+                                description={item.description}
+                                image={item.icon}
+                                backgroundColor={item.color}
+                                changeActivity={props.changeActivity}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            </React.Fragment>
         );
 
+        // Dynamic load card content
+        const alertCancelHandler = () => {
+            this.props.changeActivity('home');
+        };
+        // Error handler
         const Loading = (props) => {
             if (props.error) {
                 console.error(props.error);
-                return <div>failed to load</div>
-            } else if (props.pastDelay) {
-                return <Backdrop open={true}><CircularProgress color="inherit"/></Backdrop>;
+                return <MyAlert
+                    title={'Error'}
+                    description={'Error occurred: ' + props.error.message}
+                    textCancel={'Close'}
+                    funcCancel={alertCancelHandler}
+                />
             } else if (props.timedOut) {
-                console.error(props.timedOut);
-                return <div>failed to load</div>
+                return <MyAlert
+                    title={'Loading'}
+                    description={'Component is still loading... But may be you should retry'}
+                    textCancel={'Cancel'}
+                    funcCancel={alertCancelHandler}
+                    showSpinner={true}
+                />;
+            } else if (props.pastDelay) {
+                return <MyAlert
+                    title={'Loading'}
+                    description={'Please wait...'}
+                    textCancel={'Cancel'}
+                    funcCancel={alertCancelHandler}
+                    showSpinner={true}
+                />;
             } else {
                 return null;
             }
         };
-        const LoadableComponent = Loadable({
-            loader: this.props.activityList.filter(x => (x.name === this.props.activity))[0].file,
+        // Async load
+        const Tool = Loadable({
+            loader: props.activityList.filter(({name}) => (name === props.activity))[0].loader,
+            render(loaded) {
+                const Component = loaded.default;
+                return <Component
+                    title={props.activityList.filter(x => (x.name === props.activity))[0].title}
+                    changeActivity={props.changeActivity}
+                />;
+            },
             loading: Loading,
-            delay: 500,
+            delay: 300,
             timeout: 10000
         });
-        return <LoadableComponent/>
+        return <Tool/>
     }
 }
 
