@@ -76,7 +76,7 @@ const randomCharacter = async (type, allowConfusing, useCsprng) => {
         }
         case 'symbol': {
             for (; ;) {
-                const char = charSet.symbol[await randomNumber(0, charSet.digit.length - 1, useCsprng)];
+                const char = charSet.symbol[await randomNumber(0, charSet.symbol.length - 1, useCsprng)];
                 if (allowConfusing || !charSet.confusingChar.includes(char)) return char;
             }
         }
