@@ -13,7 +13,7 @@ const tools = [
         title: "UUID Generator",
         description: "Generate UUIDv1 & UUIDv4",
         icon: UuidIcon,
-        color: '#333'
+        color: '#b388ff'
     },
     {
         name: "password-generator",
@@ -21,7 +21,7 @@ const tools = [
         title: "Password Generator",
         description: "Generate strong password",
         icon: LockIcon,
-        color: '#333'
+        color: '#4db6ac'
     },
     {
         name: "test-fail",

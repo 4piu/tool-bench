@@ -14,8 +14,8 @@ const styles = theme => ({
         position: 'relative'
     },
     icon: {
-        width: 50,
-        height: 50,
+        width: 55,
+        height: 55,
         position: 'absolute',
         top: '50%',
         left: '50%',
