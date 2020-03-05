@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import WrenchIcon from '../assets/img/wrench.svg';
+import WrenchIcon from '../assets/img/icon_wrench.svg';
 
 const styles = theme => ({
     banner: {

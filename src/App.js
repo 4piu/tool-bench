@@ -2,6 +2,8 @@ import React from "react";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {Helmet} from "react-helmet";
 import logo from "./assets/img/logo.png";
+import UuidIcon from "./assets/img/icon_uuid.svg";
+import LockIcon from "./assets/img/icon_lock.svg";
 import Layout from "./components/Layout";
 
 const tools = [
@@ -10,16 +12,16 @@ const tools = [
         loader: () => import("./components/tools/UuidGenerator.js"),
         title: "UUID Generator",
         description: "Generate UUIDv1 & UUIDv4",
-        icon: undefined,
-        color: 'orange'
+        icon: UuidIcon,
+        color: '#333'
     },
     {
         name: "password-generator",
         loader: () => import("./components/tools/PasswordGenerator.js"),
         title: "Password Generator",
         description: "Generate strong password",
-        icon: undefined,
-        color: 'grey'
+        icon: LockIcon,
+        color: '#333'
     },
     {
         name: "test-fail",
@@ -60,7 +62,10 @@ export default class App extends React.Component {
     }
 
     changeActivity = (newActivity) => {
-        this.setState({activity: newActivity});
+        setTimeout(
+            () => this.setState({activity: newActivity}),
+            newActivity === 'home'? 0 : 200
+        )
     };
 
     render() {
