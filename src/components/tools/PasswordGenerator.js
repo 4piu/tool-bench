@@ -2,7 +2,6 @@ import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import MyAppBar from "../MyAppBar";
-import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -23,6 +22,7 @@ import csprng from "random-number-csprng";
 import regeneratorRuntime from "regenerator-runtime";
 import {Tooltip} from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
+import Container from "@material-ui/core/Container";
 
 const charSet = {
     upperCase: [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
@@ -33,15 +33,13 @@ const charSet = {
 };
 
 const styles = theme => ({
-    GridContainer: {
-        padding: theme.spacing(3)
-    },
-    GridItem: {
+    Container: {
+        padding: theme.spacing(3),
         '& > *': {
             marginBottom: theme.spacing(3)
         }
     },
-    GridItemButtonContainer: {
+    ButtonContainer: {
         '& > *': {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(2)
@@ -195,109 +193,104 @@ class PasswordGenerator extends React.Component {
                     isHome={false}
                     changeActivity={this.props.changeActivity}/>
                 {/** Main view */}
-                <Grid container className={classes.GridContainer}>
-                    {/** Option checkbox */}
-                    <Grid item xs={12} className={classes.GridItem}>
-                        <FormControl error={this.state.checkboxInvalid} component="fieldset">
-                            <FormLabel component="legend">Characters</FormLabel>
-                            <FormGroup>
-                                <Tooltip title={charSet.upperCase.join('')}
-                                         placement={"right"} arrow>
-                                    <FormControlLabel
-                                        control={<Checkbox
-                                            checked={this.state.upperCaseChecked}
-                                            onChange={this.checkboxCharactersHandler('upperCaseChecked')}/>}
-                                        label="Upper case letters"
-                                    />
-                                </Tooltip>
-                                <Tooltip title={charSet.lowerCase.join('')}
-                                         placement={"right"} arrow>
-                                    <FormControlLabel
-                                        control={<Checkbox
-                                            checked={this.state.lowerCaseChecked}
-                                            onChange={this.checkboxCharactersHandler('lowerCaseChecked')}/>}
-                                        label="Lower case letters"
-                                    />
-                                </Tooltip>
-                                <Tooltip title={charSet.digit.join('')}
-                                         placement={"right"} arrow>
-                                    <FormControlLabel
-                                        control={<Checkbox
-                                            checked={this.state.digitChecked}
-                                            onChange={this.checkboxCharactersHandler('digitChecked')}/>}
-                                        label="Digits"
-                                    />
-                                </Tooltip>
-                                <Tooltip title={charSet.symbol.join('')}
-                                         placement={"right"} arrow>
-                                    <FormControlLabel
-                                        control={<Checkbox
-                                            checked={this.state.symbolChecked}
-                                            onChange={this.checkboxCharactersHandler('symbolChecked')}/>}
-                                        label="Symbols"
-                                    />
-                                </Tooltip>
-                            </FormGroup>
-                            {this.state.checkboxInvalid &&
-                            <FormHelperText>Must select at least one character type</FormHelperText>}
-                        </FormControl>
-                        <br/>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Options</FormLabel>
-                            <FormGroup>
-                                <Tooltip title={charSet.confusingChar.join('')}
-                                         placement={"right"} arrow>
-                                    <FormControlLabel
-                                        control={<Switch
-                                            checked={this.state.confusingCharChecked}
-                                            onChange={this.checkboxCharactersHandler('confusingCharChecked')}/>}
-                                        label="Allow confusing characters"
-                                    />
-                                </Tooltip>
-                                <Tooltip title={"Secure but much slower"} placement={"right"} arrow>
-                                    <FormControlLabel control={<Switch
-                                        checked={this.state.useCsprngChecked}
-                                        onChange={this.checkboxCharactersHandler('useCsprngChecked')}/>}
-                                                      label="Use CSPRNG"
-                                    />
-                                </Tooltip>
-                            </FormGroup>
-                        </FormControl>
-                        <br/>
-                        <FormControl error={this.state.inputPasswordLengthInvalid}>
-                            <InputLabel htmlFor="input-length">Password length</InputLabel>
-                            <Input
-                                id="input-length"
-                                aria-describedby={this.state.inputPasswordLengthInvalid ? "input-number-error" : null}
-                                onChange={this.inputNumberHandler}
-                                value={String(this.state.inputPasswordLength)}
-                                inputProps={{
-                                    type: 'number',
-                                    min: '6',
-                                    step: '1'
-                                }}
-                            />
-                            {this.state.inputPasswordLengthInvalid &&
-                            <FormHelperText id="input-number-error">Must be a integer not small than 6</FormHelperText>}
-                        </FormControl>
-                    </Grid>
-                    {/** Output textarea */}
-                    <Grid item xs={12} sm={8} md={6} lg={4} xl={3} className={classes.GridItem}>
-                        <TextField
-                            id="textarea-password-output"
-                            label="Password"
-                            multiline
-                            rowsMax={10}
-                            fullWidth={true}
-                            variant="outlined"
-                            value={this.state.password}
+                <Container className={classes.Container} maxWidth={"sm"}>
+                    <FormControl error={this.state.checkboxInvalid} component="fieldset">
+                        <FormLabel component="legend">Characters</FormLabel>
+                        <FormGroup>
+                            <Tooltip title={charSet.upperCase.join('')}
+                                     placement={"right"} arrow>
+                                <FormControlLabel
+                                    control={<Checkbox
+                                        checked={this.state.upperCaseChecked}
+                                        onChange={this.checkboxCharactersHandler('upperCaseChecked')}/>}
+                                    label="Upper case letters"
+                                />
+                            </Tooltip>
+                            <Tooltip title={charSet.lowerCase.join('')}
+                                     placement={"right"} arrow>
+                                <FormControlLabel
+                                    control={<Checkbox
+                                        checked={this.state.lowerCaseChecked}
+                                        onChange={this.checkboxCharactersHandler('lowerCaseChecked')}/>}
+                                    label="Lower case letters"
+                                />
+                            </Tooltip>
+                            <Tooltip title={charSet.digit.join('')}
+                                     placement={"right"} arrow>
+                                <FormControlLabel
+                                    control={<Checkbox
+                                        checked={this.state.digitChecked}
+                                        onChange={this.checkboxCharactersHandler('digitChecked')}/>}
+                                    label="Digits"
+                                />
+                            </Tooltip>
+                            <Tooltip title={charSet.symbol.join('')}
+                                     placement={"right"} arrow>
+                                <FormControlLabel
+                                    control={<Checkbox
+                                        checked={this.state.symbolChecked}
+                                        onChange={this.checkboxCharactersHandler('symbolChecked')}/>}
+                                    label="Symbols"
+                                />
+                            </Tooltip>
+                        </FormGroup>
+                        {this.state.checkboxInvalid &&
+                        <FormHelperText>Must select at least one character type</FormHelperText>}
+                    </FormControl>
+                    <br/>
+                    <FormControl component="fieldset">
+                        <FormLabel component="legend">Options</FormLabel>
+                        <FormGroup>
+                            <Tooltip title={charSet.confusingChar.join('')}
+                                     placement={"right"} arrow>
+                                <FormControlLabel
+                                    control={<Switch
+                                        checked={this.state.confusingCharChecked}
+                                        onChange={this.checkboxCharactersHandler('confusingCharChecked')}/>}
+                                    label="Allow confusing characters"
+                                />
+                            </Tooltip>
+                            <Tooltip title={"Secure but much slower"} placement={"right"} arrow>
+                                <FormControlLabel control={<Switch
+                                    checked={this.state.useCsprngChecked}
+                                    onChange={this.checkboxCharactersHandler('useCsprngChecked')}/>}
+                                                  label="Use CSPRNG"
+                                />
+                            </Tooltip>
+                        </FormGroup>
+                    </FormControl>
+                    <br/>
+                    <FormControl error={this.state.inputPasswordLengthInvalid}>
+                        <InputLabel htmlFor="input-length">Password length</InputLabel>
+                        <Input
+                            id="input-length"
+                            aria-describedby={this.state.inputPasswordLengthInvalid ? "input-number-error" : null}
+                            onChange={this.inputNumberHandler}
+                            value={String(this.state.inputPasswordLength)}
                             inputProps={{
-                                spellCheck: false
+                                type: 'number',
+                                min: '6',
+                                step: '1'
                             }}
                         />
-                    </Grid>
-                    {/** Buttons */}
-                    <Grid className={classes.GridItemButtonContainer} item xs={12}>
+                        {this.state.inputPasswordLengthInvalid &&
+                        <FormHelperText id="input-number-error">Must be a integer not small than 6</FormHelperText>}
+                    </FormControl>
+                    <br/>
+                    <TextField
+                        id="textarea-password-output"
+                        label="Password"
+                        multiline
+                        rowsMax={10}
+                        fullWidth={true}
+                        variant="outlined"
+                        value={this.state.password}
+                        inputProps={{
+                            spellCheck: false
+                        }}
+                    />
+                    <br/>
+                    <div className={classes.ButtonContainer}>
                         <Button variant="contained" color={"primary"}
                                 disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
                                 onClick={this.buttonGenerateHandler}
@@ -313,8 +306,8 @@ class PasswordGenerator extends React.Component {
                                 onClick={this.buttonDownloadHandler}
                                 startIcon={<GetAppIcon/>}
                         >Download</Button>
-                    </Grid>
-                </Grid>
+                    </div>
+                </Container>
             </>
         );
     }

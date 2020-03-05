@@ -8,7 +8,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import {withStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
@@ -22,21 +21,20 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import DoneIcon from '@material-ui/icons/Done';
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
+import Container from "@material-ui/core/Container";
 
 const NUMBER_THRESHOLD = 1000;
 const DEFAULT_NUMBER = 1;
 const DEFAULT_UUID_VERSION = 4;
 
 const styles = theme => ({
-    GridContainer: {
-        padding: theme.spacing(3)
-    },
-    GridItem: {
+    Container: {
+        padding: theme.spacing(3),
         '& > *': {
             marginBottom: theme.spacing(3)
         }
     },
-    GridItemButtonContainer: {
+    ButtonContainer: {
         '& > *': {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(2)
@@ -174,7 +172,7 @@ class UuidGenerator extends React.Component {
         const isValid = isPositiveInteger(inputValue);
         const nextState = {
             inputNumberInvalid: !isValid,
-            inputNumber: isValid? parseInt(inputValue) : null
+            inputNumber: isValid ? parseInt(inputValue) : null
         };
         this.setState(nextState);
     };
@@ -217,9 +215,8 @@ class UuidGenerator extends React.Component {
                     isHome={false}
                     changeActivity={this.props.changeActivity}/>
                 {/** Main view */}
-                <Grid container className={classes.GridContainer}>
-                    {/** UUID version radio input */}
-                    <Grid item xs={12} className={classes.GridItem}>
+                <Container className={classes.Container} maxWidth={"sm"}>
+                    <>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">UUID version</FormLabel>
                             <RadioGroup
@@ -234,11 +231,9 @@ class UuidGenerator extends React.Component {
                                 <FormControlLabel value="5" control={<Radio/>} label="UUID v5"/>
                             </RadioGroup>
                         </FormControl>
-                    </Grid>
-                    {/** Option inputs and output*/}
-                    <Grid item xs={12} sm={8} md={6} lg={4} xl={3} className={classes.GridItem}>
-                        <>
-                            {(this.state.inputVersion === 1 || this.state.inputVersion === 4) &&
+                        <br/>
+                        {// Number input
+                            (this.state.inputVersion === 1 || this.state.inputVersion === 4) &&
                             <FormControl error={this.isInvalidInput()}>
                                 <InputLabel htmlFor="input-amount">Number</InputLabel>
                                 <Input
@@ -255,7 +250,8 @@ class UuidGenerator extends React.Component {
                                 {this.isInvalidInput() &&
                                 <FormHelperText id="input-number-error">Must be a positive integer</FormHelperText>}
                             </FormControl>}
-                            {(this.state.inputVersion === 3 || this.state.inputVersion === 5) &&
+                        {// Namespace and name input
+                            (this.state.inputVersion === 3 || this.state.inputVersion === 5) &&
                             <>
                                 <FormControl fullWidth={true} error={this.state.inputNamespaceInvalid}>
                                     <InputLabel htmlFor="input-namespace">Namespace</InputLabel>
@@ -274,6 +270,7 @@ class UuidGenerator extends React.Component {
                                     {this.state.inputNamespaceInvalid &&
                                     <FormHelperText id="input-namespace-error">Must be UUID</FormHelperText>}
                                 </FormControl>
+                                <br/>
                                 <FormControl fullWidth={true}>
                                     <InputLabel htmlFor="input-name">Name</InputLabel>
                                     <Input
@@ -291,51 +288,49 @@ class UuidGenerator extends React.Component {
                                     />
                                 </FormControl>
                             </>
-                            }
-                        </>
-                        <>
-                            <TextField
-                                id="textarea-uuid-output"
-                                label="UUID"
-                                disabled={this.state.uuidList.length > NUMBER_THRESHOLD}
-                                multiline
-                                rowsMax={20}
-                                fullWidth={true}
-                                variant="outlined"
-                                value={(this.state.uuidList.length > NUMBER_THRESHOLD) ? "Please download instead" : this.state.uuidList.join('\n')}
-                                inputProps={{
-                                    spellCheck: false
-                                }}
-                            />
-                        </>
-                    </Grid>
-                    {/** Buttons */}
-                    <Grid className={classes.GridItemButtonContainer} item xs={12}>
-                        <div className={classes.ButtonGenerateWrapper}>
-                            <Button variant="contained" color={"primary"}
-                                    disabled={this.isInvalidInput() || this.state.generating}
-                                    onClick={this.buttonGenerateHandler}
-                                    startIcon={<PlayArrowIcon/>}
-                            >Generate</Button>
-                            {this.state.generating &&
-                            <CircularProgress size={24} className={classes.ButtonGenerateProgress}/>}
+                        }
+                        <br/>
+                        <TextField
+                            id="textarea-uuid-output"
+                            label="UUID"
+                            disabled={this.state.uuidList.length > NUMBER_THRESHOLD}
+                            multiline
+                            rowsMax={10}
+                            fullWidth={true}
+                            variant="outlined"
+                            value={(this.state.uuidList.length > NUMBER_THRESHOLD) ? "Please download instead" : this.state.uuidList.join('\n')}
+                            inputProps={{
+                                spellCheck: false
+                            }}
+                        />
+                        <br/>
+                        <div className={classes.ButtonContainer}>
+                            <div className={classes.ButtonGenerateWrapper}>
+                                <Button variant="contained" color={"primary"}
+                                        disabled={this.isInvalidInput() || this.state.generating}
+                                        onClick={this.buttonGenerateHandler}
+                                        startIcon={<PlayArrowIcon/>}
+                                >Generate</Button>
+                                {this.state.generating &&
+                                <CircularProgress size={24} className={classes.ButtonGenerateProgress}/>}
+                            </div>
+                            <div className={classes.ButtonGenerateWrapper}>
+                                <Button variant="contained"
+                                        disabled={this.isInvalidInput() || this.state.uuidList.length > NUMBER_THRESHOLD}
+                                        onClick={this.buttonCopyHandler}
+                                        startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
+                                >{this.state.copied ? 'Copied' : 'Copy'}</Button>
+                            </div>
+                            <div className={classes.ButtonGenerateWrapper}>
+                                <Button variant="contained"
+                                        disabled={this.isInvalidInput()}
+                                        onClick={this.buttonDownloadHandler}
+                                        startIcon={<GetAppIcon/>}
+                                >Download</Button>
+                            </div>
                         </div>
-                        <div className={classes.ButtonGenerateWrapper}>
-                            <Button variant="contained"
-                                    disabled={this.isInvalidInput() || this.state.uuidList.length > NUMBER_THRESHOLD}
-                                    onClick={this.buttonCopyHandler}
-                                    startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
-                            >{this.state.copied ? 'Copied' : 'Copy'}</Button>
-                        </div>
-                        <div className={classes.ButtonGenerateWrapper}>
-                            <Button variant="contained"
-                                    disabled={this.isInvalidInput()}
-                                    onClick={this.buttonDownloadHandler}
-                                    startIcon={<GetAppIcon/>}
-                            >Download</Button>
-                        </div>
-                    </Grid>
-                </Grid>
+                    </>
+                </Container>
             </>
         );
     }
