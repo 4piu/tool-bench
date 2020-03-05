@@ -13,14 +13,15 @@ import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import {downloadText} from "../../utils/DownloadService";
 import {v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5} from "uuid";
-// noinspection ES6UnusedImports
-import regeneratorRuntime from "regenerator-runtime";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DoneIcon from '@material-ui/icons/Done';
+// noinspection ES6UnusedImports
+import regeneratorRuntime from "regenerator-runtime";
 
 const NUMBER_THRESHOLD = 1000;
 const DEFAULT_NUMBER = 1;
@@ -55,6 +56,26 @@ const styles = theme => ({
     }
 });
 
+const randomUuid = async (version, number, name, namespace) => {
+    // console.debug(`${version}, ${number}, ${name}, ${namespace}`);
+    switch (version) {
+        case 1: {
+            const ret = [];
+            for (let i = 0; i < number; i++) ret.push(uuidV1());
+            return ret;
+        }
+        case 3:
+            return [uuidV3(name, namespace)];
+        case 4: {
+            const ret = [];
+            for (let i = 0; i < number; i++) ret.push(uuidV4());
+            return ret;
+        }
+        case 5:
+            return [uuidV5(name, namespace)];
+    }
+};
+
 class UuidGenerator extends React.Component {
 
     static propTypes = {
@@ -65,39 +86,38 @@ class UuidGenerator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            inputVersion: DEFAULT_UUID_VERSION,
+            inputVersion: null,
             inputNumberInvalid: false,
-            inputNumber: DEFAULT_NUMBER,
+            inputNumber: "",
             inputNamespaceInvalid: false,
-            inputNamespace: null,
+            inputNamespace: "",
             inputName: "",
             generating: false,
             copied: false,
             uuidList: []
         };
+        // console.debug('init')
     }
 
     async componentDidMount() {
-        // TODO read saved instance
-        this.setState({
-            uuidList: await this.randomUuid(DEFAULT_UUID_VERSION, DEFAULT_NUMBER),
-            inputNamespace: (await this.randomUuid(4, 1))[0]
-        });
+        let savedInstance;
+        try {
+            savedInstance = JSON.parse(localStorage.getItem('uuid-generator'));
+        } catch (e) {
+            console.error('Fail to load saved instance');
+        }
+        this.setState(savedInstance ||
+            {
+                inputVersion: DEFAULT_UUID_VERSION,
+                inputNumber: DEFAULT_NUMBER,
+                uuidList: await randomUuid(DEFAULT_UUID_VERSION, DEFAULT_NUMBER),
+                inputNamespace: (await randomUuid(4, 1))[0]
+            });
+        // console.debug(savedInstance);
     }
 
     componentWillUnmount() {
-        // TODO save instance
-    }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return (
-            (this.state.inputNumberInvalid !== nextState.inputNumberInvalid) ||
-            (this.state.uuidList !== nextState.uuidList) ||
-            (this.state.generating !== nextState.generating) ||
-            (this.state.copied !== nextState.copied) ||
-            (this.state.inputVersion !== nextState.inputVersion) ||
-            (this.state.inputNamespaceInvalid !== nextState.inputNamespaceInvalid)
-        );
+        localStorage.setItem('uuid-generator', JSON.stringify(this.state));
     }
 
     isInvalidInput = () => {
@@ -105,30 +125,10 @@ class UuidGenerator extends React.Component {
         if (this.state.inputVersion === 3 || this.state.inputVersion === 5) return this.state.inputNamespaceInvalid;
     };
 
-    randomUuid = async (version, number, name, namespace) => {
-        // console.debug(`${version}, ${number}, ${name}, ${namespace}`);
-        switch (version) {
-            case 1: {
-                const ret = [];
-                for (let i = 0; i < number; i++) ret.push(uuidV1());
-                return ret;
-            }
-            case 3:
-                return [uuidV3(name, namespace)];
-            case 4: {
-                const ret = [];
-                for (let i = 0; i < number; i++) ret.push(uuidV4());
-                return ret;
-            }
-            case 5:
-                return [uuidV5(name, namespace)];
-        }
-    };
-
     buttonGenerateHandler = async () => {
         if (this.isInvalidInput()) return;
         const execJob = async () => {
-            const uuidList = await this.randomUuid(this.state.inputVersion, this.state.inputNumber, this.state.inputName, this.state.inputNamespace);
+            const uuidList = await randomUuid(this.state.inputVersion, this.state.inputNumber, this.state.inputName, this.state.inputNamespace);
             this.setState({
                 uuidList: uuidList,
                 generating: false
@@ -157,16 +157,7 @@ class UuidGenerator extends React.Component {
     };
 
     buttonDownloadHandler = async () => {
-        const download = (filename, text) => {
-            const element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        };
-        download(`UUID-${this.state.uuidList.length}.txt`, this.state.uuidList.join('\n'));
+        downloadText(`UUID-${this.state.uuidList.length}.txt`, this.state.uuidList.join('\n'));
     };
 
     inputNumberHandler = event => {
@@ -181,10 +172,11 @@ class UuidGenerator extends React.Component {
         };
         const inputValue = event.currentTarget.value;
         const isValid = isPositiveInteger(inputValue);
-        this.setState({
+        const nextState = {
             inputNumberInvalid: !isValid,
-            inputNumber: isValid ? parseInt(inputValue) : null
-        });
+            inputNumber: isValid? parseInt(inputValue) : null
+        };
+        this.setState(nextState);
     };
 
     inputNamespaceHandler = event => {
@@ -214,6 +206,8 @@ class UuidGenerator extends React.Component {
     render() {
         // console.debug('rendered');
         // console.debug(this.state.inputNumber);
+        // console.debug('render');
+        // console.debug(this.state);
         const {classes} = this.props;
         return (
             <>
@@ -231,7 +225,7 @@ class UuidGenerator extends React.Component {
                             <RadioGroup
                                 aria-label="uuid-version"
                                 name="uuid-version"
-                                defaultValue={`${DEFAULT_UUID_VERSION}`}
+                                value={String(this.state.inputVersion)}
                                 onChange={this.inputVersionHandler}
                             >
                                 <FormControlLabel value="1" control={<Radio/>} label="UUID v1"/>
@@ -251,7 +245,7 @@ class UuidGenerator extends React.Component {
                                     id="input-amount"
                                     aria-describedby={this.isInvalidInput() ? "input-number-error" : null}
                                     onChange={this.inputNumberHandler}
-                                    defaultValue={this.state.inputNumber}
+                                    value={String(this.state.inputNumber)}
                                     inputProps={{
                                         type: 'number',
                                         min: '1',
@@ -270,9 +264,12 @@ class UuidGenerator extends React.Component {
                                         name={"namespace"}
                                         aria-describedby={this.state.inputNamespaceInvalid ? "input-namespace-error" : ""}
                                         onChange={this.inputNamespaceHandler}
-                                        defaultValue={this.state.inputNamespace}
+                                        value={this.state.inputNamespace}
                                         autoComplete={"off"}   // autocomplete="off" may not working https://bugs.chromium.org/p/chromium/issues/detail?id=914451
                                         fullWidth={true}
+                                        inputProps={{
+                                            spellCheck: false
+                                        }}
                                     />
                                     {this.state.inputNamespaceInvalid &&
                                     <FormHelperText id="input-namespace-error">Must be UUID</FormHelperText>}
@@ -285,8 +282,12 @@ class UuidGenerator extends React.Component {
                                         onChange={this.inputNameHandler}
                                         fullWidth={true}
                                         multiline={true}
+                                        value={this.state.inputName}
                                         autoComplete={"off"}   // autocomplete="off" may not working https://bugs.chromium.org/p/chromium/issues/detail?id=914451
                                         rowsMax={10}
+                                        inputProps={{
+                                            spellCheck: false
+                                        }}
                                     />
                                 </FormControl>
                             </>
@@ -294,7 +295,7 @@ class UuidGenerator extends React.Component {
                         </>
                         <>
                             <TextField
-                                id="textfield-uuid-output"
+                                id="textarea-uuid-output"
                                 label="UUID"
                                 disabled={this.state.uuidList.length > NUMBER_THRESHOLD}
                                 multiline
@@ -302,6 +303,9 @@ class UuidGenerator extends React.Component {
                                 fullWidth={true}
                                 variant="outlined"
                                 value={(this.state.uuidList.length > NUMBER_THRESHOLD) ? "Please download instead" : this.state.uuidList.join('\n')}
+                                inputProps={{
+                                    spellCheck: false
+                                }}
                             />
                         </>
                     </Grid>
@@ -317,18 +321,18 @@ class UuidGenerator extends React.Component {
                             <CircularProgress size={24} className={classes.ButtonGenerateProgress}/>}
                         </div>
                         <div className={classes.ButtonGenerateWrapper}>
-                        <Button variant="contained"
-                                disabled={this.isInvalidInput() || this.state.uuidList.length > NUMBER_THRESHOLD}
-                                onClick={this.buttonCopyHandler}
-                                startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
-                        >{this.state.copied ? 'Copied' : 'Copy'}</Button>
+                            <Button variant="contained"
+                                    disabled={this.isInvalidInput() || this.state.uuidList.length > NUMBER_THRESHOLD}
+                                    onClick={this.buttonCopyHandler}
+                                    startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
+                            >{this.state.copied ? 'Copied' : 'Copy'}</Button>
                         </div>
                         <div className={classes.ButtonGenerateWrapper}>
-                        <Button variant="contained"
-                                disabled={this.isInvalidInput()}
-                                onClick={this.buttonDownloadHandler}
-                                startIcon={<GetAppIcon/>}
-                        >Download</Button>
+                            <Button variant="contained"
+                                    disabled={this.isInvalidInput()}
+                                    onClick={this.buttonDownloadHandler}
+                                    startIcon={<GetAppIcon/>}
+                            >Download</Button>
                         </div>
                     </Grid>
                 </Grid>
