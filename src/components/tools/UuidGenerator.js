@@ -74,7 +74,7 @@ const randomUuid = async (version, number, name, namespace) => {
     }
 };
 
-class UuidGenerator extends React.Component {
+class UuidGenerator extends React.PureComponent {
 
     static propTypes = {
         title: PropTypes.string.isRequired,
@@ -114,8 +114,12 @@ class UuidGenerator extends React.Component {
         // console.debug(savedInstance);
     }
 
-    componentWillUnmount() {
+    saveState = () => {
         localStorage.setItem('uuid-generator', JSON.stringify(this.state));
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.saveState();
     }
 
     isInvalidInput = () => {

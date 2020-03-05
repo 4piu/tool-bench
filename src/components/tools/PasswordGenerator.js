@@ -18,6 +18,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {downloadText} from "../../utils/DownloadService";
 import csprng from "random-number-csprng";
+import {shallowCompare} from "../../utils/ObjectCompare";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
 import {Tooltip} from "@material-ui/core";
@@ -81,7 +82,7 @@ const randomCharacter = async (type, allowConfusing, useCsprng) => {
     }
 };
 
-class PasswordGenerator extends React.Component {
+class PasswordGenerator extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
         changeActivity: PropTypes.func.isRequired
@@ -114,10 +115,18 @@ class PasswordGenerator extends React.Component {
         if (savedInstance) this.setState(savedInstance);
     }
 
-    componentWillUnmount() {
-        const saveData = this.state;
+    saveState = () => {
+        const saveData = Object.assign({}, this.state);
         saveData.password = "";
         localStorage.setItem('password-generator', JSON.stringify(saveData));
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const prev = Object.assign({}, prevState);
+        const now = Object.assign({}, this.state);
+        delete prev.password;
+        delete now.password;
+        if (!shallowCompare(prev, now)) this.saveState();
     }
 
     checkboxCharactersHandler = name => event => {
