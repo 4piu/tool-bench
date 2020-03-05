@@ -122,11 +122,7 @@ class PasswordGenerator extends React.PureComponent {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const prev = Object.assign({}, prevState);
-        const now = Object.assign({}, this.state);
-        delete prev.password;
-        delete now.password;
-        if (!shallowCompare(prev, now)) this.saveState();
+        if (!shallowCompare(prevState, this.state, ['password'])) this.saveState();
     }
 
     checkboxCharactersHandler = name => event => {
