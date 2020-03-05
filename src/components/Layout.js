@@ -10,6 +10,11 @@ import MyAlert from "./MyAlert";
 const styles = theme => ({
     root: {
         padding: theme.spacing(3)
+    },
+    GridItem: {
+        '& > *': {
+            height: '100%'
+        }
     }
 });
 
@@ -31,14 +36,15 @@ class Layout extends React.Component {
 
         // Show card list
         if (props.activity === 'home') return (
-            <React.Fragment>
+            <>
                 <MyAppBar
                     title={"Tool bench"}
                     isHome={true}
                     changeActivity={props.changeActivity}/>
                 <Grid container spacing={2} className={classes.root}>
                     {this.props.activityList.map(item => (
-                        <Grid key={item.name}
+                        <Grid className={classes.GridItem}
+                              key={item.name}
                               data-id={item.name}
                               onClick={this.handleCardClick}
                               item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -52,7 +58,7 @@ class Layout extends React.Component {
                         </Grid>
                     ))}
                 </Grid>
-            </React.Fragment>
+            </>
         );
 
         // Dynamic load card content
