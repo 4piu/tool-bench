@@ -40,9 +40,12 @@ const styles = theme => ({
             marginBottom: theme.spacing(2)
         }
     },
-    ButtonGenerateWrapper: {
+    ButtonWrapper: {
         position: 'relative',
-        display: 'inline-flex'
+        display: 'inline-flex',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%'
+        }
     },
     ButtonGenerateProgress: {
         color: "primary",
@@ -309,26 +312,29 @@ class UuidGenerator extends React.PureComponent {
                         />
                         <br/>
                         <div className={classes.ButtonContainer}>
-                            <div className={classes.ButtonGenerateWrapper}>
+                            <div className={classes.ButtonWrapper}>
                                 <Button variant="contained" color={"primary"}
                                         disabled={this.isInvalidInput() || this.state.generating}
                                         onClick={this.buttonGenerateHandler}
+                                        fullWidth={true}
                                         startIcon={<PlayArrowIcon/>}
                                 >Generate</Button>
                                 {this.state.generating &&
                                 <CircularProgress size={24} className={classes.ButtonGenerateProgress}/>}
                             </div>
-                            <div className={classes.ButtonGenerateWrapper}>
+                            <div className={classes.ButtonWrapper}>
                                 <Button variant="contained"
                                         disabled={this.isInvalidInput() || this.state.uuidList.length > NUMBER_THRESHOLD}
                                         onClick={this.buttonCopyHandler}
+                                        fullWidth={true}
                                         startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
                                 >{this.state.copied ? 'Copied' : 'Copy'}</Button>
                             </div>
-                            <div className={classes.ButtonGenerateWrapper}>
+                            <div className={classes.ButtonWrapper}>
                                 <Button variant="contained"
                                         disabled={this.isInvalidInput()}
                                         onClick={this.buttonDownloadHandler}
+                                        fullWidth={true}
                                         startIcon={<GetAppIcon/>}
                                 >Download</Button>
                             </div>

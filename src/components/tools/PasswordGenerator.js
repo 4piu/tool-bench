@@ -45,7 +45,14 @@ const styles = theme => ({
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(2)
         }
-    }
+    },
+    ButtonWrapper: {
+        position: 'relative',
+        display: 'inline-flex',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%'
+        }
+    },
 });
 
 const randomNumber = async (min, max, useCsprng) => {
@@ -296,21 +303,31 @@ class PasswordGenerator extends React.PureComponent {
                     />
                     <br/>
                     <div className={classes.ButtonContainer}>
-                        <Button variant="contained" color={"primary"}
-                                disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
-                                onClick={this.buttonGenerateHandler}
-                                startIcon={<RefreshIcon/>}
-                        >Generate</Button>
-                        <Button variant="contained"
-                                disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
-                                onClick={this.buttonCopyHandler}
-                                startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
-                        >{this.state.copied ? 'Copied' : 'Copy'}</Button>
-                        <Button variant="contained"
-                                disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
-                                onClick={this.buttonDownloadHandler}
-                                startIcon={<GetAppIcon/>}
-                        >Download</Button>
+                        <div className={classes.ButtonWrapper}>
+                            <Button variant="contained" color={"primary"}
+                                    disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
+                                    onClick={this.buttonGenerateHandler}
+                                    fullWidth={true}
+                                    startIcon={<RefreshIcon/>}
+                            >Generate</Button>
+                        </div>
+                        <div className={classes.ButtonWrapper}>
+                            <Button variant="contained"
+                                    disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
+                                    onClick={this.buttonCopyHandler}
+                                    fullWidth={true}
+                                    startIcon={this.state.copied ? <DoneIcon/> :
+                                        <FileCopyIcon/>}
+                            >{this.state.copied ? 'Copied' : 'Copy'}</Button>
+                        </div>
+                        <div className={classes.ButtonWrapper}>
+                            <Button variant="contained"
+                                    disabled={this.state.inputPasswordLengthInvalid || this.state.checkboxInvalid}
+                                    onClick={this.buttonDownloadHandler}
+                                    fullWidth={true}
+                                    startIcon={<GetAppIcon/>}
+                            >Download</Button>
+                        </div>
                     </div>
                 </Container>
             </>
