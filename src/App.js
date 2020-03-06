@@ -50,7 +50,8 @@ const style = {
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    minWidth: '280px'
 };
 
 export default class App extends React.Component {

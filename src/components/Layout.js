@@ -9,16 +9,18 @@ import MyAlert from "./MyAlert";
 
 const styles = theme => ({
     root: {
-        padding: theme.spacing(3)
+        padding: theme.spacing(3),
+        maxWidth: 1440,
+        alignSelf: "center"
     },
     GridItem: {
         '& > *': {
-            height: '100%'
+            height: "100%"
         }
     }
 });
 
-class Layout extends React.Component {
+class Layout extends React.PureComponent {
     static propTypes = {
         activityList: PropTypes.arrayOf(PropTypes.object).isRequired,
         activity: PropTypes.string.isRequired,
@@ -47,7 +49,7 @@ class Layout extends React.Component {
                               key={item.name}
                               data-id={item.name}
                               onClick={this.handleCardClick}
-                              item xs={12} sm={6} md={4} lg={3} xl={2}>
+                              item xs={12} sm={6} md={4} lg={3}>
                             <MyCard
                                 title={item.title}
                                 description={item.description}
