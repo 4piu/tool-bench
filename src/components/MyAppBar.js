@@ -4,10 +4,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import {fade, withStyles} from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import SearchIcon from '@material-ui/icons/Search';
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import {TextField} from "@material-ui/core";
 
 const styles = theme => ({
     root: {
@@ -19,11 +20,11 @@ const styles = theme => ({
     title: {
         flexGrow: 1,
         display: 'none',
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('xs')]: {
             display: 'block',
         },
     },
-    search: {
+    SearchDesktop: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -32,12 +33,14 @@ const styles = theme => ({
         },
         marginLeft: 0,
         width: '100%',
+        display: 'none',
         [theme.breakpoints.up('sm')]: {
+            display: 'block',
             marginLeft: theme.spacing(1),
-            width: 'auto',
+            width: 'auto'
         },
     },
-    searchIcon: {
+    SearchDesktopIcon: {
         width: theme.spacing(7),
         height: '100%',
         position: 'absolute',
@@ -46,10 +49,10 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    inputRoot: {
+    SearchDesktopInputRoot: {
         color: 'inherit',
     },
-    inputInput: {
+    SearchDesktopInput: {
         padding: theme.spacing(1, 1, 1, 7),
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -57,55 +60,120 @@ const styles = theme => ({
             width: 120,
             '&:focus': {
                 width: 200,
-            },
-        },
-    }
+            }
+        }
+    },
+    SearchMobileIcon: {
+        color: 'inherit',
+        [theme.breakpoints.up('sm')]: {
+            display: 'none'
+        }
+    },
+    SearchMobileInput: {
+        flexGrow: 1,
+        '& > *': {
+            color: 'inherit'
+        }
+    },
+    SearchMobileInputRoot: {
+        color: 'inherit'
+    },
 });
 
-class MyAppBar extends React.Component {
+class MyAppBar extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
-        isHome: PropTypes.bool.isRequired,
-        changeActivity: PropTypes.func.isRequired
+        showBackButton: PropTypes.bool,
+        showSearchBar: PropTypes.bool,
+        changeActivity: PropTypes.func.isRequired,
+        onSearchInputChange: PropTypes.func
+    };
+
+    static defaultProps = {
+        showBackButton: false,
+        showSearchBar: false
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchExpanded: false
+        }
+    }
+
+    expandSearch = () => {
+        this.setState({
+            searchExpanded: true
+        })
     };
 
     handleBackClick = () => {
-        this.props.changeActivity('home');
+        if (this.state.searchExpanded) {
+            this.setState({
+                searchExpanded: false
+            })
+        } else {
+            this.props.changeActivity('home');
+        }
     };
 
     render() {
+        // console.debug(this.state);
         const {classes} = this.props;
         return (
             <div className={classes.root}>
                 <AppBar position="static">
                     <Toolbar>
-                        {!this.props.isHome &&
-                        <IconButton
-                            edge="start"
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.handleBackClick}
-                        >
-                            <ArrowBackIcon/>
-                        </IconButton>}
-                        <Typography className={classes.title} variant="h6" noWrap>
-                            {this.props.title}
-                        </Typography>
-                        {this.props.isHome &&
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}>
+                        {// Back arrow button
+                            (this.props.showBackButton || this.state.searchExpanded) &&
+                            <IconButton
+                                edge="start"
+                                className={classes.menuButton}
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={this.handleBackClick}
+                            >
+                                <ArrowBackIcon/>
+                            </IconButton>}
+                        {// Title
+                            !this.state.searchExpanded &&
+                            <Typography className={classes.title} variant="h6" noWrap>
+                                {this.props.title}
+                            </Typography>
+                        }
+                        {// Search bar sm-
+                            this.props.showSearchBar && this.state.searchExpanded &&
+                            <TextField
+                                className={classes.SearchMobileInput}
+                                autoComplete={"off"}
+                                onChange={this.props.onSearchInputChange}
+                                color={"secondary"}
+                                autoFocus={true}/>
+                        }
+                        {// Search button sm-
+                            this.props.showSearchBar && !this.state.searchExpanded &&
+                            <IconButton
+                                className={classes.SearchMobileIcon}
+                                onClick={this.expandSearch}>
                                 <SearchIcon/>
+                            </IconButton>
+                        }
+                        {// Search bar sm+
+                            this.props.showSearchBar && !this.state.searchExpanded &&
+                            <div className={classes.SearchDesktop}>
+                                <div className={classes.SearchDesktopIcon}>
+                                    <SearchIcon/>
+                                </div>
+                                <InputBase
+                                    placeholder="Search…"
+                                    classes={{
+                                        root: classes.SearchDesktopInputRoot,
+                                        input: classes.SearchDesktopInput,
+                                    }}
+                                    inputProps={{'aria-label': 'search'}}
+                                    onChange={this.props.onSearchInputChange}/>
                             </div>
-                            <InputBase
-                                placeholder="Search…"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                                inputProps={{'aria-label': 'search'}}
-                            />
-                        </div>}
+                        }
                     </Toolbar>
                 </AppBar>
             </div>

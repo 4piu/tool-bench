@@ -18,7 +18,7 @@ class ToolClass extends React.Component {
                 {/** App bar */}
                 <MyAppBar
                     title={this.props.title}
-                    isHome={false}
+                    showBackButton={true}
                     changeActivity={this.props.changeActivity}/>
                 {/** Main view */}
                 <Grid container>

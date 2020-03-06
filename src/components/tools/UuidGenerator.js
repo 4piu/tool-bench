@@ -216,7 +216,7 @@ class UuidGenerator extends React.PureComponent {
                 {/** App bar */}
                 <MyAppBar
                     title={this.props.title}
-                    isHome={false}
+                    showBackButton={true}
                     changeActivity={this.props.changeActivity}/>
                 {/** Main view */}
                 <Container className={classes.Container} maxWidth={"sm"}>

@@ -39,7 +39,7 @@ class Layout extends React.Component {
             <>
                 <MyAppBar
                     title={"Tool bench"}
-                    isHome={true}
+                    showSearchBar={true}
                     changeActivity={props.changeActivity}/>
                 <Grid container spacing={2} className={classes.root}>
                     {this.props.activityList.map(item => (
