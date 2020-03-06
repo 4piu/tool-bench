@@ -4,6 +4,7 @@ import {Helmet} from "react-helmet";
 import logo from "./assets/img/logo.png";
 import UuidIcon from "./assets/img/icon_uuid.svg";
 import LockIcon from "./assets/img/icon_lock.svg";
+import Base64Icon from "./assets/img/icon_base64.svg"
 import Layout from "./components/Layout";
 
 const tools = [
@@ -22,6 +23,14 @@ const tools = [
         description: "Generate strong password",
         icon: LockIcon,
         color: '#4db6ac'
+    },
+    {
+        name: "base64-codec",
+        loader: () => import("./components/tools/Base64Codec.js"),
+        title: "Base64 Encoder / Decoder",
+        description: "Encode or decode base64 string",
+        icon: Base64Icon,
+        color: '#81d4fa'
     },
     {
         name: "test-fail",
