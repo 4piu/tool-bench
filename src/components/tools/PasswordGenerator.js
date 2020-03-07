@@ -113,6 +113,16 @@ class PasswordGenerator extends React.PureComponent {
     }
 
     componentDidMount() {
+        this.loadState();
+    }
+
+    saveState = () => {
+        const saveData = Object.assign({}, this.state);
+        saveData.password = "";
+        localStorage.setItem('password-generator', JSON.stringify(saveData));
+    };
+
+    loadState = () => {
         let savedInstance;
         try {
             savedInstance = JSON.parse(localStorage.getItem('password-generator'));
@@ -120,12 +130,6 @@ class PasswordGenerator extends React.PureComponent {
             console.error('Failed to load saved instance');
         }
         if (savedInstance) this.setState(savedInstance);
-    }
-
-    saveState = () => {
-        const saveData = Object.assign({}, this.state);
-        saveData.password = "";
-        localStorage.setItem('password-generator', JSON.stringify(saveData));
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {

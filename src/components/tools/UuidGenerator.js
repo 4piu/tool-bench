@@ -101,6 +101,10 @@ class UuidGenerator extends React.PureComponent {
     }
 
     async componentDidMount() {
+        await this.loadState()
+    }
+
+    loadState = async () => {
         let savedInstance;
         try {
             savedInstance = JSON.parse(localStorage.getItem('uuid-generator'));
@@ -114,8 +118,7 @@ class UuidGenerator extends React.PureComponent {
                 uuidList: await randomUuid(DEFAULT_UUID_VERSION, DEFAULT_NUMBER),
                 inputNamespace: (await randomUuid(4, 1))[0]
             });
-        // console.debug(savedInstance);
-    }
+    };
 
     saveState = () => {
         localStorage.setItem('uuid-generator', JSON.stringify(this.state));
