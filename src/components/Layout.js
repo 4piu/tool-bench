@@ -8,10 +8,11 @@ import MyAppBar from "./MyAppBar";
 import MyAlert from "./MyAlert";
 
 const styles = theme => ({
-    root: {
+    GridContainer: {
         padding: theme.spacing(3),
         maxWidth: 1440,
-        alignSelf: "center"
+        marginLeft: "auto",
+        marginRight: "auto"
     },
     GridItem: {
         '& > *': {
@@ -43,7 +44,7 @@ class Layout extends React.PureComponent {
                     title={"Tool bench"}
                     showSearchBar={true}
                     changeActivity={props.changeActivity}/>
-                <Grid container spacing={2} className={classes.root}>
+                <Grid container spacing={2} className={classes.GridContainer}>
                     {this.props.activityList.map(item => (
                         <Grid className={classes.GridItem}
                               key={item.name}

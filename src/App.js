@@ -46,7 +46,8 @@ const tools = [
     {
         name: "test-timeout",
         loader: () => {
-            return new Promise((resolve) => {});
+            return new Promise((resolve) => {
+            });
         },
         title: "I will timeout",
         description: "Test purpose component",
@@ -55,15 +56,7 @@ const tools = [
     }
 ];
 
-const style = {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-    overflow: 'hidden',
-    minWidth: '280px'
-};
-
-export default class App extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,13 +67,13 @@ export default class App extends React.Component {
     changeActivity = (newActivity) => {
         setTimeout(
             () => this.setState({activity: newActivity}),
-            newActivity === 'home'? 0 : 200
+            newActivity === 'home' ? 0 : 200
         )
     };
 
     render() {
         return (
-            <div style={style}>
+            <>
                 <Helmet>
                     <title>Tool Bench</title>
                     <link rel="icon" type="image/png" href={logo}/>
@@ -98,7 +91,9 @@ export default class App extends React.Component {
                     activityList={tools}
                     activity={this.state.activity}
                     changeActivity={this.changeActivity}/>
-            </div>
+            </>
         );
     }
 }
+
+export default App;
