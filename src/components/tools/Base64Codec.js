@@ -19,12 +19,13 @@ import {downloadText} from "../../utils/DownloadService";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
 
-class DefaultTab {
+class AppTab {
     constructor() {
         this.id = uuidV4();
         this.encoded = "";
         this.decoded = "";
         this.name = "New tab";
+        this.focus = "decoded";
     }
 }
 
@@ -83,8 +84,7 @@ class Base64Codec extends React.Component {
         this.state = {
             tabIndex: "",
             tabs: [],
-            copied: false,
-            focus: "decoded"
+            copied: false
         }
     }
 
@@ -119,7 +119,7 @@ class Base64Codec extends React.Component {
     };
 
     newTab = () => {
-        const newTab = new DefaultTab();
+        const newTab = new AppTab();
         this.setState(prevState => ({
             tabs: [...prevState.tabs, newTab],
             tabIndex: newTab.id
@@ -150,41 +150,29 @@ class Base64Codec extends React.Component {
 
     closeAllTab = () => {
         this.setState({
-            tabs: [new DefaultTab()]
+            tabs: [new AppTab()]
         })
     };
 
-    decodeInput = event => {
+    decodeInput = (event, tab) => {
         const input = event.currentTarget.value;
-        const decoded = Buffer.from(input, 'base64').toString('base64') === input ?
+        tab.encoded = input;
+        tab.decoded = Buffer.from(input, 'base64').toString('base64') === input ?
             Buffer.from(input, 'base64').toString('utf-8') : 'Malformed input';
-        this.setState(prevState => {
-            const thisTab = prevState.tabs.find(({id}) => id === this.state.tabIndex);
-            thisTab.encoded = input;
-            thisTab.decoded = decoded;
-            return {
-                focus: "decoded",
-                tabs: prevState.tabs
-            }
-        })
+        tab.focus = "decoded";
+        this.forceUpdate();
     };
 
-    encodeInput = event => {
+    encodeInput = (event, tab) => {
         const input = event.currentTarget.value;
-        const encoded = Buffer.from(input, 'utf-8').toString('base64');
-        this.setState(prevState => {
-            const thisTab = prevState.tabs.find(({id}) => id === this.state.tabIndex);
-            thisTab.encoded = encoded;
-            thisTab.decoded = input;
-            return {
-                focus: "encoded",
-                tabs: prevState.tabs
-            }
-        })
+        tab.encoded = Buffer.from(input, 'utf-8').toString('base64');
+        tab.decoded = input;
+        tab.focus = "encoded";
+        this.forceUpdate();
     };
 
-    buttonCopyHandler = async () => {
-        const text = this.state.tabs.filter(({id}) => id === this.state.tabIndex)[0][this.state.focus];
+    buttonCopyHandler = async (tab) => {
+        const text = tab[tab.focus];
         await navigator.clipboard.writeText(text);
         this.setState({
             copied: true
@@ -196,9 +184,9 @@ class Base64Codec extends React.Component {
         }, 3000);
     };
 
-    buttonDownloadHandler = async () => {
-        const text = this.state.tabs.filter(({id}) => id === this.state.tabIndex)[0][this.state.focus];
-        downloadText(`${this.state.focus}.txt`, text);
+    buttonDownloadHandler = async (tab) => {
+        const text = tab[tab.focus];
+        downloadText(`${tab.focus}.txt`, text);
     };
 
     render() {
@@ -206,46 +194,46 @@ class Base64Codec extends React.Component {
         return (
             <>
                 <div>
-                {/** App bar */}
-                <MyAppBar title={this.props.title}/>
-                {/** Tabs */}
-                <AppBar className={classes.TabsBar} position="static" color="default">
-                    <Tabs
-                        value={this.state.tabIndex || 0}
-                        onChange={this.changeTab}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        aria-label="opened working tabs"
-                    >
-                        {this.state.tabs.map((tab) => (
-                            <Tab key={tab.id} value={tab.id}
-                                 className={classes.Tab}
+                    {/** App bar */}
+                    <MyAppBar title={this.props.title}/>
+                    {/** Tabs */}
+                    <AppBar className={classes.TabsBar} position="static" color="default">
+                        <Tabs
+                            value={this.state.tabIndex || 0}
+                            onChange={this.changeTab}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            aria-label="opened working tabs"
+                        >
+                            {this.state.tabs.map((tab) => (
+                                <Tab key={tab.id} value={tab.id}
+                                     className={classes.Tab}
+                                     component={"div"}
+                                     label={
+                                         <div className={classes.CustomTabLabel}>
+                                             <div className={classes.TabLabel}>
+                                                 {tab.name}
+                                             </div>
+                                             <IconButton className={classes.CloseTabButton} size={"small"}
+                                                         onClick={this.closeThisTab} data-index={tab.id}>
+                                                 <CloseIcon/>
+                                             </IconButton>
+                                         </div>
+                                     }
+                                />
+                            ))}
+                            <Tab className={classes.NewTabButton}
                                  component={"div"}
                                  label={
-                                     <div className={classes.CustomTabLabel}>
-                                         <div className={classes.TabLabel}>
-                                             {tab.name}
-                                         </div>
-                                         <IconButton className={classes.CloseTabButton} size={"small"}
-                                                     onClick={this.closeThisTab} data-index={tab.id}>
-                                             <CloseIcon/>
-                                         </IconButton>
-                                     </div>
-                                 }
-                            />
-                        ))}
-                        <Tab className={classes.NewTabButton}
-                             component={"div"}
-                             label={
-                                 <IconButton size={"small"}>
-                                     <AddIcon/>
-                                 </IconButton>
-                             } onClick={this.newTab}/>
-                    </Tabs>
-                </AppBar>
-                {/** Main view */}
+                                     <IconButton size={"small"}>
+                                         <AddIcon/>
+                                     </IconButton>
+                                 } onClick={this.newTab}/>
+                        </Tabs>
+                    </AppBar>
+                    {/** Main view */}
                 </div>
                 <>
                     {this.state.tabs
@@ -265,7 +253,7 @@ class Base64Codec extends React.Component {
                                         }}
                                         rows={16}
                                         rowsMax={16}
-                                        onChange={this.decodeInput}
+                                        onChange={e => this.decodeInput(e, tab)}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -281,26 +269,26 @@ class Base64Codec extends React.Component {
                                         }}
                                         rows={16}
                                         rowsMax={16}
-                                        onChange={this.encodeInput}
+                                        onChange={e => this.encodeInput(e, tab)}
                                     />
                                 </Grid>
                                 <Grid item xs={12} className={classes.ButtonContainer}>
                                     <div className={classes.ButtonWrapper}>
                                         <Button variant="contained"
-                                                onClick={this.buttonCopyHandler}
+                                                onClick={e => this.buttonCopyHandler(tab)}
                                                 fullWidth={true}
                                                 startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
                                         >{this.state.copied ?
                                             'Copied' :
-                                            `Copy ${this.state.focus}`
+                                            `Copy ${tab.focus}`
                                         }</Button>
                                     </div>
                                     <div className={classes.ButtonWrapper}>
                                         <Button variant="contained"
-                                                onClick={this.buttonDownloadHandler}
+                                                onClick={e => this.buttonDownloadHandler(tab)}
                                                 fullWidth={true}
                                                 startIcon={<GetAppIcon/>}
-                                        >{`Download ${this.state.focus}`}</Button>
+                                        >{`Download ${tab.focus}`}</Button>
                                     </div>
                                 </Grid>
                             </Grid>
