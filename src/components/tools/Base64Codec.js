@@ -259,7 +259,7 @@ class Base64Codec extends React.Component {
                                         multiline
                                         fullWidth={true}
                                         variant="outlined"
-                                        value={this.state.tabs.filter(({id}) => id === this.state.tabIndex)[0].encoded}
+                                        value={tab.encoded}
                                         inputProps={{
                                             spellCheck: false
                                         }}
@@ -275,7 +275,7 @@ class Base64Codec extends React.Component {
                                         multiline
                                         fullWidth={true}
                                         variant="outlined"
-                                        value={this.state.tabs.filter(({id}) => id === this.state.tabIndex)[0].decoded}
+                                        value={tab.decoded}
                                         inputProps={{
                                             spellCheck: false
                                         }}
