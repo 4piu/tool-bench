@@ -2,7 +2,6 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import MyCard from "./MyCard";
 import {withStyles} from "@material-ui/core/styles";
-import PropTypes from "prop-types";
 import Loadable from "react-loadable";
 import MyAppBar from "./MyAppBar";
 import MyAlert from "./MyAlert";
@@ -11,6 +10,7 @@ import ApplicationContext from "./ApplicationContext";
 const styles = theme => ({
     GridContainer: {
         padding: theme.spacing(3),
+        width: "100%",
         maxWidth: 1440,
         marginLeft: "auto",
         marginRight: "auto"
@@ -50,7 +50,6 @@ class Layout extends React.PureComponent {
                                 title={item.title}
                                 description={item.description}
                                 image={item.icon}
-                                backgroundColor={item.color}
                                 changeActivity={context.changeActivity}
                             />
                         </Grid>
@@ -104,7 +103,7 @@ class Layout extends React.PureComponent {
                 />;
             },
             loading: Loading,
-            delay: 300,
+            delay: 200,
             timeout: 10000
         });
         return <Tool/>

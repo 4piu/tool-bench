@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import WrenchIcon from '../assets/img/icon_wrench.svg';
+import {CardHeader} from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
 
 const styles = theme => ({
     banner: {
@@ -23,18 +22,16 @@ const styles = theme => ({
     }
 });
 
-class MyCard extends React.Component {
+class MyCard extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
         description: PropTypes.string,
-        image: PropTypes.string,
-        backgroundColor: PropTypes.string
+        image: PropTypes.string
     };
 
     static defaultProps = {
         description: "",
-        image: WrenchIcon,
-        backgroundColor: "#333"
+        image: WrenchIcon
     };
 
     render() {
@@ -42,19 +39,11 @@ class MyCard extends React.Component {
 
         return (
             <Card>
-                <CardActionArea>
-                    <div className={classes.banner}>
-                        <img className={classes.icon} src={this.props.image} alt={this.props.title}/>
-                    </div>
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            {this.props.title}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {this.props.description}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
+                <CardHeader
+                    avatar={<Avatar src={this.props.image}/>}
+                    title={this.props.title}
+                    subheader={this.props.description}
+                />
             </Card>
         );
     }
