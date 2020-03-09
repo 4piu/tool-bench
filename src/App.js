@@ -6,6 +6,7 @@ import UuidIcon from "./assets/img/icon_uuid.svg";
 import LockIcon from "./assets/img/icon_lock.svg";
 import Base64Icon from "./assets/img/icon_base64.svg"
 import JsonIcon from "./assets/img/icon_json.svg";
+import ClockIcon from "./assets/img/icon_timestamp.svg";
 import Layout from "./components/Layout";
 import ApplicationContext from "./components/ApplicationContext";
 
@@ -37,6 +38,13 @@ const tools = [
         title: "JSON Beautify / Uglify",
         description: "Beautify & uglify JSON",
         icon: JsonIcon
+    },
+    {
+        name: "timestamp",
+        loader: () => import("./components/tools/UnixTimestamp.js"),
+        title: "Unix timestamp",
+        description: "Unix timestamp utilities",
+        icon: ClockIcon
     },
     {
         name: "test-fail",
