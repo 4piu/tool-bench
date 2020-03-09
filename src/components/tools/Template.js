@@ -8,18 +8,14 @@ const styles = theme => ({});
 
 class ToolClass extends React.Component {
     static propTypes = {
-        title: PropTypes.string.isRequired,
-        changeActivity: PropTypes.func.isRequired
+        title: PropTypes.string.isRequired
     };
 
     render() {
         return (
             <>
                 {/** App bar */}
-                <MyAppBar
-                    title={this.props.title}
-                    showBackButton={true}
-                    changeActivity={this.props.changeActivity}/>
+                <MyAppBar title={this.props.title}/>
                 {/** Main view */}
                 <Grid container>
 

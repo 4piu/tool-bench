@@ -18,7 +18,6 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import {downloadText} from "../../utils/DownloadService";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
-import {Toolbar} from "@material-ui/core";
 
 class DefaultTab {
     constructor() {
@@ -76,8 +75,7 @@ const styles = theme => ({
 
 class Base64Codec extends React.Component {
     static propTypes = {
-        title: PropTypes.string.isRequired,
-        changeActivity: PropTypes.func.isRequired
+        title: PropTypes.string
     };
 
     constructor(props) {
@@ -209,10 +207,7 @@ class Base64Codec extends React.Component {
             <>
                 <div>
                 {/** App bar */}
-                <MyAppBar
-                    title={this.props.title}
-                    showBackButton={true}
-                    changeActivity={this.props.changeActivity}/>
+                <MyAppBar title={this.props.title}/>
                 {/** Tabs */}
                 <AppBar className={classes.TabsBar} position="static" color="default">
                     <Tabs

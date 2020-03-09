@@ -91,8 +91,7 @@ const randomCharacter = async (type, allowConfusing, useCsprng) => {
 
 class PasswordGenerator extends React.PureComponent {
     static propTypes = {
-        title: PropTypes.string.isRequired,
-        changeActivity: PropTypes.func.isRequired
+        title: PropTypes.string
     };
 
     constructor(props) {
@@ -204,10 +203,7 @@ class PasswordGenerator extends React.PureComponent {
         return (
             <>
                 {/** App bar */}
-                <MyAppBar
-                    title={this.props.title}
-                    showBackButton={true}
-                    changeActivity={this.props.changeActivity}/>
+                <MyAppBar title={this.props.title}/>
                 {/** Main view */}
                 <Container className={classes.Container} maxWidth={"sm"}>
                     <FormControl error={this.state.checkboxInvalid} component="fieldset">

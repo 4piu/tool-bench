@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import Loadable from "react-loadable";
 import MyAppBar from "./MyAppBar";
 import MyAlert from "./MyAlert";
+import ApplicationContext from "./ApplicationContext";
 
 const styles = theme => ({
     GridContainer: {
@@ -22,30 +23,24 @@ const styles = theme => ({
 });
 
 class Layout extends React.PureComponent {
-    static propTypes = {
-        activityList: PropTypes.arrayOf(PropTypes.object).isRequired,
-        activity: PropTypes.string.isRequired,
-        changeActivity: PropTypes.func.isRequired
-    };
 
     handleCardClick = (e) => {
-        // console.debug(e.currentTarget.getAttribute('data-id'));
-        this.props.changeActivity(e.currentTarget.getAttribute('data-id'));
+        this.context.changeActivity(e.currentTarget.getAttribute('data-id'));
     };
 
     render() {
         const {classes} = this.props;
         const props = this.props;
+        const context = this.context;
 
         // Show card list
-        if (props.activity === 'home') return (
+        if (context.activity === 'home') return (
             <>
                 <MyAppBar
                     title={"Tool bench"}
-                    showSearchBar={true}
-                    changeActivity={props.changeActivity}/>
+                    showSearchBar={true}/>
                 <Grid container spacing={2} className={classes.GridContainer}>
-                    {this.props.activityList.map(item => (
+                    {context.activityList.map(item => (
                         <Grid className={classes.GridItem}
                               key={item.name}
                               data-id={item.name}
@@ -56,7 +51,7 @@ class Layout extends React.PureComponent {
                                 description={item.description}
                                 image={item.icon}
                                 backgroundColor={item.color}
-                                changeActivity={props.changeActivity}
+                                changeActivity={context.changeActivity}
                             />
                         </Grid>
                     ))}
@@ -66,7 +61,7 @@ class Layout extends React.PureComponent {
 
         // Dynamic load card content
         const alertCancelHandler = () => {
-            this.props.changeActivity('home');
+            context.changeActivity('home');
         };
         // Error handler
         const Loading = (props) => {
@@ -100,12 +95,12 @@ class Layout extends React.PureComponent {
         };
         // Async load
         const Tool = Loadable({
-            loader: props.activityList.filter(({name}) => (name === props.activity))[0].loader,
+            loader: context.activityList.filter(({name}) => (name === context.activity))[0].loader,
             render(loaded) {
                 const Component = loaded.default;
                 return <Component
-                    title={props.activityList.filter(x => (x.name === props.activity))[0].title}
-                    changeActivity={props.changeActivity}
+                    title={context.activityList.filter(x => (x.name === context.activity))[0].title}
+                    changeActivity={context.changeActivity}
                 />;
             },
             loading: Loading,
@@ -115,5 +110,7 @@ class Layout extends React.PureComponent {
         return <Tool/>
     }
 }
+
+Layout.contextType = ApplicationContext;
 
 export default withStyles(styles)(Layout);

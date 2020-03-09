@@ -6,6 +6,7 @@ import UuidIcon from "./assets/img/icon_uuid.svg";
 import LockIcon from "./assets/img/icon_lock.svg";
 import Base64Icon from "./assets/img/icon_base64.svg"
 import Layout from "./components/Layout";
+import ApplicationContext from "./components/ApplicationContext";
 
 const tools = [
     {
@@ -87,10 +88,13 @@ class App extends React.Component {
 
                 <CssBaseline/>
 
-                <Layout
-                    activityList={tools}
-                    activity={this.state.activity}
-                    changeActivity={this.changeActivity}/>
+                <ApplicationContext.Provider value={{
+                    changeActivity: this.changeActivity,
+                    activityList: tools,
+                    activity: this.state.activity
+                }}>
+                    <Layout/>
+                </ApplicationContext.Provider>
             </>
         );
     }

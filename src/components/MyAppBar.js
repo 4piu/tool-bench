@@ -9,6 +9,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import {TextField} from "@material-ui/core";
+import ApplicationContext from "./ApplicationContext";
 
 const styles = theme => ({
     root: {
@@ -82,15 +83,11 @@ const styles = theme => ({
 
 class MyAppBar extends React.PureComponent {
     static propTypes = {
-        title: PropTypes.string.isRequired,
-        showBackButton: PropTypes.bool,
-        showSearchBar: PropTypes.bool,
-        changeActivity: PropTypes.func.isRequired,
-        onSearchInputChange: PropTypes.func
+        title: PropTypes.string,
+        showSearchBar: PropTypes.bool
     };
 
     static defaultProps = {
-        showBackButton: false,
         showSearchBar: false
     };
 
@@ -113,18 +110,19 @@ class MyAppBar extends React.PureComponent {
                 searchExpanded: false
             })
         } else {
-            this.props.changeActivity('home');
+            this.context.changeActivity('home');
         }
     };
 
     render() {
         const {classes} = this.props;
+        const context = this.context;
         return (
             <div className={classes.root}>
                 <AppBar position="static">
                     <Toolbar>
                         {// Back arrow button
-                            (this.props.showBackButton || this.state.searchExpanded) &&
+                            (context.activity !== 'home' || this.state.searchExpanded) &&
                             <IconButton
                                 edge="start"
                                 className={classes.menuButton}
@@ -137,7 +135,7 @@ class MyAppBar extends React.PureComponent {
                         {// Title
                             !this.state.searchExpanded &&
                             <Typography className={classes.title} variant="h6" noWrap>
-                                {this.props.title}
+                                {this.props.title || context.activity}
                             </Typography>
                         }
                         {// Search bar sm-
@@ -145,7 +143,7 @@ class MyAppBar extends React.PureComponent {
                             <TextField
                                 className={classes.SearchMobileInput}
                                 autoComplete={"off"}
-                                onChange={this.props.onSearchInputChange}
+                                onChange={context.onSearchInputChange}
                                 color={"secondary"}
                                 autoFocus={true}/>
                         }
@@ -170,7 +168,7 @@ class MyAppBar extends React.PureComponent {
                                         input: classes.SearchDesktopInput,
                                     }}
                                     inputProps={{'aria-label': 'search'}}
-                                    onChange={this.props.onSearchInputChange}/>
+                                    onChange={context.onSearchInputChange}/>
                             </div>
                         }
                     </Toolbar>
@@ -179,5 +177,7 @@ class MyAppBar extends React.PureComponent {
         );
     }
 }
+
+MyAppBar.contextType = ApplicationContext;
 
 export default withStyles(styles)(MyAppBar);

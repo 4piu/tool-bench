@@ -80,8 +80,7 @@ const randomUuid = async (version, number, name, namespace) => {
 class UuidGenerator extends React.PureComponent {
 
     static propTypes = {
-        title: PropTypes.string.isRequired,
-        changeActivity: PropTypes.func.isRequired
+        title: PropTypes.string
     };
 
     constructor(props) {
@@ -212,18 +211,11 @@ class UuidGenerator extends React.PureComponent {
     };
 
     render() {
-        // console.debug('rendered');
-        // console.debug(this.state.inputNumber);
-        // console.debug('render');
-        // console.debug(this.state);
         const {classes} = this.props;
         return (
             <>
                 {/** App bar */}
-                <MyAppBar
-                    title={this.props.title}
-                    showBackButton={true}
-                    changeActivity={this.props.changeActivity}/>
+                <MyAppBar title={this.props.title}/>
                 {/** Main view */}
                 <Container className={classes.Container} maxWidth={"sm"}>
                     <>
