@@ -5,33 +5,38 @@ import logo from "./assets/img/logo.png";
 import UuidIcon from "./assets/img/icon_uuid.svg";
 import LockIcon from "./assets/img/icon_lock.svg";
 import Base64Icon from "./assets/img/icon_base64.svg"
+import JsonIcon from "./assets/img/icon_json.svg";
 import Layout from "./components/Layout";
 import ApplicationContext from "./components/ApplicationContext";
 
 const tools = [
     {
-        name: "uuid-generator",
+        name: "uuid",
         loader: () => import("./components/tools/UuidGenerator.js"),
         title: "UUID Generator",
-        description: "Generate UUIDv1 & UUIDv4",
-        icon: UuidIcon,
-        color: '#b388ff'
+        description: "Batch generate UUID",
+        icon: UuidIcon
     },
     {
-        name: "password-generator",
+        name: "password",
         loader: () => import("./components/tools/PasswordGenerator.js"),
         title: "Password Generator",
         description: "Generate strong password",
-        icon: LockIcon,
-        color: '#4db6ac'
+        icon: LockIcon
     },
     {
-        name: "base64-codec",
+        name: "base64",
         loader: () => import("./components/tools/Base64Codec.js"),
         title: "Base64 Encoder / Decoder",
-        description: "Encode or decode base64 string",
-        icon: Base64Icon,
-        color: '#81d4fa'
+        description: "Encode & decode base64 string",
+        icon: Base64Icon
+    },
+    {
+        name: "json",
+        loader: () => import("./components/tools/JsonFormatter.js"),
+        title: "JSON Beautify / Uglify",
+        description: "Beautify & uglify JSON",
+        icon: JsonIcon
     },
     {
         name: "test-fail",
@@ -41,8 +46,7 @@ const tools = [
         },
         title: "I will fail",
         description: "Test purpose component",
-        icon: undefined,
-        color: 'black'
+        icon: undefined
     },
     {
         name: "test-timeout",
@@ -52,8 +56,7 @@ const tools = [
         },
         title: "I will timeout",
         description: "Test purpose component",
-        icon: undefined,
-        color: 'black'
+        icon: undefined
     }
 ];
 
