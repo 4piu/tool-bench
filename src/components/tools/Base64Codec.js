@@ -160,7 +160,7 @@ class Base64Codec extends React.Component {
         tab.decoded = Buffer.from(input, 'base64').toString('base64') === input ?
             Buffer.from(input, 'base64').toString('utf-8') : 'Malformed input';
         tab.focus = "decoded";
-        this.forceUpdate();
+        this.setState(this.state);
     };
 
     encodeInput = (event, tab) => {
@@ -168,7 +168,7 @@ class Base64Codec extends React.Component {
         tab.encoded = Buffer.from(input, 'utf-8').toString('base64');
         tab.decoded = input;
         tab.focus = "encoded";
-        this.forceUpdate();
+        this.setState(this.state);
     };
 
     buttonCopyHandler = async (tab) => {

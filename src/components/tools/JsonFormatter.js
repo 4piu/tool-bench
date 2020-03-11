@@ -27,7 +27,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 
-class DefaultTab {
+class AppTab {
     constructor() {
         this.id = uuidV4();
         this.original = "";
@@ -132,7 +132,7 @@ class JsonFormatter extends React.Component {
     };
 
     newTab = () => {
-        const newTab = new DefaultTab();
+        const newTab = new AppTab();
         this.setState(prevState => ({
             tabs: [...prevState.tabs, newTab],
             tabIndex: newTab.id
@@ -163,7 +163,7 @@ class JsonFormatter extends React.Component {
 
     closeAllTab = () => {
         this.setState({
-            tabs: [new DefaultTab()]
+            tabs: [new AppTab()]
         })
     };
 

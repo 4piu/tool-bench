@@ -7,10 +7,8 @@ import {CardHeader} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 
 const styles = theme => ({
-    banner: {
-        height: 100,
-        backgroundColor: props => props.backgroundColor,
-        position: 'relative'
+    root: {
+        cursor: 'default'
     },
     icon: {
         width: 55,
@@ -38,7 +36,7 @@ class MyCard extends React.PureComponent {
         const {classes} = this.props;
 
         return (
-            <Card>
+            <Card className={classes.root}>
                 <CardHeader
                     avatar={<Avatar src={this.props.image}/>}
                     title={this.props.title}
