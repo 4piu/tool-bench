@@ -89,7 +89,7 @@ const randomCharacter = async (type, allowConfusing, useCsprng) => {
     }
 };
 
-class PasswordGenerator extends React.Component {
+class PasswordGenerator extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string
     };

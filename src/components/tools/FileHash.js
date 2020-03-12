@@ -92,7 +92,9 @@ const fileHashWorker = (file) => {
         // TODO hash file
         console.debug(`received ${m.data}`);
         file.resultMd5 = "foo";
-        postMessage(file)
+        file.resultSha1 = "bar";
+        file.resultSha256 = "buz";
+        postMessage(file);
     }
 };
 
@@ -113,18 +115,76 @@ class FileHash extends React.Component {
         this.state = {
             defaultAlgorithm: "MD5",
             files: [],
-            poolSize: ([1, 2, 4, 8, 16, 32, 64].includes(navigator.hardwareConcurrency))? navigator.hardwareConcurrency : 1
+            pool: [],
+            poolSize: ([1, 2, 4, 8, 16, 32, 64].includes(navigator.hardwareConcurrency)) ? navigator.hardwareConcurrency : 1
         }
     }
 
     workerMessageHandler = m => {
         this.setState(prevState => {
             const index = prevState.files.findIndex(({taskId}) => taskId === m.taskId);
+            m.status = "done";
+            this.removeFromPool(m.taskId);
             if (index !== -1) prevState.files[index] = m;
             return {
                 files: prevState.files
             }
+        });
+        this.feedPool();
+    };
+
+    feedPool = () => {
+        this.setState(prevState => {
+            for (const file of prevState.files) {
+                if (prevState.pool.length < prevState.poolSize) {
+                    const worker = new Worker(fileHashWorker);
+                    worker.addEventListener("message", this.workerMessageHandler);
+                    prevState.pool.push({
+                        taskId: file.taskId,
+                        worker: worker
+                    });
+                } else {
+                    break;
+                }
+            }
+            return {
+                pool: prevState.pool
+            };
         })
+    };
+
+    removeFromPool = id => {
+        this.setState(prevState => {
+            prevState.pool.filter(({taskId}) => taskId !== id);
+            return {
+                pool: prevState.pool
+            }
+        });
+        this.feedPool();
+    };
+
+    startAllTask = () => {
+        this.setState(prevState => {
+            prevState.files.forEach(file => {
+                if (file.status === "pending") file.status = "queued";
+            });
+            return {
+                files: prevState.files
+            }
+        });
+        this.feedPool();
+    };
+
+    stopAllTask = () => {
+
+    };
+
+    startTask = id => {
+
+    };
+
+    stopTask = id => {
+
     };
 
     fileAddHandler = event => {
@@ -146,8 +206,10 @@ class FileHash extends React.Component {
             if (prevState.files.length > 0) {
                 prevState.files.forEach(file => {
                     if (file.hashAlgorithm !== event.target.value) {
-                        file.hashAlgorithm = event.target.value;
-                        if (file.status !== "processing") file.status = "pending";  // reset status
+                        if (file.status !== "processing") {
+                            file.hashAlgorithm = event.target.value;
+                            file.status = "pending";    // reset status
+                        }
                     }
                 });
             }
@@ -162,8 +224,10 @@ class FileHash extends React.Component {
         this.setState(prevState => {
             const file = prevState.files.find(({taskId}) => taskId === id);
             if (file.hashAlgorithm !== event.target.value) {
-                file.hashAlgorithm = event.target.value;
-                if (file.status !== "processing") file.status = "pending";  // reset status
+                if (file.status !== "processing") {
+                    file.hashAlgorithm = event.target.value;
+                    file.status = "pending";  // reset status
+                }
             }
             return {
                 files: prevState.files
@@ -235,7 +299,7 @@ class FileHash extends React.Component {
                                     <IconButton className={classes.StatusButton}>
                                         {file.status === "pending" &&
                                         <PlayArrowIcon/>}
-                                        {file.status === "processing" &&
+                                        {(file.status === "processing" || file.status === "queued") &&
                                         <StopIcon/>}
                                         {file.status === "done" &&
                                         <DoneIcon/>}
@@ -255,7 +319,9 @@ class FileHash extends React.Component {
                                         {this.menuItemHashAlgorithm}
                                     </Select>
                                 </FormControl>
-                                <IconButton size={"small"} onClick={e => this.removeItemHandler(file.taskId)}>
+                                <IconButton size={"small"}
+                                            disabled={file.status === "processing"}
+                                            onClick={e => this.removeItemHandler(file.taskId)}>
                                     <CloseIcon/>
                                 </IconButton>
                             </div>
