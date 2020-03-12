@@ -7,6 +7,7 @@ import LockIcon from "./assets/img/icon_lock.svg";
 import Base64Icon from "./assets/img/icon_base64.svg"
 import JsonIcon from "./assets/img/icon_json.svg";
 import ClockIcon from "./assets/img/icon_timestamp.svg";
+import CheckIcon from "./assets/img/icon_check.svg";
 import Layout from "./components/Layout";
 import ApplicationContext from "./components/ApplicationContext";
 
@@ -45,6 +46,13 @@ const tools = [
         title: "Unix timestamp",
         description: "Unix timestamp utilities",
         icon: ClockIcon
+    },
+    {
+        name: "hash",
+        loader: () => import("./components/tools/FileHash.js"),
+        title: "File checksum",
+        description: "Calculate the hash of file",
+        icon: CheckIcon
     },
     {
         name: "test-fail",
