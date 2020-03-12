@@ -142,18 +142,18 @@ class JsonFormatter extends React.Component {
     closeThisTab = event => {
         event.stopPropagation();    // Don't bother changeTab
         const indexToRemove = event.currentTarget.getAttribute('data-index');
-        let newTabIndex = this.state.tabIndex;  // Default no tab switch
-        if (this.state.tabIndex === indexToRemove) {
-            const indexOfElement = this.state.tabs.findIndex(({id}) => id === indexToRemove);
-            if (indexOfElement < this.state.tabs.length - 1) {  // Switch to right tab
-                newTabIndex = this.state.tabs[indexOfElement + 1].id;
-            } else if (indexOfElement > 0) {    // Switch to left tab
-                newTabIndex = this.state.tabs[indexOfElement - 1].id;
-            } else {    // No index
-                newTabIndex = 0
-            }
-        }
         this.setState(prevState => {
+            let newTabIndex = prevState.tabIndex;  // Default no tab switch
+            if (prevState.tabIndex === indexToRemove) {
+                const indexOfElement = prevState.tabs.findIndex(({id}) => id === indexToRemove);
+                if (indexOfElement < prevState.tabs.length - 1) {  // Switch to right tab
+                    newTabIndex = prevState.tabs[indexOfElement + 1].id;
+                } else if (indexOfElement > 0) {    // Switch to left tab
+                    newTabIndex = prevState.tabs[indexOfElement - 1].id;
+                } else {    // No index
+                    newTabIndex = 0
+                }
+            }
             return {
                 tabs: prevState.tabs.filter(({id}) => (id !== indexToRemove)),
                 tabIndex: newTabIndex

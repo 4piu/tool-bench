@@ -89,7 +89,7 @@ const randomCharacter = async (type, allowConfusing, useCsprng) => {
     }
 };
 
-class PasswordGenerator extends React.PureComponent {
+class PasswordGenerator extends React.Component {
     static propTypes = {
         title: PropTypes.string
     };
@@ -136,15 +136,12 @@ class PasswordGenerator extends React.PureComponent {
     }
 
     checkboxCharactersHandler = name => event => {
-        const state = {
-            upperCaseChecked: this.state.upperCaseChecked,
-            lowerCaseChecked: this.state.lowerCaseChecked,
-            digitChecked: this.state.digitChecked,
-            symbolChecked: this.state.symbolChecked
-        };
-        state[name] = event.currentTarget.checked;
-        state.checkboxInvalid = !(state.upperCaseChecked || state.lowerCaseChecked || state.digitChecked || state.symbolChecked);
-        this.setState(state);
+        const val = event.currentTarget.checked;
+        this.setState(prevState => {
+            prevState[name] = val;
+            prevState.checkboxInvalid = !(prevState.upperCaseChecked || prevState.lowerCaseChecked || prevState.digitChecked || prevState.symbolChecked);
+            return prevState;
+        });
     };
 
     inputNumberHandler = event => {
@@ -159,11 +156,10 @@ class PasswordGenerator extends React.PureComponent {
         };
         const inputValue = event.currentTarget.value;
         const isValid = isValidLength(inputValue);
-        const nextState = {
+        this.setState({
             inputPasswordLengthInvalid: !isValid,
             inputPasswordLength: inputValue
-        };
-        this.setState(nextState);
+        });
     };
 
     buttonGenerateHandler = async () => {
