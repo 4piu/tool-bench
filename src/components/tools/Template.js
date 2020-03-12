@@ -2,7 +2,7 @@ import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import MyAppBar from "../MyAppBar";
-import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 
 const styles = theme => ({});
 
@@ -12,14 +12,15 @@ class ToolClass extends React.Component {
     };
 
     render() {
+        const {classes} = this.props;
         return (
             <>
                 {/** App bar */}
                 <MyAppBar title={this.props.title}/>
                 {/** Main view */}
-                <Grid container>
+                <Container container>
 
-                </Grid>
+                </Container>
             </>
         );
     }
