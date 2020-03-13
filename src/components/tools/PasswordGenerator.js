@@ -89,7 +89,7 @@ const randomCharacter = async (type, allowConfusing, useCsprng) => {
     }
 };
 
-class PasswordGenerator extends React.PureComponent {
+class PasswordGenerator extends React.Component {
     static propTypes = {
         title: PropTypes.string
     };
@@ -132,15 +132,15 @@ class PasswordGenerator extends React.PureComponent {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!shallowCompare(prevState, this.state, ['password'])) this.saveState();
+        this.saveState();
     }
 
     checkboxCharactersHandler = name => event => {
         const val = event.currentTarget.checked;
-        this.setState(prevState => {
-            prevState[name] = val;
-            prevState.checkboxInvalid = !(prevState.upperCaseChecked || prevState.lowerCaseChecked || prevState.digitChecked || prevState.symbolChecked);
-            return prevState;
+        this.setState(state => {
+            state[name] = val;
+            state.checkboxInvalid = !(state.upperCaseChecked || state.lowerCaseChecked || state.digitChecked || state.symbolChecked);
+            return state;
         });
     };
 

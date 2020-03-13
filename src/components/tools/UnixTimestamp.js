@@ -82,8 +82,8 @@ class UnixTimestamp extends React.Component {
 
     selectSecondsHandler = event => {
         const value = event.target.value;
-        this.setState(prevState => {
-            const nextDate = prevState.selectedDate;
+        this.setState(state => {
+            const nextDate = state.selectedDate;
             nextDate.setSeconds(parseInt(value));
             return {
                 selectedDate: nextDate

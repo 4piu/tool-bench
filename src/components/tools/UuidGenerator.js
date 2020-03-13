@@ -123,7 +123,7 @@ class UuidGenerator extends React.PureComponent {
         localStorage.setItem('uuid-generator', JSON.stringify(this.state));
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, state, snapshot) {
         this.saveState();
     }
 

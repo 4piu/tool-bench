@@ -105,7 +105,7 @@ class JsonFormatter extends React.Component {
         this.loadState()
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, state, snapshot) {
         this.saveState();
     };
 
@@ -133,8 +133,8 @@ class JsonFormatter extends React.Component {
 
     newTab = () => {
         const newTab = new AppTab();
-        this.setState(prevState => ({
-            tabs: [...prevState.tabs, newTab],
+        this.setState(state => ({
+            tabs: [...state.tabs, newTab],
             tabIndex: newTab.id
         }));
     };
@@ -142,20 +142,20 @@ class JsonFormatter extends React.Component {
     closeThisTab = event => {
         event.stopPropagation();    // Don't bother changeTab
         const indexToRemove = event.currentTarget.getAttribute('data-index');
-        this.setState(prevState => {
-            let newTabIndex = prevState.tabIndex;  // Default no tab switch
-            if (prevState.tabIndex === indexToRemove) {
-                const indexOfElement = prevState.tabs.findIndex(({id}) => id === indexToRemove);
-                if (indexOfElement < prevState.tabs.length - 1) {  // Switch to right tab
-                    newTabIndex = prevState.tabs[indexOfElement + 1].id;
+        this.setState(state => {
+            let newTabIndex = state.tabIndex;  // Default no tab switch
+            if (state.tabIndex === indexToRemove) {
+                const indexOfElement = state.tabs.findIndex(({id}) => id === indexToRemove);
+                if (indexOfElement < state.tabs.length - 1) {  // Switch to right tab
+                    newTabIndex = state.tabs[indexOfElement + 1].id;
                 } else if (indexOfElement > 0) {    // Switch to left tab
-                    newTabIndex = prevState.tabs[indexOfElement - 1].id;
+                    newTabIndex = state.tabs[indexOfElement - 1].id;
                 } else {    // No index
                     newTabIndex = 0
                 }
             }
             return {
-                tabs: prevState.tabs.filter(({id}) => (id !== indexToRemove)),
+                tabs: state.tabs.filter(({id}) => (id !== indexToRemove)),
                 tabIndex: newTabIndex
             }
         });
