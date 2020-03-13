@@ -15,7 +15,5 @@ self.addEventListener("message", m => {
             job.resultSha512 = "bar";
             break;
     }
-    // console.debug('worker');
-    // console.debug(job)
     setTimeout(()=> postMessage(job), Math.floor(Math.random() * 6000) + 2000);
 });

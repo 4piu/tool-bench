@@ -16,11 +16,12 @@ import IconButton from "@material-ui/core/IconButton";
 import {v4 as uuidV4} from "uuid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import CloseIcon from '@material-ui/icons/Close';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import StopIcon from '@material-ui/icons/Stop';
-import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from "@material-ui/icons/Close";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import StopIcon from "@material-ui/icons/Stop";
+import DoneIcon from "@material-ui/icons/Done";
 import FileHashWorker from "worker-loader!./FileHash.worker.js";
+import {shallowCompare} from "../../utils/ObjectCompare";
 
 const styles = theme => ({
     root: {
@@ -32,7 +33,7 @@ const styles = theme => ({
         marginBottom: theme.spacing(2),
     },
     Fab: {
-        position: 'fixed',
+        position: "fixed",
         bottom: theme.spacing(3),
         right: theme.spacing(3)
     },
@@ -86,16 +87,16 @@ const styles = theme => ({
         paddingRight: theme.spacing(1),
     },
     ButtonContainer: {
-        '& > *': {
+        "& > *": {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(2)
         }
     },
     ButtonWrapper: {
-        position: 'relative',
-        display: 'inline-flex',
-        [theme.breakpoints.down('xs')]: {
-            width: '100%'
+        position: "relative",
+        display: "inline-flex",
+        [theme.breakpoints.down("xs")]: {
+            width: "100%"
         }
     },
 });
@@ -118,30 +119,60 @@ class FileHash extends React.Component {
             defaultAlgorithm: "MD5",
             jobs: [],
             poolSize: ([1, 2, 4, 8, 16, 32, 64].includes(navigator.hardwareConcurrency)) ? navigator.hardwareConcurrency : 1
-        }
+        };
     }
 
     componentWillUnmount() {
-        this.stopAllTask();
+        // Terminate all
+        this.state.jobs.forEach(job => {
+            if (job.hasOwnProperty("workerRef")) job.workerRef.terminate();
+        });
     }
+
+    componentDidMount() {
+        this.loadState();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!shallowCompare(prevState, this.state, ["jobs", "poolSize"])) this.saveState();
+    }
+
+    saveState = () => {
+        console.debug("saved");
+        localStorage.setItem("file-hash", JSON.stringify({
+            defaultAlgorithm: this.state.defaultAlgorithm
+        }));
+    };
+
+    loadState = () => {
+        let savedInstance;
+        try {
+            savedInstance = JSON.parse(localStorage.getItem("file-hash"));
+        } catch (e) {
+            console.error("Failed to load saved instance");
+        }
+        if (savedInstance) {
+            this.setState(savedInstance);
+        }
+    };
 
     workerMessageHandler = ({data}) => {
         this.setState(state => {
-            // console.debug('workerMessageHandler')
-            // console.debug(data)
+            delete data.workerRef;
             data.status = "done";
             const index = state.jobs.findIndex(o => o.taskId === data.taskId);
             if (index !== -1) state.jobs[index] = data;
             this.feedPool(state);
             return {
                 jobs: state.jobs
-            }
+            };
         });
     };
 
     feedPool = state => {
         let modified = false;
         let processingCount = state.jobs.filter(({status}) => status === "processing").length;
+        // Add queued job to processing
         for (const job of state.jobs) {
             if (processingCount < state.poolSize || state.poolSize === -1) {
                 if (job.status === "queued") {
@@ -170,22 +201,66 @@ class FileHash extends React.Component {
                 }
             });
             modified |= this.feedPool(state);
-            // console.debug('startAllTask')
-            // console.debug(state.jobs)
             return modified ? {jobs: state.jobs} : null;
-        })
+        });
     };
 
     stopAllTask = () => {
-
+        this.setState(state => {
+            let modified = false;
+            for (const job of state.jobs) {
+                if (job.status === "processing") {
+                    job.workerRef.terminate();
+                    delete job.workerRef;
+                }
+                if (job.status === "processing" || job.status === "queued") {
+                    job.status = "pending";
+                    modified = true;
+                }
+            }
+            return modified ? {jobs: state.jobs} : null;
+        });
     };
 
     startTask = id => {
-
+        this.setState(state => {
+            const job = state.jobs.find(({taskId}) => taskId === id);
+            if (job.status === "pending") {
+                job.status = "queued";
+            }
+            this.feedPool(state);
+            return {
+                jobs: state.jobs
+            }
+        });
     };
 
     stopTask = id => {
+        this.setState(state => {
+            const job = state.jobs.find(({taskId}) => taskId === id);
+            if (job.status === "processing") {
+                job.workerRef.terminate();
+                delete job.workerRef;
+            }
+            job.status = "pending";
+            this.feedPool(state);
+            return {
+                jobs: state.jobs
+            }
+        });
+    };
 
+    toggleStatus = id => {
+        const job = this.state.jobs.find(({taskId}) => taskId === id);
+        switch (job.status) {
+            case "pending":
+                this.startTask(id);
+                break;
+            case "queued":
+            case "processing":
+                this.stopTask(id);
+                break;
+        }
     };
 
     fileAddHandler = event => {
@@ -200,8 +275,8 @@ class FileHash extends React.Component {
             }));
             return {
                 jobs: state.jobs.concat(tmp)
-            }
-        })
+            };
+        });
     };
 
     selectDefaultAlgorithmHandler = event => {
@@ -219,7 +294,7 @@ class FileHash extends React.Component {
             return {
                 defaultAlgorithm: event.target.value,
                 jobs: state.jobs
-            }
+            };
         });
     };
 
@@ -241,7 +316,7 @@ class FileHash extends React.Component {
     selectPoolSizeHandler = event => {
         this.setState({
             poolSize: event.target.value
-        })
+        });
     };
 
     removeItemHandler = id => {
@@ -249,12 +324,11 @@ class FileHash extends React.Component {
             const nextFiles = state.jobs.filter(({taskId}) => taskId !== id);
             return {
                 jobs: nextFiles
-            }
+            };
         });
     };
 
     render() {
-        console.log(this.state.jobs)
         const {classes} = this.props;
         return (
             <>
@@ -316,7 +390,11 @@ class FileHash extends React.Component {
                         <Paper key={job.taskId} className={classes.ListItem}>
                             <div className={classes.ListItemJob}>
                                 <div className={classes.IconButtonWrapper}>
-                                    <IconButton className={classes.StatusButton}>
+                                    {job.status === "processing" &&
+                                    <CircularProgress size={48} className={classes.Progress}/>}
+                                    <IconButton className={classes.StatusButton}
+                                                onClick={e => this.toggleStatus(job.taskId)}
+                                                disabled={job.status === "done"}>
                                         {job.status === "pending" &&
                                         <PlayArrowIcon/>}
                                         {(job.status === "processing" || job.status === "queued") &&
@@ -324,8 +402,6 @@ class FileHash extends React.Component {
                                         {job.status === "done" &&
                                         <DoneIcon/>}
                                     </IconButton>
-                                    {job.status === "processing" &&
-                                    <CircularProgress size={48} className={classes.Progress}/>}
                                 </div>
                                 <Typography className={classes.FileName}>{job.file.name}</Typography>
                                 <FormControl className={classes.Select}>
