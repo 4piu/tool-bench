@@ -20,6 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import DoneIcon from '@material-ui/icons/Done';
+import FileHashWorker from "worker-loader!./FileHash.worker.js";
 
 const styles = theme => ({
     root: {
@@ -83,20 +84,21 @@ const styles = theme => ({
         wordBreak: "break-all",
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
-    }
+    },
+    ButtonContainer: {
+        '& > *': {
+            marginRight: theme.spacing(1),
+            marginBottom: theme.spacing(2)
+        }
+    },
+    ButtonWrapper: {
+        position: 'relative',
+        display: 'inline-flex',
+        [theme.breakpoints.down('xs')]: {
+            width: '100%'
+        }
+    },
 });
-
-const fileHashWorker = (file) => {
-    console.debug(`processing ${file.name}`);
-    self.onmessage = m => {
-        // TODO hash file
-        console.debug(`received ${m.data}`);
-        file.resultMd5 = "foo";
-        file.resultSha1 = "bar";
-        file.resultSha256 = "buz";
-        postMessage(file);
-    }
-};
 
 class FileHash extends React.Component {
     static propTypes = {
@@ -114,65 +116,64 @@ class FileHash extends React.Component {
         ));
         this.state = {
             defaultAlgorithm: "MD5",
-            files: [],
-            pool: [],
+            jobs: [],
             poolSize: ([1, 2, 4, 8, 16, 32, 64].includes(navigator.hardwareConcurrency)) ? navigator.hardwareConcurrency : 1
         }
     }
 
-    workerMessageHandler = m => {
-        this.setState(prevState => {
-            const index = prevState.files.findIndex(({taskId}) => taskId === m.taskId);
-            m.status = "done";
-            this.removeFromPool(m.taskId);
-            if (index !== -1) prevState.files[index] = m;
+    componentWillUnmount() {
+        this.stopAllTask();
+    }
+
+    workerMessageHandler = ({data}) => {
+        this.setState(state => {
+            // console.debug('workerMessageHandler')
+            // console.debug(data)
+            data.status = "done";
+            const index = state.jobs.findIndex(o => o.taskId === data.taskId);
+            if (index !== -1) state.jobs[index] = data;
+            this.feedPool(state);
             return {
-                files: prevState.files
+                jobs: state.jobs
             }
         });
-        this.feedPool();
     };
 
-    feedPool = () => {
-        this.setState(prevState => {
-            for (const file of prevState.files) {
-                if (prevState.pool.length < prevState.poolSize) {
-                    const worker = new Worker(fileHashWorker);
+    feedPool = state => {
+        let modified = false;
+        let processingCount = state.jobs.filter(({status}) => status === "processing").length;
+        for (const job of state.jobs) {
+            if (processingCount < state.poolSize || state.poolSize === -1) {
+                if (job.status === "queued") {
+                    const worker = new FileHashWorker();
                     worker.addEventListener("message", this.workerMessageHandler);
-                    prevState.pool.push({
-                        taskId: file.taskId,
-                        worker: worker
-                    });
-                } else {
-                    break;
+                    job.status = "processing";
+                    worker.postMessage(job);
+                    job.workerRef = worker;
+                    processingCount++;
+                    modified = true;
                 }
+            } else {
+                break;
             }
-            return {
-                pool: prevState.pool
-            };
-        })
-    };
-
-    removeFromPool = id => {
-        this.setState(prevState => {
-            prevState.pool.filter(({taskId}) => taskId !== id);
-            return {
-                pool: prevState.pool
-            }
-        });
-        this.feedPool();
+        }
+        return modified;
     };
 
     startAllTask = () => {
-        this.setState(prevState => {
-            prevState.files.forEach(file => {
-                if (file.status === "pending") file.status = "queued";
+        this.setState(state => {
+            let modified = false;
+            state.jobs.forEach(job => {
+                if (job.status === "pending") {
+                    job.status = "queued";
+                    modified = true;
+                }
             });
-            return {
-                files: prevState.files
-            }
-        });
-        this.feedPool();
+            modified |= this.feedPool(state);
+            // console.debug('startAllTask')
+            // console.debug(state.jobs)
+            return modified ? {jobs: state.jobs} : null;
+        })
     };
 
     stopAllTask = () => {
@@ -189,40 +190,42 @@ class FileHash extends React.Component {
 
     fileAddHandler = event => {
         const newFiles = Array.from(event.target.files);
-        this.setState(prevState => {
-            newFiles.forEach(o => {
-                o.taskId = uuidV4();
-                o.hashAlgorithm = prevState.defaultAlgorithm;
-                o.status = "pending"
-            });
+        this.setState(state => {
+            const tmp = [];
+            newFiles.forEach(o => tmp.push({
+                taskId: uuidV4(),
+                hashAlgorithm: state.defaultAlgorithm,
+                status: "pending",
+                file: o
+            }));
             return {
-                files: prevState.files.concat(newFiles)
+                jobs: state.jobs.concat(tmp)
             }
         })
     };
 
     selectDefaultAlgorithmHandler = event => {
-        this.setState(prevState => {
-            if (prevState.files.length > 0) {
-                prevState.files.forEach(file => {
-                    if (file.hashAlgorithm !== event.target.value) {
-                        if (file.status !== "processing") {
-                            file.hashAlgorithm = event.target.value;
-                            file.status = "pending";    // reset status
+        this.setState(state => {
+            if (state.jobs.length > 0) {
+                state.jobs.forEach(job => {
+                    if (job.hashAlgorithm !== event.target.value) {
+                        if (job.status !== "processing") {
+                            job.hashAlgorithm = event.target.value;
+                            job.status = "pending";    // reset status
                         }
                     }
                 });
             }
             return {
                 defaultAlgorithm: event.target.value,
-                files: prevState.files
+                jobs: state.jobs
             }
         });
     };
 
     selectAlgorithmHandler = (event, id) => {
-        this.setState(prevState => {
-            const file = prevState.files.find(({taskId}) => taskId === id);
+        this.setState(state => {
+            const file = state.jobs.find(({taskId}) => taskId === id);
             if (file.hashAlgorithm !== event.target.value) {
                 if (file.status !== "processing") {
                     file.hashAlgorithm = event.target.value;
@@ -230,7 +233,7 @@ class FileHash extends React.Component {
                 }
             }
             return {
-                files: prevState.files
+                jobs: state.jobs
             };
         });
     };
@@ -242,16 +245,16 @@ class FileHash extends React.Component {
     };
 
     removeItemHandler = id => {
-        this.setState(prevState => {
-            const nextFiles = prevState.files.filter(({taskId}) => taskId !== id);
+        this.setState(state => {
+            const nextFiles = state.jobs.filter(({taskId}) => taskId !== id);
             return {
-                files: nextFiles
+                jobs: nextFiles
             }
         });
     };
 
     render() {
-        console.debug(this.state.files);
+        console.log(this.state.jobs)
         const {classes} = this.props;
         return (
             <>
@@ -278,7 +281,7 @@ class FileHash extends React.Component {
                             id="select-worker"
                             value={this.state.poolSize}
                             onChange={this.selectPoolSizeHandler}
-                            disabled={this.state.files.findIndex(({status}) => status === "processing") !== -1}
+                            disabled={this.state.jobs.findIndex(({status}) => status === "processing") !== -1}
                             autoWidth={true}
                         >
                             <MenuItem value={1}>🚲 &nbsp; 1</MenuItem>
@@ -291,52 +294,73 @@ class FileHash extends React.Component {
                             <MenuItem value={-1}>☢ &nbsp; ∞</MenuItem>
                         </Select>
                     </FormControl>
+                    <div className={classes.ButtonContainer}>
+                        <div className={classes.ButtonWrapper}>
+                            <Button variant="contained"
+                                    color={"primary"}
+                                    onClick={this.startAllTask}
+                                    fullWidth={true}
+                                    startIcon={<PlayArrowIcon/>}
+                            >Start all</Button>
+                        </div>
+                        <div className={classes.ButtonWrapper}>
+                            <Button variant="contained"
+                                    onClick={this.stopAllTask}
+                                    fullWidth={true}
+                                    startIcon={<StopIcon/>}
+                            >Stop all</Button>
+                        </div>
+                    </div>
                     <Divider className={classes.Divider}/>
-                    {this.state.files.map(file => (
-                        <Paper key={file.taskId} className={classes.ListItem}>
+                    {this.state.jobs.map(job => (
+                        <Paper key={job.taskId} className={classes.ListItem}>
                             <div className={classes.ListItemJob}>
                                 <div className={classes.IconButtonWrapper}>
                                     <IconButton className={classes.StatusButton}>
-                                        {file.status === "pending" &&
+                                        {job.status === "pending" &&
                                         <PlayArrowIcon/>}
-                                        {(file.status === "processing" || file.status === "queued") &&
+                                        {(job.status === "processing" || job.status === "queued") &&
                                         <StopIcon/>}
-                                        {file.status === "done" &&
+                                        {job.status === "done" &&
                                         <DoneIcon/>}
                                     </IconButton>
-                                    {file.status === "processing" &&
+                                    {job.status === "processing" &&
                                     <CircularProgress size={48} className={classes.Progress}/>}
                                 </div>
-                                <Typography className={classes.FileName}>{file.name}</Typography>
+                                <Typography className={classes.FileName}>{job.file.name}</Typography>
                                 <FormControl className={classes.Select}>
                                     <Select
                                         id="select-algorithm"
-                                        value={file.hashAlgorithm}
-                                        onChange={e => this.selectAlgorithmHandler(e, file.taskId)}
-                                        disabled={file.status === "processing"}
+                                        value={job.hashAlgorithm}
+                                        onChange={e => this.selectAlgorithmHandler(e, job.taskId)}
+                                        disabled={job.status === "processing"}
                                         autoWidth={true}
                                     >
                                         {this.menuItemHashAlgorithm}
                                     </Select>
                                 </FormControl>
                                 <IconButton size={"small"}
-                                            disabled={file.status === "processing"}
-                                            onClick={e => this.removeItemHandler(file.taskId)}>
+                                            disabled={job.status === "processing"}
+                                            onClick={e => this.removeItemHandler(job.taskId)}>
                                     <CloseIcon/>
                                 </IconButton>
                             </div>
                             <div className={classes.ChecksumText}>
-                                {file.resultMd5 &&
+                                {job.resultMd5 &&
                                 <div>
-                                    MD5: {file.resultMd5}}
+                                    MD5: {job.resultMd5}
                                 </div>}
-                                {file.resultSha1 &&
+                                {job.resultSha1 &&
                                 <div>
-                                    SHA-1: {file.resultSha1}
+                                    SHA-1: {job.resultSha1}
                                 </div>}
-                                {file.resultSha256 &&
+                                {job.resultSha256 &&
                                 <div>
-                                    SHA-256: {file.resultSha256}
+                                    SHA-256: {job.resultSha256}
+                                </div>}
+                                {job.resultSha512 &&
+                                <div>
+                                    SHA-512: {job.resultSha512}
                                 </div>}
                             </div>
                         </Paper>

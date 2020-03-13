@@ -82,6 +82,10 @@ module.exports = {
                         options: {
                             sourceMap: isDevelopment
                         }
+                    },
+                    {
+                        test: /\.worker\.js$/,
+                        use: { loader: 'worker-loader' }
                     }
                 ]
             }
