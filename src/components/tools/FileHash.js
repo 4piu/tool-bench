@@ -22,6 +22,7 @@ import StopIcon from "@material-ui/icons/Stop";
 import DoneIcon from "@material-ui/icons/Done";
 import FileHashWorker from "worker-loader!./FileHash.worker.js";
 import {shallowCompare} from "../../utils/ObjectCompare";
+import MyDragAndDrop from "../MyDragAndDrop";
 
 const styles = theme => ({
     root: {
@@ -99,6 +100,12 @@ const styles = theme => ({
             width: "100%"
         }
     },
+    DropBox: {
+        [theme.breakpoints.down("sm")]: {
+            display: "none",
+            height: "8rem"
+        }
+    }
 });
 
 class FileHash extends React.Component {
@@ -231,7 +238,7 @@ class FileHash extends React.Component {
             this.feedPool(state);
             return {
                 jobs: state.jobs
-            }
+            };
         });
     };
 
@@ -246,7 +253,7 @@ class FileHash extends React.Component {
             this.feedPool(state);
             return {
                 jobs: state.jobs
-            }
+            };
         });
     };
 
@@ -264,7 +271,7 @@ class FileHash extends React.Component {
     };
 
     fileAddHandler = event => {
-        const newFiles = Array.from(event.target.files);
+        const newFiles = Array.from(event.target.files || event.dataTransfer.files);
         this.setState(state => {
             const tmp = [];
             newFiles.forEach(o => tmp.push({
@@ -386,6 +393,7 @@ class FileHash extends React.Component {
                         </div>
                     </div>
                     <Divider className={classes.Divider}/>
+                    <MyDragAndDrop className={classes.DropBox} onDrop={this.fileAddHandler}/>
                     {this.state.jobs.map(job => (
                         <Paper key={job.taskId} className={classes.ListItem}>
                             <div className={classes.ListItemJob}>
