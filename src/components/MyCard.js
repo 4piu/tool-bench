@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import WrenchIcon from '../assets/img/icon_wrench.svg';
 import {CardHeader} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 const styles = theme => ({
     root: {
@@ -37,11 +38,14 @@ class MyCard extends React.PureComponent {
 
         return (
             <Card className={classes.root}>
-                <CardHeader
-                    avatar={<Avatar src={this.props.image}/>}
-                    title={this.props.title}
-                    subheader={this.props.description}
-                />
+                <CardActionArea>
+                    <CardHeader
+                        avatar={<Avatar src={this.props.image}/>}
+                        title={this.props.title}
+                        subheader={this.props.description}
+                    />
+                </CardActionArea>
+
             </Card>
         );
     }
