@@ -6,8 +6,8 @@ const styleCommon = {
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "transparent",
-    border: "3px dashed grey",
-    color: "grey",
+    border: "3px dashed #bbb",
+    color: "#bbb",
     borderRadius: "1rem",
     padding: "2rem"
 };

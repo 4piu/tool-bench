@@ -1,8 +1,8 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isDevelopment = process.env.NODE_ENV === "development";
 
 module.exports = {
     entry: {
@@ -49,16 +49,16 @@ module.exports = {
             {
                 test: /\.module\.s[ac]ss$/,
                 use: [
-                    isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
                     {
-                        loader: 'css-loader',
+                        loader: "css-loader",
                         options: {
                             modules: false,
                             sourceMap: isDevelopment
                         }
                     },
                     {
-                        loader: 'sass-loader',
+                        loader: "sass-loader",
                         options: {
                             sourceMap: isDevelopment
                         }
@@ -69,40 +69,40 @@ module.exports = {
                 test: /\.s[ac]ss$/,
                 exclude: /\.module.s([ac]ss)$/,
                 use: [
-                    isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
                     {
-                        loader: 'css-loader',
+                        loader: "css-loader",
                         options: {
                             modules: false,
                             sourceMap: isDevelopment
                         }
                     },
                     {
-                        loader: 'sass-loader',
+                        loader: "sass-loader",
                         options: {
                             sourceMap: isDevelopment
                         }
-                    },
-                    {
-                        test: /\.worker\.js$/,
-                        use: { loader: 'worker-loader' }
                     }
                 ]
+            },
+            {
+                test: /\.worker\.js$/,
+                use: [{loader: "worker-loader"}]
             }
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.scss']
+        extensions: [".js", ".jsx", ".scss"]
     },
     plugins: [
-        isDevelopment? null : new CleanWebpackPlugin(),
+        isDevelopment ? null : new CleanWebpackPlugin(),
         new HtmlWebPackPlugin({
             template: "./src/index.html",
             filename: "./index.html"
         }),
         new MiniCssExtractPlugin({
-            filename: isDevelopment ? '[name].css' : '[name].[hash].css',
-            chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
+            filename: isDevelopment ? "[name].css" : "[name].[hash].css",
+            chunkFilename: isDevelopment ? "[id].css" : "[id].[hash].css"
         })
     ]
 };

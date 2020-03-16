@@ -23,7 +23,7 @@ const styles = theme => ({
     }
 });
 
-class MyAlert extends React.Component {
+class MyAlert extends React.PureComponent {
 
     static propTypes = {
         title: PropTypes.string,
