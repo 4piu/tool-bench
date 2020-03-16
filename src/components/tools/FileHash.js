@@ -20,7 +20,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import StopIcon from "@material-ui/icons/Stop";
 import DoneIcon from "@material-ui/icons/Done";
-import FileHashWorker from "worker-loader!./FileHash.worker.js";
+import FileHashWorker from "./FileHash.worker.js";
 import {shallowCompare} from "../../utils/ObjectCompare";
 import MyDragAndDrop from "../MyDragAndDrop";
 
@@ -102,9 +102,9 @@ const styles = theme => ({
     },
     DropBox: {
         [theme.breakpoints.down("sm")]: {
-            display: "none",
-            height: "8rem"
-        }
+            display: "none!important",
+        },
+        height: "8rem"
     }
 });
 
@@ -271,7 +271,10 @@ class FileHash extends React.Component {
     };
 
     fileAddHandler = event => {
-        const newFiles = Array.from(event.target.files || event.dataTransfer.files);
+        const newFiles = Array
+            .from(event.target.files || event.dataTransfer.files)
+            .filter(file => (file.type || file.size % 4096 !== 0));
+        console.debug(newFiles);
         this.setState(state => {
             const tmp = [];
             newFiles.forEach(o => tmp.push({
