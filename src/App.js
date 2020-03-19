@@ -4,7 +4,8 @@ import {Helmet} from "react-helmet";
 import logo from "./assets/img/logo.png";
 import UuidIcon from "./assets/img/icon_uuid.svg";
 import LockIcon from "./assets/img/icon_lock.svg";
-import Base64Icon from "./assets/img/icon_base64.svg"
+import Base64Icon from "./assets/img/icon_base64.svg";
+import QrIcon from "./assets/img/icon_qr.svg";
 import JsonIcon from "./assets/img/icon_json.svg";
 import ClockIcon from "./assets/img/icon_timestamp.svg";
 import CheckIcon from "./assets/img/icon_check.svg";
@@ -53,6 +54,13 @@ const tools = [
         title: "File checksum",
         description: "Calculate the hash of file",
         icon: CheckIcon
+    },
+    {
+        name: "qr",
+        loader: () => import("./components/tools/QrCodeGenerator.js"),
+        title: "QR Code",
+        description: "Generate QR code",
+        icon: QrIcon
     },
     {
         name: "test-fail",
