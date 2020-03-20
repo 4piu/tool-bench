@@ -18,7 +18,7 @@ class ToolClass extends React.Component {
                 {/** App bar */}
                 <MyAppBar title={this.props.title}/>
                 {/** Main view */}
-                <Container container>
+                <Container>
 
                 </Container>
             </>

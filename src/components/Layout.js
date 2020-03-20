@@ -95,7 +95,7 @@ class Layout extends React.PureComponent {
         // Async load
         const Tool = Loadable({
             loader: context.activityList.filter(({name}) => (name === context.activity))[0].loader,
-            render(loaded) {
+            render: (loaded) => {
                 const Component = loaded.default;
                 return <Component
                     title={context.activityList.filter(x => (x.name === context.activity))[0].title}

@@ -358,6 +358,7 @@ class FileHash extends React.Component {
                             {this.menuItemHashAlgorithm}
                         </Select>
                     </FormControl>
+                    <br/>
                     <FormControl className={classes.MenuSelect}>
                         <InputLabel id="select-worker-label">Concurrent</InputLabel>
                         <Select

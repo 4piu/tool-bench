@@ -44,14 +44,14 @@ const tools = [
     {
         name: "timestamp",
         loader: () => import("./components/tools/UnixTimestamp.js"),
-        title: "Unix timestamp",
+        title: "Unix Timestamp",
         description: "Unix timestamp utilities",
         icon: ClockIcon
     },
     {
         name: "hash",
         loader: () => import("./components/tools/FileHash.js"),
-        title: "File checksum",
+        title: "File Checksum",
         description: "Calculate the hash of file",
         icon: CheckIcon
     },
