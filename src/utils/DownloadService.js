@@ -7,3 +7,10 @@ export const downloadText = (filename, text) => {
     element.click();
     document.body.removeChild(element);
 };
+
+export const downloadBase64 = (filename, base64) => {
+    const a = document.createElement("a");
+    a.href = base64;
+    a.download = filename;
+    a.click();
+};

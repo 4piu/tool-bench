@@ -21,20 +21,25 @@ import Loadable from "react-loadable";
 import regeneratorRuntime from "regenerator-runtime";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import {deepCompare} from "../../utils/ObjectCompare";
+import {downloadBase64} from "../../utils/DownloadService";
 
 const isValidHexColor = str => {
     return /^#([0-9A-F]{3}){1,2}$/i.test(str);
 };
 
 const QrCodeImage = async (text, options) => {
+    const onImgClick = event => {
+        const imgSrc = event.currentTarget.src;
+        downloadBase64("qr", imgSrc);
+    };
     try {
         if (options.type === "svg") {
             const base64Img = (new Buffer(await QrCode.toString(text, options))).toString("base64");
-            return <img alt="qr-code"
-                        src={`data:image/svg+xml;base64,${base64Img}`}/>;
+            const imgSrc = `data:image/svg+xml;base64,${base64Img}`;
+            return <img alt="qr-code" title="Click to download" src={imgSrc} onClick={onImgClick}/>;
         } else {
-            return <img alt="qr-code" src={await QrCode.toDataURL(text, options)}/>;
+            const imgSrc = await QrCode.toDataURL(text, options);
+            return <img alt="qr-code" title="Click to download" src={imgSrc} onClick={onImgClick}/>;
         }
     } catch (e) {
         console.error(e.message);
@@ -78,7 +83,8 @@ const styles = theme => ({
         textAlign: "center",
         "& > img": {
             width: "100%",
-            maxWidth: 300
+            maxWidth: 300,
+            cursor: "pointer"
         }
     }
 });
