@@ -84,11 +84,13 @@ const styles = theme => ({
 class MyAppBar extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string,
-        showSearchBar: PropTypes.bool
+        showSearchBar: PropTypes.bool,
+        menuItems: PropTypes.arrayOf(PropTypes.node)
     };
 
     static defaultProps = {
-        showSearchBar: false
+        showSearchBar: false,
+        menuItems: []
     };
 
     constructor(props) {
@@ -170,6 +172,13 @@ class MyAppBar extends React.PureComponent {
                                     inputProps={{'aria-label': 'search'}}
                                     onChange={context.onSearchInputChange}/>
                             </div>
+                        }
+                        {// Custom menu items
+                            this.props.menuItems.map((item, index) => (
+                                <div key={"menu-" + index}>
+                                    {item}
+                                </div>
+                            ))
                         }
                     </Toolbar>
                 </AppBar>
