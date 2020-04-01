@@ -41,7 +41,9 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^1.3.6",
+    "base64url": "^3.0.1",
     "date-fns": "^2.10.0",
+    "dns-packet": "latest",
     "filereader-stream": "^2.0.0",
     "qrcode": "^1.4.4",
     "random-number-csprng": "^1.0.2",

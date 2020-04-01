@@ -9,6 +9,7 @@ import QrIcon from "./assets/img/icon_qr.svg";
 import JsonIcon from "./assets/img/icon_json.svg";
 import ClockIcon from "./assets/img/icon_timestamp.svg";
 import CheckIcon from "./assets/img/icon_check.svg";
+import GlobeIcon from "./assets/img/icon_globe.svg";
 import Layout from "./components/Layout";
 import ApplicationContext from "./components/ApplicationContext";
 
@@ -58,9 +59,16 @@ const tools = [
     {
         name: "qr",
         loader: () => import("./components/tools/QrCodeGenerator.js"),
-        title: "QR Code",
+        title: "QR Code Creator",
         description: "Generate QR code",
         icon: QrIcon
+    },
+    {
+        name: "dns",
+        loader: () => import("./components/tools/DnsLookup.js"),
+        title: "DNS Lookup",
+        description: "DNS lookup using DNS Over HTTPS",
+        icon: GlobeIcon
     },
     {
         name: "test-fail",
