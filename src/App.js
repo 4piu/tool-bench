@@ -16,56 +16,56 @@ import ApplicationContext from "./components/ApplicationContext";
 const tools = [
     {
         name: "uuid",
-        loader: () => import("./components/tools/UuidGenerator.js"),
+        loader: () => import("./components/tools/Uuid/UuidGenerator.js"),
         title: "UUID Generator",
         description: "Batch generate UUID",
         icon: UuidIcon
     },
     {
         name: "password",
-        loader: () => import("./components/tools/PasswordGenerator.js"),
+        loader: () => import("./components/tools/Password/PasswordGenerator.js"),
         title: "Password Generator",
         description: "Generate strong password",
         icon: LockIcon
     },
     {
         name: "base64",
-        loader: () => import("./components/tools/Base64Codec.js"),
+        loader: () => import("./components/tools/Base64/Base64Codec.js"),
         title: "Base64 Encoder / Decoder",
         description: "Encode & decode base64 string",
         icon: Base64Icon
     },
     {
         name: "json",
-        loader: () => import("./components/tools/JsonFormatter.js"),
+        loader: () => import("./components/tools/Json/JsonFormatter.js"),
         title: "JSON Beautify / Uglify",
         description: "Beautify & uglify JSON",
         icon: JsonIcon
     },
     {
         name: "timestamp",
-        loader: () => import("./components/tools/UnixTimestamp.js"),
+        loader: () => import("./components/tools/Timestamp/UnixTimestamp.js"),
         title: "Unix Timestamp",
         description: "Unix timestamp utilities",
         icon: ClockIcon
     },
     {
         name: "hash",
-        loader: () => import("./components/tools/FileHash.js"),
+        loader: () => import("./components/tools/FileHash/FileHash.js"),
         title: "File Checksum",
         description: "Calculate the hash of file",
         icon: CheckIcon
     },
     {
         name: "qr",
-        loader: () => import("./components/tools/QrCodeGenerator.js"),
+        loader: () => import("./components/tools/QrCode/QrCodeGenerator.js"),
         title: "QR Code Creator",
         description: "Generate QR code",
         icon: QrIcon
     },
     {
         name: "dns",
-        loader: () => import("./components/tools/DnsLookup.js"),
+        loader: () => import("./components/tools/DnsLookup/DnsLookup.js"),
         title: "DNS Lookup",
         description: "DNS lookup using DNS Over HTTPS",
         icon: GlobeIcon

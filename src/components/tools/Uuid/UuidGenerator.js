@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import MyAppBar from "../MyAppBar";
+import MyAppBar from "../../MyAppBar";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import {downloadText} from "../../utils/DownloadService";
+import {downloadText} from "../../../utils/DownloadService";
 import {v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5} from "uuid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';

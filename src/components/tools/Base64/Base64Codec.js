@@ -1,7 +1,7 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import MyAppBar from "../MyAppBar";
+import MyAppBar from "../../MyAppBar";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -15,7 +15,7 @@ import Button from "@material-ui/core/Button";
 import DoneIcon from "@material-ui/icons/Done";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import {downloadText} from "../../utils/DownloadService";
+import {downloadText} from "../../../utils/DownloadService";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import MyAppBar from "../MyAppBar";
+import MyAppBar from "../../MyAppBar";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -16,9 +16,9 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DoneIcon from '@material-ui/icons/Done';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import {downloadText} from "../../utils/DownloadService";
+import {downloadText} from "../../../utils/DownloadService";
 import csprng from "random-number-csprng";
-import {shallowCompare} from "../../utils/ObjectCompare";
+import {shallowCompare} from "../../../utils/ObjectCompare";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
 import {Tooltip} from "@material-ui/core";

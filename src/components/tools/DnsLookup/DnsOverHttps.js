@@ -1,5 +1,8 @@
 import dnsPacket from "dns-packet";
 import base64url from "base64url";
+import fetch from "node-fetch";
+// noinspection ES6UnusedImports
+import regeneratorRuntime from "regenerator-runtime";
 
 export const query = async (qName, qType = "A", qClass = "IN", url = "https://cloudflare-dns.com/dns-query", method = "GET") => {
     const buffer = dnsPacket.encode({
@@ -13,12 +16,12 @@ export const query = async (qName, qType = "A", qClass = "IN", url = "https://cl
         }]
     });
     const serverUrl = url.endsWith("/") ? url.slice(0, -1) : url;
+    let response;
     if (method === "GET") {
         const query = base64url(buffer);
-        const response = await fetch(`${serverUrl}?dns=${query}`);
-        console.debug(response);
+        response = await fetch(`${serverUrl}?dns=${query}`);
     } else if (method === "POST") {
-        const response = await fetch(serverUrl, {
+        response = await fetch(serverUrl, {
             method: "POST",
             headers: {
                 "Accept": "application/dns-message",
@@ -27,8 +30,10 @@ export const query = async (qName, qType = "A", qClass = "IN", url = "https://cl
             },
             body: buffer
         });
-        console.debug(response);
     } else {
         throw new Error("Unsupported method");
     }
+    if (!response.ok) throw new Error(response.statusText);
+    return dnsPacket.decode(Buffer.from(await response.arrayBuffer()));
+
 };

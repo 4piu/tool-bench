@@ -1,7 +1,7 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import MyAppBar from "../MyAppBar";
+import MyAppBar from "../../MyAppBar";
 import Container from "@material-ui/core/Container";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -21,8 +21,8 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import StopIcon from "@material-ui/icons/Stop";
 import DoneIcon from "@material-ui/icons/Done";
 import FileHashWorker from "./FileHash.worker.js";
-import {shallowCompare} from "../../utils/ObjectCompare";
-import MyDragAndDrop from "../MyDragAndDrop";
+import {shallowCompare} from "../../../utils/ObjectCompare";
+import MyDragAndDrop from "../../MyDragAndDrop";
 
 const styles = theme => ({
     root: {

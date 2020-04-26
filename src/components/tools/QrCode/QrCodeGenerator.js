@@ -1,7 +1,7 @@
 import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import MyAppBar from "../MyAppBar";
+import MyAppBar from "../../MyAppBar";
 import Container from "@material-ui/core/Container";
 import QrCode from "qrcode";
 import FormControl from "@material-ui/core/FormControl";
@@ -21,7 +21,7 @@ import Loadable from "react-loadable";
 import regeneratorRuntime from "regenerator-runtime";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import {downloadBase64} from "../../utils/DownloadService";
+import {downloadBase64} from "../../../utils/DownloadService";
 
 const isValidHexColor = str => {
     return /^#([0-9A-F]{3}){1,2}$/i.test(str);
