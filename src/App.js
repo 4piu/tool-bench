@@ -10,6 +10,7 @@ import JsonIcon from "./assets/img/icon_json.svg";
 import ClockIcon from "./assets/img/icon_timestamp.svg";
 import CheckIcon from "./assets/img/icon_check.svg";
 import GlobeIcon from "./assets/img/icon_globe.svg";
+import BrowserIcon from "./assets/img/icon_browser.svg";
 import Layout from "./components/Layout";
 import ApplicationContext from "./components/ApplicationContext";
 
@@ -69,6 +70,13 @@ const tools = [
         title: "DNS Lookup",
         description: "DNS lookup using DNS Over HTTPS",
         icon: GlobeIcon
+    },
+    {
+        name: "ua",
+        loader: () => import("./components/tools/UserAgent/UserAgent.js"),
+        title: "User Agent",
+        description: "UA utilities",
+        icon: BrowserIcon
     },
     {
         name: "test-fail",
