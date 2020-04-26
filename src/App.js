@@ -108,10 +108,14 @@ class App extends React.Component {
     };
 
     render() {
+        let title = "ToolHub";
+        if (this.state.activity !== "home") {
+            title += ` - ${tools.filter(x => (x.name === this.state.activity))[0].title}`;
+        }
         return (
             <>
                 <Helmet>
-                    <title>Tool Bench</title>
+                    <title>{title}</title>
                     <link rel="icon" type="image/png" href={logo}/>
                     <meta
                         name="viewport"
