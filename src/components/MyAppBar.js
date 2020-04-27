@@ -12,9 +12,6 @@ import {TextField} from "@material-ui/core";
 import ApplicationContext from "./ApplicationContext";
 
 const styles = theme => ({
-    root: {
-        // flexGrow: 1,
-    },
     menuButton: {
         marginRight: theme.spacing(2),
     },
@@ -114,7 +111,7 @@ class MyAppBar extends React.PureComponent {
                 searchExpanded: false
             });
         } else {
-            this.context.changeActivity("home");
+            this.context.onActivityChange("home");
         }
     };
 
@@ -122,7 +119,7 @@ class MyAppBar extends React.PureComponent {
         const {classes} = this.props;
         const context = this.context;
         return (
-            <div className={classes.root}>
+            <>
                 <AppBar position={this.props.position}>
                     <Toolbar>
                         {// Back arrow button
@@ -147,7 +144,7 @@ class MyAppBar extends React.PureComponent {
                             <TextField
                                 className={classes.SearchMobileInput}
                                 autoComplete={"off"}
-                                onChange={context.onSearchInputChange}
+                                onChange={context.onSearchInput}
                                 color={"secondary"}
                                 autoFocus={true}/>
                         }
@@ -172,7 +169,7 @@ class MyAppBar extends React.PureComponent {
                                         input: classes.SearchDesktopInput,
                                     }}
                                     inputProps={{"aria-label": "search"}}
-                                    onChange={context.onSearchInputChange}/>
+                                    onChange={context.onSearchInput}/>
                             </div>
                         }
                         {// Custom menu items
@@ -184,9 +181,9 @@ class MyAppBar extends React.PureComponent {
                         }
                     </Toolbar>
                 </AppBar>
-                {this.props.position === "fixed" &&
-                <Toolbar/>}
-            </div>
+                {// Margin
+                    this.props.position === "fixed" && <Toolbar/>}
+            </>
         );
     }
 }

@@ -25,7 +25,7 @@ const styles = theme => ({
 class Layout extends React.PureComponent {
 
     handleCardClick = (e) => {
-        this.context.changeActivity(e.currentTarget.getAttribute('data-id'));
+        this.context.onActivityChange(e.currentTarget.getAttribute('data-id'));
     };
 
     render() {
@@ -37,7 +37,7 @@ class Layout extends React.PureComponent {
         if (context.activity === 'home') return (
             <>
                 <MyAppBar
-                    title={"Tool bench"}
+                    title={"ToolHub"}
                     showSearchBar={true}/>
                 <Grid container spacing={2} className={classes.GridContainer}>
                     {context.activityList.map(item => (
@@ -50,7 +50,7 @@ class Layout extends React.PureComponent {
                                 title={item.title}
                                 description={item.description}
                                 image={item.icon}
-                                changeActivity={context.changeActivity}
+                                changeActivity={context.onActivityChange}
                             />
                         </Grid>
                     ))}
@@ -60,7 +60,7 @@ class Layout extends React.PureComponent {
 
         // Dynamic load card content
         const alertCancelHandler = () => {
-            context.changeActivity('home');
+            context.onActivityChange('home');
         };
         // Error handler
         const Loading = (props) => {
@@ -99,7 +99,7 @@ class Layout extends React.PureComponent {
                 const Component = loaded.default;
                 return <Component
                     title={context.activityList.filter(x => (x.name === context.activity))[0].title}
-                    changeActivity={context.changeActivity}
+                    changeActivity={context.onActivityChange}
                 />;
             },
             loading: Loading,

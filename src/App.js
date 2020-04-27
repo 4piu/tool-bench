@@ -108,17 +108,21 @@ class App extends React.Component {
         }
     }
 
-    changeActivity = (newActivity) => {
+    onActivityChange = (newActivity) => {
         setTimeout(
             () => this.setState({activity: newActivity}),
             newActivity === 'home' ? 0 : 200
         )
     };
 
+    onSearchInput = ev => {
+        const text = ev.currentTarget.value;
+    };
+
     render() {
         let title = "ToolHub";
         if (this.state.activity !== "home") {
-            title += ` - ${tools.filter(x => (x.name === this.state.activity))[0].title}`;
+            title += ` - ${tools.find(({name}) => name === this.state.activity).title}`;
         }
         return (
             <>
@@ -136,7 +140,8 @@ class App extends React.Component {
                 <CssBaseline/>
 
                 <ApplicationContext.Provider value={{
-                    changeActivity: this.changeActivity,
+                    onActivityChange: this.onActivityChange,
+                    onSearchInput: this.onSearchInput,
                     activityList: tools,
                     activity: this.state.activity
                 }}>

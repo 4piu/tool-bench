@@ -146,7 +146,7 @@ const dnsUncommonType = [
     "NSEC",
     "NSEC3",
     "NULL",
-    "OPT",
+    // "OPT",
     "PTR",
     "RP",
     "RRSIG",
