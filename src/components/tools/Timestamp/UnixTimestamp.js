@@ -68,6 +68,18 @@ class UnixTimestamp extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.timer = setInterval(() => {
+            this.setState({
+                selectedDate: new Date(),
+            });
+        }, 1000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+
     getTimestamp = () => {
         return Math.floor((new Date(this.state.selectedDate.getTime() -
             (this.state.selectedTimezone - this.state.selectedDate.getTimezoneOffset()) * 60000))
@@ -75,12 +87,14 @@ class UnixTimestamp extends React.Component {
     };
 
     selectDateHandler = value => {
+        clearInterval(this.timer);
         this.setState({
             selectedDate: value
         })
     };
 
     selectSecondsHandler = event => {
+        clearInterval(this.timer);
         const value = event.target.value;
         this.setState(state => {
             const nextDate = state.selectedDate;
