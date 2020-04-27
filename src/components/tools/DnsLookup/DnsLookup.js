@@ -307,6 +307,107 @@ class DnsLookup extends React.PureComponent {
         }
     };
 
+    extractAnswerData = answer => {
+        switch (answer.type) {
+            case "A":
+            case "AAAA":
+            case "CNAME":
+            case "DNAME":
+            case "NS":
+            case "PTR":
+                return [
+                    ["data", answer.data]
+                ];
+            case "CAA":
+                return [
+                    ["flags", answer.data.flags],
+                    ["tag", answer.data.tag],
+                    ["value", answer.data.value],
+                    ["issuer critical", answer.data.issuerCritical]
+                ];
+            case "DNSKEY":
+                return [
+                    ["flags", answer.data.flags],
+                    ["algorithm", answer.data.algorithm],
+                    ["key", answer.data.key.toString("hex")]
+                ];
+            case "DS":
+                return [
+                    ["key tag", answer.data.keyTag],
+                    ["algorithm", answer.data.algorithm],
+                    ["digest type", answer.data.digestType],
+                    ["digest", answer.data.digest.toString("hex")]
+                ];
+            case "HINFO":
+                return [
+                    ["CPU", answer.data.cpu],
+                    ["OS", answer.data.os]
+                ];
+            case "MX":
+                return [
+                    ["preference", answer.data.preference],
+                    ["exchange", answer.data.exchange]
+                ];
+            case "NSEC":
+                return [
+                    ["next domain", answer.data.nextDomain],
+                    ["RR types", answer.data.rrtypes]
+                ];
+            case "NSEC3":
+                return [
+                    ["algorithm", answer.data.algorithm],
+                    ["flags", answer.data.flags],
+                    ["iterations", answer.data.iterations],
+                    ["salt", answer.data.salt.toString("hex")],
+                    ["next domain", answer.data.nextDomain],
+                    ["RR types", answer.data.rrtypes]
+                ];
+            case "NULL":
+                return [
+                    ["data", answer.data.toString("hex")]
+                ];
+            case "OPT":
+                // TODO: OPT
+                break;
+            case "RP":
+                return [
+                    ["mbox", answer.data.mbox],
+                    ["txt", answer.data.txt]
+                ];
+            case "RRSIG":
+                return [
+                    ["type covered", answer.data.typeCovered],
+                    ["algorithm", answer.data.algorithm],
+                    ["labels", answer.data.labels],
+                    ["original TTL", answer.data.originalTTL],
+                    ["expiration", answer.data.expiration],
+                    ["inception", answer.data.inception],
+                    ["key tag", answer.data.keyTag],
+                    ["signer's name", answer.data.signersName],
+                    ["signature", answer.data.signature]
+                ];
+            case "SOA":
+                return [
+                    ["domain name", answer.data.mname],
+                    ["mailbox", answer.data.rname],
+                    ["zone serial", answer.data.serial],
+                    ["refresh interval", answer.data.refresh],
+                    ["retry interval", answer.data.retry],
+                    ["expire interval", answer.data.expire],
+                    ["minimum TTL", answer.data.minimum]
+                ];
+            case "SRV":
+                return [
+                    ["service port", answer.data.port],
+                    ["service hostname", answer.data.target],
+                    ["optional service priority", answer.data.priority],
+                    ["optional service weight", answer.data.weight]
+                ];
+            case "TXT":
+                return answer.data.map(rec => (["data", rec.toString("utf8")]));
+        }
+    };
+
     render() {
         const {classes} = this.props;
         return (
@@ -398,256 +499,17 @@ class DnsLookup extends React.PureComponent {
                                         <TableCell>{"class"}</TableCell>
                                         <TableCell align="right">{answer.class}</TableCell>
                                     </TableRow>
-                                    {(answer.type === "A" ||
-                                        answer.type === "AAAA" ||
-                                        answer.type === "CNAME" ||
-                                        answer.type === "DNAME" ||
-                                        answer.type === "NS" ||
-                                        answer.type === "PTR") &&
-                                    <TableRow>
-                                        <TableCell>{"data"}</TableCell>
-                                        <TableCell align="right">{answer.data}</TableCell>
-                                    </TableRow>
-                                    }
-                                    {answer.type === "CAA" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"flags"}</TableCell>
-                                            <TableCell align="right">{answer.data.flags}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"tag"}</TableCell>
-                                            <TableCell align="right">{answer.data.tag}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"value"}</TableCell>
-                                            <TableCell align="right">{answer.data.value}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"issuer critical"}</TableCell>
-                                            <TableCell align="right">{answer.data.issuerCritical}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "DNSKEY" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"flags"}</TableCell>
-                                            <TableCell align="right">{answer.data.flags}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"algorithm"}</TableCell>
-                                            <TableCell align="right">{answer.data.algorithm}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"key"}</TableCell>
-                                            <TableCell align="right" className={classes.ForceBreak}>{answer.data.key.toString("hex")}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "DS" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"key tag"}</TableCell>
-                                            <TableCell align="right">{answer.data.keyTag}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"algorithm"}</TableCell>
-                                            <TableCell align="right">{answer.data.algorithm}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"digest type"}</TableCell>
-                                            <TableCell align="right">{answer.data.digestType}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"digest"}</TableCell>
-                                            <TableCell align="right" className={classes.ForceBreak}>{answer.data.digest.toString("hex")}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "HINFO" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"CPU"}</TableCell>
-                                            <TableCell align="right">{answer.data.cpu}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"OS"}</TableCell>
-                                            <TableCell align="right">{answer.data.os}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "MX" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"preference"}</TableCell>
-                                            <TableCell align="right">{answer.data.preference}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"exchange"}</TableCell>
-                                            <TableCell align="right">{answer.data.exchange}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "NSEC" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"next domain"}</TableCell>
-                                            <TableCell align="right">{answer.data.nextDomain}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"RR types"}</TableCell>
-                                            <TableCell align="right">{answer.data.rrtypes}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "NSEC3" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"algorithm"}</TableCell>
-                                            <TableCell align="right">{answer.data.algorithm}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"flags"}</TableCell>
-                                            <TableCell align="right">{answer.data.flags}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"iterations"}</TableCell>
-                                            <TableCell align="right">{answer.data.iterations}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"salt"}</TableCell>
-                                            <TableCell align="right" className={classes.ForceBreak}>{answer.data.salt.toString("hex")}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"next domain"}</TableCell>
-                                            <TableCell align="right">{answer.data.nextDomain}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"RR types"}</TableCell>
-                                            <TableCell align="right">{answer.data.rrtypes}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "NULL" &&
-                                    <TableRow>
-                                        <TableCell>{"data"}</TableCell>
-                                        <TableCell align="right" className={classes.ForceBreak}>{answer.data.toString("hex")}</TableCell>
-                                    </TableRow>
-                                    }
-                                    {answer.type === "RP" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"mbox"}</TableCell>
-                                            <TableCell align="right">{answer.data.mbox}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"txt"}</TableCell>
-                                            <TableCell align="right">{answer.data.txt}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "RRSIG" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"type covered"}</TableCell>
-                                            <TableCell align="right">{answer.data.typeCovered}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"algorithm"}</TableCell>
-                                            <TableCell align="right">{answer.data.algorithm}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"labels"}</TableCell>
-                                            <TableCell align="right">{answer.data.labels}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"original TTL"}</TableCell>
-                                            <TableCell align="right">{answer.data.originalTTL}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"expiration"}</TableCell>
-                                            <TableCell align="right">{answer.data.expiration}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"inception"}</TableCell>
-                                            <TableCell align="right">{answer.data.inception}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"key tag"}</TableCell>
-                                            <TableCell align="right">{answer.data.keyTag}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"signer's name"}</TableCell>
-                                            <TableCell align="right">{answer.data.signersName}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"signature"}</TableCell>
-                                            <TableCell align="right">{answer.data.signature}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "SOA" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"domain name"}</TableCell>
-                                            <TableCell align="right">{answer.data.mname}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"mailbox"}</TableCell>
-                                            <TableCell align="right">{answer.data.rname}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"zone serial"}</TableCell>
-                                            <TableCell align="right">{answer.data.serial}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"refresh interval"}</TableCell>
-                                            <TableCell align="right">{answer.data.refresh}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"retry interval"}</TableCell>
-                                            <TableCell align="right">{answer.data.retry}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"expire interval"}</TableCell>
-                                            <TableCell align="right">{answer.data.expire}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"minimum TTL"}</TableCell>
-                                            <TableCell align="right">{answer.data.minimum}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "SRV" &&
-                                    <>
-                                        <TableRow>
-                                            <TableCell>{"service port"}</TableCell>
-                                            <TableCell align="right">{answer.data.port}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"service hostname"}</TableCell>
-                                            <TableCell align="right">{answer.data.target}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"optional service priority"}</TableCell>
-                                            <TableCell align="right">{answer.data.priority}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>{"optional service weight"}</TableCell>
-                                            <TableCell align="right">{answer.data.weight}</TableCell>
-                                        </TableRow>
-                                    </>
-                                    }
-                                    {answer.type === "TXT" &&
-                                    answer.data.map((rec, index) => (
-                                        <TableRow key={`txt-${index}`}>
-                                            <TableCell>{"data"}</TableCell>
-                                            <TableCell align="right" className={classes.ForceBreak}>{rec.toString("utf8")}</TableCell>
-                                        </TableRow>
-                                    ))
-                                    }
-                                    {// TODO: OPT
+                                    {
+                                        this.extractAnswerData(answer).map((data, index) => (
+                                            <TableRow key={`answer-field-${index}`}>
+                                                <TableCell>
+                                                    {data[0]}
+                                                </TableCell>
+                                                <TableCell align="right" className={classes.ForceBreak}>
+                                                    {data[1]}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
                                     }
                                     <TableRow>
                                         <TableCell>TTL</TableCell>
