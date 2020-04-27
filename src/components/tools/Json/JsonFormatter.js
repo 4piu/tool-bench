@@ -5,9 +5,9 @@ import MyAppBar from "../../MyAppBar";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from "@material-ui/icons/Close";
 import {v4 as uuidV4} from "uuid";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -27,59 +27,38 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Toolbar from "@material-ui/core/Toolbar";
+import MyDynamicTab from "../../MyDynamicTab";
 
-class AppTab {
-    constructor() {
-        this.id = uuidV4();
-        this.original = "";
-        this.output = "";
-        this.name = "New tab";
-        this.mode = "beautify";
-        this.indent = 4
+class JsonTab extends MyDynamicTab.DataTab {
+    constructor(active) {
+        super(active);
+        this.data = {
+            original: "",
+            output: "",
+            mode: "beautify",
+            indent: 4
+        };
     }
 }
 
 const styles = theme => ({
     Container: {
         padding: theme.spacing(3),
-        '& > *': {
+        "& > *": {
             marginBottom: theme.spacing(2),
         }
     },
-    TabsBar: {
-        width: "100%",
-        backgroundColor: theme.palette.background.paper
-    },
-    Tab: {
-        borderRight: "1px solid #ddd"
-    },
-    TabLabel: {
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap"
-    },
-    NewTabButton: {
-        minWidth: 0
-    },
-    CustomTabLabel: {
-        width: "100%",
-        display: "flex"
-    },
-    CloseTabButton: {
-        marginLeft: "auto",
-        padding: 0
-    },
     ButtonContainer: {
-        '& > *': {
+        "& > *": {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(2)
         }
     },
     ButtonWrapper: {
-        position: 'relative',
-        display: 'inline-flex',
-        [theme.breakpoints.down('xs')]: {
-            width: '100%'
+        position: "relative",
+        display: "inline-flex",
+        [theme.breakpoints.down("xs")]: {
+            width: "100%"
         }
     },
     SelectIndent: {
@@ -96,14 +75,13 @@ class JsonFormatter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabIndex: "",
-            tabs: [],
+            tabs: [new JsonTab(true)],
             copied: false
-        }
+        };
     }
 
     componentDidMount() {
-        this.loadState()
+        this.loadState();
     }
 
     componentDidUpdate(prevProps, state, snapshot) {
@@ -113,71 +91,35 @@ class JsonFormatter extends React.Component {
     loadState = () => {
         let savedInstance;
         try {
-            savedInstance = JSON.parse(localStorage.getItem('json-formatter'));
+            savedInstance = JSON.parse(localStorage.getItem("json-formatter"));
         } catch (e) {
-            console.error('Failed to load saved instance');
+            console.error("Failed to load saved instance");
         }
         if (savedInstance) {
             this.setState(savedInstance);
-        } else {
-            this.newTab();
         }
     };
 
     saveState = () => {
-        localStorage.setItem('json-formatter', JSON.stringify(this.state));
-    };
-
-    changeTab = (event, newValue) => {
-        this.setState({tabIndex: newValue})
-    };
-
-    newTab = () => {
-        const newTab = new AppTab();
-        this.setState(state => ({
-            tabs: [...state.tabs, newTab],
-            tabIndex: newTab.id
-        }));
-    };
-
-    closeThisTab = event => {
-        event.stopPropagation();    // Don't bother changeTab
-        const indexToRemove = event.currentTarget.getAttribute('data-index');
-        this.setState(state => {
-            let newTabIndex = state.tabIndex;  // Default no tab switch
-            if (state.tabIndex === indexToRemove) {
-                const indexOfElement = state.tabs.findIndex(({id}) => id === indexToRemove);
-                if (indexOfElement < state.tabs.length - 1) {  // Switch to right tab
-                    newTabIndex = state.tabs[indexOfElement + 1].id;
-                } else if (indexOfElement > 0) {    // Switch to left tab
-                    newTabIndex = state.tabs[indexOfElement - 1].id;
-                } else {    // No index
-                    newTabIndex = 0
-                }
-            }
-            return {
-                tabs: state.tabs.filter(({id}) => (id !== indexToRemove)),
-                tabIndex: newTabIndex
-            }
-        });
+        localStorage.setItem("json-formatter", JSON.stringify(this.state));
     };
 
     closeAllTab = () => {
         this.setState({
-            tabs: [new AppTab()]
-        })
+            tabs: [new JsonTab()]
+        });
     };
 
     beautifyInput = (event, tab) => {
         const input = event ? event.currentTarget.value : tab.original;
         let beautified;
         try {
-            beautified = JSON.stringify(JSON.parse(input), null, tab.indent);
+            beautified = JSON.stringify(JSON.parse(input), null, tab.data.indent);
         } catch (e) {
             beautified = e.message;
         }
-        tab.original = input;
-        tab.output = beautified;
+        tab.data.original = input;
+        tab.data.output = beautified;
         this.setState(this.state);
     };
 
@@ -189,13 +131,13 @@ class JsonFormatter extends React.Component {
         } catch (e) {
             uglified = e.message;
         }
-        tab.original = input;
-        tab.output = uglified;
+        tab.data.original = input;
+        tab.data.output = uglified;
         this.setState(this.state);
     };
 
     buttonCopyHandler = async (tab) => {
-        const text = tab.output;
+        const text = tab.data.output;
         await navigator.clipboard.writeText(text);
         this.setState({
             copied: true
@@ -203,18 +145,18 @@ class JsonFormatter extends React.Component {
         setTimeout(() => {
             this.setState({
                 copied: false
-            })
+            });
         }, 3000);
     };
 
     buttonDownloadHandler = async (tab) => {
-        const text = tab.output;
-        downloadText(`${tab.mode}.txt`, text);
+        const text = tab.data.output;
+        downloadText(`${tab.data.mode}.txt`, text);
     };
 
     selectModeHandler = (event, newValue, tab) => {
-        tab.mode = newValue;
-        if (tab.mode === 'beautify') {
+        tab.data.mode = newValue;
+        if (tab.data.mode === "beautify") {
             this.beautifyInput(null, tab);
         } else {
             this.uglifyInput(null, tab);
@@ -224,22 +166,28 @@ class JsonFormatter extends React.Component {
     selectIndentHandler = (event, tab) => {
         switch (event.target.value) {
             case "2":
-                tab.indent = 2;
+                tab.data.indent = 2;
                 break;
             case "3":
-                tab.indent = 3;
+                tab.data.indent = 3;
                 break;
             case "4":
-                tab.indent = 4;
+                tab.data.indent = 4;
                 break;
             default:
-                tab.indent = "\t";
+                tab.data.indent = "\t";
         }
-        if (tab.mode === 'beautify') {
+        if (tab.data.mode === "beautify") {
             this.beautifyInput(null, tab);
         } else {
             this.uglifyInput(null, tab);
         }
+    };
+
+    onTabChange = tabs => {
+        this.setState({
+            tabs: tabs
+        });
     };
 
     render() {
@@ -256,61 +204,26 @@ class JsonFormatter extends React.Component {
                     {/** App bar */}
                     <MyAppBar position={"static"} title={this.props.title}/>
                     {/** Tabs */}
-                    <AppBar className={classes.TabsBar} position="static" color="default">
-                        <Tabs
-                            value={this.state.tabIndex || 0}
-                            onChange={this.changeTab}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="scrollable"
-                            scrollButtons="auto"
-                            aria-label="opened working tabs"
-                        >
-                            {this.state.tabs.map((tab) => (
-                                <Tab key={tab.id} value={tab.id}
-                                     className={classes.Tab}
-                                     component={"div"}
-                                     label={
-                                         <div className={classes.CustomTabLabel}>
-                                             <div className={classes.TabLabel}>
-                                                 {tab.name}
-                                             </div>
-                                             <IconButton className={classes.CloseTabButton} size={"small"}
-                                                         onClick={this.closeThisTab} data-index={tab.id}>
-                                                 <CloseIcon/>
-                                             </IconButton>
-                                         </div>
-                                     }
-                                />
-                            ))}
-                            <Tab className={classes.NewTabButton}
-                                 component={"div"}
-                                 label={
-                                     <IconButton size={"small"}>
-                                         <AddIcon/>
-                                     </IconButton>
-                                 } onClick={this.newTab}/>
-                        </Tabs>
-                    </AppBar>
+                    <MyDynamicTab tabClass={JsonTab} tabs={this.state.tabs} onTabChange={this.onTabChange}/>
                     {/** Main view */}
                 </div>
                 <Toolbar/>
                 <Toolbar/>
                 <>
                     {this.state.tabs
-                        .filter(({id}) => id === this.state.tabIndex)
+                        .filter(x => x.active)
                         .map(tab => (
-                            <Grid className={classes.Container} container spacing={2} key={`grid-container-${tab.id}`}>
+                            <Grid className={classes.Container} container key={`grid-container-${tab.id}`}>
                                 <Grid item xs={12}>
                                     <FormControl component="fieldset">
                                         <FormLabel component="legend">Operation</FormLabel>
-                                        <RadioGroup aria-label="operation" name="operation" value={tab.mode}
+                                        <RadioGroup aria-label="operation" name="operation" value={tab.data.mode}
                                                     onChange={(e, v) => this.selectModeHandler(e, v, tab)}>
                                             <FormControlLabel value="beautify" control={<Radio/>} label="Beautify"/>
                                             <FormControlLabel value="uglify" control={<Radio/>} label="Uglify"/>
                                         </RadioGroup>
                                     </FormControl>
-                                    {tab.mode === "beautify" &&
+                                    {tab.data.mode === "beautify" &&
                                     <>
                                         <br/>
                                         <FormControl className={classes.SelectIndent}>
@@ -318,7 +231,7 @@ class JsonFormatter extends React.Component {
                                             <Select
                                                 labelId="label-select-indent"
                                                 id="select-indent"
-                                                value={String(tab.indent)}
+                                                value={String(tab.data.indent)}
                                                 onChange={(e) => this.selectIndentHandler(e, tab)}
                                             >
                                                 <MenuItem value={"2"}>2 Spaces</MenuItem>
@@ -337,13 +250,13 @@ class JsonFormatter extends React.Component {
                                         multiline
                                         fullWidth={true}
                                         variant="outlined"
-                                        value={tab.original}
+                                        value={tab.data.original}
                                         inputProps={{
                                             spellCheck: false
                                         }}
                                         rows={16}
                                         rowsMax={16}
-                                        onChange={tab.mode === 'beautify' ? e => this.beautifyInput(e, tab) : e => this.uglifyInput(e, tab)}
+                                        onChange={tab.mode === "beautify" ? e => this.beautifyInput(e, tab) : e => this.uglifyInput(e, tab)}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -353,7 +266,7 @@ class JsonFormatter extends React.Component {
                                         multiline
                                         fullWidth={true}
                                         variant="outlined"
-                                        value={tab.output}
+                                        value={tab.data.output}
                                         inputProps={{
                                             spellCheck: false
                                         }}
@@ -368,8 +281,8 @@ class JsonFormatter extends React.Component {
                                                 fullWidth={true}
                                                 startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
                                         >{this.state.copied ?
-                                            'Copied' :
-                                            'Copy'
+                                            "Copied" :
+                                            "Copy"
                                         }</Button>
                                     </div>
                                     <div className={classes.ButtonWrapper}>
@@ -377,7 +290,7 @@ class JsonFormatter extends React.Component {
                                                 onClick={() => this.buttonDownloadHandler(tab)}
                                                 fullWidth={true}
                                                 startIcon={<GetAppIcon/>}
-                                        >{'Download'}</Button>
+                                        >{"Download"}</Button>
                                     </div>
                                 </Grid>
                             </Grid>

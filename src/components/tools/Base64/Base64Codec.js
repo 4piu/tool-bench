@@ -2,13 +2,6 @@ import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import MyAppBar from "../../MyAppBar";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import AddIcon from '@material-ui/icons/Add';
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from '@material-ui/icons/Close';
-import {v4 as uuidV4} from "uuid";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -19,58 +12,37 @@ import {downloadText} from "../../../utils/DownloadService";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
 import Toolbar from "@material-ui/core/Toolbar";
+import MyDynamicTab from "../../MyDynamicTab";
 
-class AppTab {
-    constructor() {
-        this.id = uuidV4();
-        this.encoded = "";
-        this.decoded = "";
-        this.name = "New tab";
-        this.focus = "decoded";
+class Base64Tab extends MyDynamicTab.DataTab {
+    constructor(active) {
+        super(active);
+        this.data = {
+            encoded: "",
+            decoded: "",
+            focus: "decoded"
+        };
     }
 }
 
 const styles = theme => ({
     Container: {
         padding: theme.spacing(3),
-        '& > *': {
+        "& > *": {
             marginBottom: theme.spacing(2),
         }
     },
-    TabsBar: {
-        width: "100%",
-        backgroundColor: theme.palette.background.paper
-    },
-    Tab: {
-        borderRight: "1px solid #ddd"
-    },
-    TabLabel: {
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap"
-    },
-    NewTabButton: {
-        minWidth: 0
-    },
-    CustomTabLabel: {
-        width: "100%",
-        display: "flex"
-    },
-    CloseTabButton: {
-        marginLeft: "auto",
-        padding: 0
-    },
     ButtonContainer: {
-        '& > *': {
+        "& > *": {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(2)
         }
     },
     ButtonWrapper: {
-        position: 'relative',
-        display: 'inline-flex',
-        [theme.breakpoints.down('xs')]: {
-            width: '100%'
+        position: "relative",
+        display: "inline-flex",
+        [theme.breakpoints.down("xs")]: {
+            width: "100%"
         }
     },
 });
@@ -83,14 +55,13 @@ class Base64Codec extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabIndex: "",
-            tabs: [],
+            tabs: [new Base64Tab(true)],
             copied: false
-        }
+        };
     }
 
     componentDidMount() {
-        this.loadState()
+        this.loadState();
     }
 
     componentDidUpdate(prevProps, state, snapshot) {
@@ -100,80 +71,44 @@ class Base64Codec extends React.Component {
     loadState = () => {
         let savedInstance;
         try {
-            savedInstance = JSON.parse(localStorage.getItem('base64-codec'));
+            savedInstance = JSON.parse(localStorage.getItem("base64-codec"));
         } catch (e) {
-            console.error('Failed to load saved instance');
+            console.error("Failed to load saved instance");
         }
         if (savedInstance) {
             this.setState(savedInstance);
-        } else {
-            this.newTab();
         }
     };
 
     saveState = () => {
-        localStorage.setItem('base64-codec', JSON.stringify(this.state));
-    };
-
-    changeTab = (event, newValue) => {
-        this.setState({tabIndex: newValue})
-    };
-
-    newTab = () => {
-        const newTab = new AppTab();
-        this.setState(state => ({
-            tabs: [...state.tabs, newTab],
-            tabIndex: newTab.id
-        }));
-    };
-
-    closeThisTab = event => {
-        event.stopPropagation();    // Don't bother changeTab
-        const indexToRemove = event.currentTarget.getAttribute('data-index');
-        this.setState(state => {
-            let newTabIndex = state.tabIndex;  // Default no tab switch
-            if (state.tabIndex === indexToRemove) {
-                const indexOfElement = state.tabs.findIndex(({id}) => id === indexToRemove);
-                if (indexOfElement < state.tabs.length - 1) {  // Switch to right tab
-                    newTabIndex = state.tabs[indexOfElement + 1].id;
-                } else if (indexOfElement > 0) {    // Switch to left tab
-                    newTabIndex = state.tabs[indexOfElement - 1].id;
-                } else {    // No index
-                    newTabIndex = 0
-                }
-            }
-            return {
-                tabs: state.tabs.filter(({id}) => (id !== indexToRemove)),
-                tabIndex: newTabIndex
-            }
-        });
+        localStorage.setItem("base64-codec", JSON.stringify(this.state));
     };
 
     closeAllTab = () => {
         this.setState({
-            tabs: [new AppTab()]
-        })
+            tabs: [new Base64Tab(true)]
+        });
     };
 
     decodeInput = (event, tab) => {
         const input = event.currentTarget.value;
-        tab.encoded = input;
-        tab.decoded = Buffer.from(input, 'base64').toString('base64') === input ?
-            Buffer.from(input, 'base64').toString('utf-8') : 'Malformed input';
-        tab.focus = "decoded";
+        tab.data.encoded = input;
+        tab.data.decoded = Buffer.from(input, "base64").toString("base64") === input ?
+            Buffer.from(input, "base64").toString("utf-8") : "Malformed input";
+        tab.data.focus = "decoded";
         this.setState(this.state);
     };
 
     encodeInput = (event, tab) => {
         const input = event.currentTarget.value;
-        tab.encoded = Buffer.from(input, 'utf-8').toString('base64');
-        tab.decoded = input;
-        tab.focus = "encoded";
+        tab.data.encoded = Buffer.from(input, "utf-8").toString("base64");
+        tab.data.decoded = input;
+        tab.data.focus = "encoded";
         this.setState(this.state);
     };
 
     buttonCopyHandler = async (tab) => {
-        const text = tab[tab.focus];
+        const text = tab.data[tab.data.focus];
         await navigator.clipboard.writeText(text);
         this.setState({
             copied: true
@@ -181,13 +116,19 @@ class Base64Codec extends React.Component {
         setTimeout(() => {
             this.setState({
                 copied: false
-            })
+            });
         }, 3000);
     };
 
     buttonDownloadHandler = async (tab) => {
-        const text = tab[tab.focus];
-        downloadText(`${tab.focus}.txt`, text);
+        const text = tab.data[tab.data.focus];
+        downloadText(`${tab.data.focus}.txt`, text);
+    };
+
+    onTabChange = tabs => {
+        this.setState({
+            tabs: tabs
+        });
     };
 
     render() {
@@ -204,105 +145,66 @@ class Base64Codec extends React.Component {
                     {/** App bar */}
                     <MyAppBar position={"static"} title={this.props.title}/>
                     {/** Tabs */}
-                    <AppBar className={classes.TabsBar} position={"static"} color="default">
-                        <Tabs
-                            value={this.state.tabIndex || 0}
-                            onChange={this.changeTab}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="scrollable"
-                            scrollButtons="auto"
-                            aria-label="opened working tabs"
-                        >
-                            {this.state.tabs.map((tab) => (
-                                <Tab key={tab.id} value={tab.id}
-                                     className={classes.Tab}
-                                     component={"div"}
-                                     label={
-                                         <div className={classes.CustomTabLabel}>
-                                             <div className={classes.TabLabel}>
-                                                 {tab.name}
-                                             </div>
-                                             <IconButton className={classes.CloseTabButton} size={"small"}
-                                                         onClick={this.closeThisTab} data-index={tab.id}>
-                                                 <CloseIcon/>
-                                             </IconButton>
-                                         </div>
-                                     }
-                                />
-                            ))}
-                            <Tab className={classes.NewTabButton}
-                                 component={"div"}
-                                 label={
-                                     <IconButton size={"small"}>
-                                         <AddIcon/>
-                                     </IconButton>
-                                 } onClick={this.newTab}/>
-                        </Tabs>
-                    </AppBar>
+                    <MyDynamicTab tabClass={Base64Tab} tabs={this.state.tabs} onTabChange={this.onTabChange}/>
                 </div>
                 <Toolbar/>
                 <Toolbar/>
                 {/** Main view */}
-                <>
-                    {this.state.tabs
-                        .filter(({id}) => id === this.state.tabIndex)
-                        .map(tab => (
-                            <Grid className={classes.Container} container spacing={2} key={`grid-container-${tab.id}`}>
-                                <Grid item xs={12} md={6}>
-                                    <TextField
-                                        id="textarea-encoded"
-                                        label="Base64 Encoded"
-                                        multiline
+                {this.state.tabs.filter(x => x.active).map(tab => (
+                    <Grid className={classes.Container} container key={`grid-container-${tab.id}`}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                id="textarea-encoded"
+                                label="Base64 Encoded"
+                                multiline
+                                fullWidth={true}
+                                variant="outlined"
+                                value={tab.data.encoded}
+                                inputProps={{
+                                    spellCheck: false
+                                }}
+                                rows={16}
+                                rowsMax={16}
+                                onChange={e => this.decodeInput(e, tab)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                id="textarea-decoded"
+                                label="Plain Text"
+                                multiline
+                                fullWidth={true}
+                                variant="outlined"
+                                value={tab.data.decoded}
+                                inputProps={{
+                                    spellCheck: false
+                                }}
+                                rows={16}
+                                rowsMax={16}
+                                onChange={e => this.encodeInput(e, tab)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} className={classes.ButtonContainer}>
+                            <div className={classes.ButtonWrapper}>
+                                <Button variant="contained"
+                                        onClick={e => this.buttonCopyHandler(tab)}
                                         fullWidth={true}
-                                        variant="outlined"
-                                        value={tab.encoded}
-                                        inputProps={{
-                                            spellCheck: false
-                                        }}
-                                        rows={16}
-                                        rowsMax={16}
-                                        onChange={e => this.decodeInput(e, tab)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <TextField
-                                        id="textarea-decoded"
-                                        label="Plain Text"
-                                        multiline
+                                        startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
+                                >{this.state.copied ?
+                                    "Copied" :
+                                    `Copy ${tab.data.focus}`
+                                }</Button>
+                            </div>
+                            <div className={classes.ButtonWrapper}>
+                                <Button variant="contained"
+                                        onClick={e => this.buttonDownloadHandler(tab)}
                                         fullWidth={true}
-                                        variant="outlined"
-                                        value={tab.decoded}
-                                        inputProps={{
-                                            spellCheck: false
-                                        }}
-                                        rows={16}
-                                        rowsMax={16}
-                                        onChange={e => this.encodeInput(e, tab)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} className={classes.ButtonContainer}>
-                                    <div className={classes.ButtonWrapper}>
-                                        <Button variant="contained"
-                                                onClick={e => this.buttonCopyHandler(tab)}
-                                                fullWidth={true}
-                                                startIcon={this.state.copied ? <DoneIcon/> : <FileCopyIcon/>}
-                                        >{this.state.copied ?
-                                            'Copied' :
-                                            `Copy ${tab.focus}`
-                                        }</Button>
-                                    </div>
-                                    <div className={classes.ButtonWrapper}>
-                                        <Button variant="contained"
-                                                onClick={e => this.buttonDownloadHandler(tab)}
-                                                fullWidth={true}
-                                                startIcon={<GetAppIcon/>}
-                                        >{`Download ${tab.focus}`}</Button>
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        ))}
-                </>
+                                        startIcon={<GetAppIcon/>}
+                                >{`Download ${tab.data.focus}`}</Button>
+                            </div>
+                        </Grid>
+                    </Grid>
+                ))}
             </>
         );
     }
