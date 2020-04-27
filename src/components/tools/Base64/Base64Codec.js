@@ -18,6 +18,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import {downloadText} from "../../../utils/DownloadService";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
+import Toolbar from "@material-ui/core/Toolbar";
 
 class AppTab {
     constructor() {
@@ -193,11 +194,17 @@ class Base64Codec extends React.Component {
         const {classes} = this.props;
         return (
             <>
-                <div>
+                <div style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 2
+                }}>
                     {/** App bar */}
-                    <MyAppBar title={this.props.title}/>
+                    <MyAppBar position={"static"} title={this.props.title}/>
                     {/** Tabs */}
-                    <AppBar className={classes.TabsBar} position="static" color="default">
+                    <AppBar className={classes.TabsBar} position={"static"} color="default">
                         <Tabs
                             value={this.state.tabIndex || 0}
                             onChange={this.changeTab}
@@ -233,8 +240,10 @@ class Base64Codec extends React.Component {
                                  } onClick={this.newTab}/>
                         </Tabs>
                     </AppBar>
-                    {/** Main view */}
                 </div>
+                <Toolbar/>
+                <Toolbar/>
+                {/** Main view */}
                 <>
                     {this.state.tabs
                         .filter(({id}) => id === this.state.tabIndex)

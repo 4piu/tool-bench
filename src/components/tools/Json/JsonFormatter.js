@@ -26,6 +26,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import Toolbar from "@material-ui/core/Toolbar";
 
 class AppTab {
     constructor() {
@@ -245,9 +246,15 @@ class JsonFormatter extends React.Component {
         const {classes} = this.props;
         return (
             <>
-                <div>
+                <div style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 2
+                }}>
                     {/** App bar */}
-                    <MyAppBar title={this.props.title}/>
+                    <MyAppBar position={"static"} title={this.props.title}/>
                     {/** Tabs */}
                     <AppBar className={classes.TabsBar} position="static" color="default">
                         <Tabs
@@ -287,6 +294,8 @@ class JsonFormatter extends React.Component {
                     </AppBar>
                     {/** Main view */}
                 </div>
+                <Toolbar/>
+                <Toolbar/>
                 <>
                     {this.state.tabs
                         .filter(({id}) => id === this.state.tabIndex)

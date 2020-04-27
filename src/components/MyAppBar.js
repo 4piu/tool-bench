@@ -85,12 +85,14 @@ class MyAppBar extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string,
         showSearchBar: PropTypes.bool,
-        menuItems: PropTypes.arrayOf(PropTypes.node)
+        menuItems: PropTypes.arrayOf(PropTypes.node),
+        position: PropTypes.string
     };
 
     static defaultProps = {
         showSearchBar: false,
-        menuItems: []
+        menuItems: [],
+        position: "fixed"
     };
 
     constructor(props) {
@@ -121,7 +123,7 @@ class MyAppBar extends React.PureComponent {
         const context = this.context;
         return (
             <div className={classes.root}>
-                <AppBar position="static">
+                <AppBar position={this.props.position}>
                     <Toolbar>
                         {// Back arrow button
                             (context.activity !== "home" || this.state.searchExpanded) &&
@@ -182,6 +184,8 @@ class MyAppBar extends React.PureComponent {
                         }
                     </Toolbar>
                 </AppBar>
+                {this.props.position === "fixed" &&
+                <Toolbar/>}
             </div>
         );
     }
