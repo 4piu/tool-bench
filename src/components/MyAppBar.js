@@ -12,15 +12,19 @@ import {TextField} from "@material-ui/core";
 import ApplicationContext from "./ApplicationContext";
 
 const styles = theme => ({
-    menuButton: {
+    MenuButton: {
         marginRight: theme.spacing(2),
     },
-    title: {
+    Title: {
         flexGrow: 1,
         display: "none",
         [theme.breakpoints.up("xs")]: {
             display: "block",
         },
+    },
+    MenuItem: {
+        color: "inherit",
+        display: "flex"
     },
     SearchDesktop: {
         position: "relative",
@@ -82,7 +86,7 @@ class MyAppBar extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string,
         showSearchBar: PropTypes.bool,
-        menuItems: PropTypes.arrayOf(PropTypes.node),
+        menuItems: PropTypes.node,
         position: PropTypes.string
     };
 
@@ -126,7 +130,7 @@ class MyAppBar extends React.PureComponent {
                             (context.activity !== "home" || this.state.searchExpanded) &&
                             <IconButton
                                 edge="start"
-                                className={classes.menuButton}
+                                className={classes.MenuButton}
                                 color="inherit"
                                 aria-label="open drawer"
                                 onClick={this.handleBackClick}
@@ -135,7 +139,7 @@ class MyAppBar extends React.PureComponent {
                             </IconButton>}
                         {// Title
                             !this.state.searchExpanded &&
-                            <Typography className={classes.title} variant="h6" noWrap>
+                            <Typography className={classes.Title} variant="h6" noWrap>
                                 {this.props.title || context.activity}
                             </Typography>
                         }
@@ -173,11 +177,10 @@ class MyAppBar extends React.PureComponent {
                             </div>
                         }
                         {// Custom menu items
-                            this.props.menuItems.map((item, index) => (
-                                <div key={"menu-" + index}>
-                                    {item}
-                                </div>
-                            ))
+                            <div className={classes.MenuItem}>
+                                {this.props.menuItems}
+                            </div>
+
                         }
                     </Toolbar>
                 </AppBar>

@@ -43,9 +43,6 @@ const styles = theme => ({
             marginBottom: theme.spacing(2)
         }
     },
-    menuItem: {
-        color: "inherit"
-    },
     Select: {
         minWidth: 120
     },
@@ -418,18 +415,16 @@ class DnsLookup extends React.PureComponent {
                 {/** App bar */}
                 <MyAppBar
                     title={this.props.title}
-                    menuItems={[
-                        <IconButton
-                            className={classes.menuItem}
-                            onClick={this.resetInput}>
-                            <DeleteIcon/>
-                        </IconButton>,
-                        <IconButton
-                            className={classes.menuItem}
-                            onClick={this.showSettings}>
-                            <SettingsIcon/>
-                        </IconButton>
-                    ]}/>
+                    menuItems={
+                        <>
+                            <IconButton onClick={this.resetInput} color={"inherit"}>
+                                <DeleteIcon/>
+                            </IconButton>
+                            <IconButton onClick={this.showSettings} color={"inherit"}>
+                                <SettingsIcon/>
+                            </IconButton>
+                        </>
+                    }/>
                 {/** Main view */}
                 <Container maxWidth={"sm"} className={classes.root}>
                     <div className={classes.SelectContainer}>

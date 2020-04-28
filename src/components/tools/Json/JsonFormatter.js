@@ -2,13 +2,7 @@ import React from "react";
 import {withStyles} from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import MyAppBar from "../../MyAppBar";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import {v4 as uuidV4} from "uuid";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -28,6 +22,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Toolbar from "@material-ui/core/Toolbar";
 import MyDynamicTab from "../../MyDynamicTab";
+import CloseIcon from "@material-ui/icons/Close";
 
 class JsonTab extends MyDynamicTab.DataTab {
     constructor(active) {
@@ -106,7 +101,7 @@ class JsonFormatter extends React.Component {
 
     closeAllTab = () => {
         this.setState({
-            tabs: [new JsonTab()]
+            tabs: [new JsonTab(true)]
         });
     };
 
@@ -202,7 +197,11 @@ class JsonFormatter extends React.Component {
                     zIndex: 2
                 }}>
                     {/** App bar */}
-                    <MyAppBar position={"static"} title={this.props.title}/>
+                    <MyAppBar position={"static"} title={this.props.title} menuItems={
+                        <IconButton onClick={this.closeAllTab} color={"inherit"}>
+                            <CloseIcon/>
+                        </IconButton>
+                    }/>
                     {/** Tabs */}
                     <MyDynamicTab tabClass={JsonTab} tabs={this.state.tabs} onTabChange={this.onTabChange}/>
                     {/** Main view */}
