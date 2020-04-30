@@ -40,7 +40,7 @@ const styles = theme => ({
     Container: {
         padding: theme.spacing(3),
         "& > *": {
-            marginBottom: theme.spacing(2),
+            margin: theme.spacing(1),
         }
     },
     ButtonContainer: {
@@ -57,8 +57,11 @@ const styles = theme => ({
         }
     },
     SelectIndent: {
-        margin: theme.spacing(1),
         minWidth: 120
+    },
+    TextField: {
+        margin: 0,
+        padding: theme.spacing(1)
     }
 });
 
@@ -242,7 +245,7 @@ class JsonFormatter extends React.Component {
                                     </>
                                     }
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={12} md={6} className={classes.TextField}>
                                     <TextField
                                         id="textarea-before"
                                         label="Original JSON"
@@ -258,7 +261,7 @@ class JsonFormatter extends React.Component {
                                         onChange={tab.mode === "beautify" ? e => this.beautifyInput(e, tab) : e => this.uglifyInput(e, tab)}
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={12} md={6} className={classes.TextField}>
                                     <TextField
                                         id="textarea-after"
                                         label="Output"

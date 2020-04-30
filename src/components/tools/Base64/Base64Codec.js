@@ -29,7 +29,7 @@ const styles = theme => ({
     Container: {
         padding: theme.spacing(3),
         "& > *": {
-            marginBottom: theme.spacing(2),
+            margin: theme.spacing(1),
         }
     },
     ButtonContainer: {
@@ -45,6 +45,10 @@ const styles = theme => ({
             width: "100%"
         }
     },
+    TextField: {
+        margin: 0,
+        padding: theme.spacing(1)
+    }
 });
 
 class Base64Codec extends React.Component {
@@ -152,7 +156,7 @@ class Base64Codec extends React.Component {
                 {/** Main view */}
                 {this.state.tabs.filter(x => x.active).map(tab => (
                     <Grid className={classes.Container} container key={`grid-container-${tab.id}`}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={6} className={classes.TextField}>
                             <TextField
                                 id="textarea-encoded"
                                 label="Base64 Encoded"
@@ -168,7 +172,7 @@ class Base64Codec extends React.Component {
                                 onChange={e => this.decodeInput(e, tab)}
                             />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={6} className={classes.TextField}>
                             <TextField
                                 id="textarea-decoded"
                                 label="Plain Text"
