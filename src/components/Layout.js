@@ -17,14 +17,17 @@ const styles = theme => ({
     },
     GridItem: {
         '& > *': {
-            height: "100%"
+            height: "100%",
+            '& > *': {
+                height: "100%"
+            }
         }
     }
 });
 
 class Layout extends React.PureComponent {
 
-    handleCardClick = (e) => {
+    onCardClick = (e) => {
         this.context.onActivityChange(e.currentTarget.getAttribute('data-id'));
     };
 
@@ -44,7 +47,7 @@ class Layout extends React.PureComponent {
                         <Grid className={classes.GridItem}
                               key={item.name}
                               data-id={item.name}
-                              onClick={this.handleCardClick}
+                              onClick={this.onCardClick}
                               item xs={12} sm={6} md={4} lg={3}>
                             <MyCard
                                 title={item.title}
