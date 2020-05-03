@@ -15,7 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
-import Toolbar from "@material-ui/core/Toolbar";
+import UaList from "./UaList";
 
 const styles = theme => ({
     Container: {
@@ -102,7 +102,7 @@ class UserAgent extends React.PureComponent {
                             centered
                         >
                             <Tab label="My UA" id={"tab-0"} value={0} aria-controls={"tab-panel-0"}/>
-                            <Tab label="UA List" id={"tab-1"} value={1} aria-controls={"tab-panel-1"}/>
+                            <Tab label="UA Example" id={"tab-1"} value={1} aria-controls={"tab-panel-1"}/>
                         </Tabs>
                     </AppBar>
                 </div>
@@ -129,7 +129,7 @@ class UserAgent extends React.PureComponent {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>{"Field"}</TableCell>
-                                            <TableCell align={"right"}>Value</TableCell>
+                                            <TableCell align={"right"}>{"Value"}</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -150,7 +150,7 @@ class UserAgent extends React.PureComponent {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>{"Field"}</TableCell>
-                                            <TableCell align={"right"}>Value</TableCell>
+                                            <TableCell align={"right"}>{"Value"}</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -167,11 +167,7 @@ class UserAgent extends React.PureComponent {
                     </Container>
                     <Container className={classes.Container} id={"tab-panel-1"} aria-labelledby={"tab-1"} value={1}
                                maxWidth={"md"}>
-                        <div>panel 2</div>
-                        <div>panel 2</div>
-                        <div>panel 2</div>
-                        <div>panel 2</div>
-                        <div>panel 2</div>
+                        <UaList/>
                     </Container>
                 </SwipeableViews>
             </>
