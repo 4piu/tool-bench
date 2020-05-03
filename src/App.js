@@ -11,6 +11,7 @@ import ClockIcon from "./assets/img/icon_timestamp.svg";
 import CheckIcon from "./assets/img/icon_check.svg";
 import GlobeIcon from "./assets/img/icon_globe.svg";
 import BrowserIcon from "./assets/img/icon_browser.svg";
+import SinIcon from "./assets/img/icon_sin.svg";
 import Layout from "./components/Layout";
 import ApplicationContext from "./components/ApplicationContext";
 
@@ -77,6 +78,14 @@ const tools = [
         title: "User Agent",
         description: "UA utilities",
         icon: BrowserIcon
+    },
+    {
+    {
+        name: "wave",
+        loader: () => import("./components/tools/SoundWave/SoundWave.js"),
+        title: "Sound wave generator",
+        description: "Sound wave generator",
+        icon: SinIcon
     },
     {
         name: "test-fail",
