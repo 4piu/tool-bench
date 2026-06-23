@@ -7,35 +7,23 @@
   "license": "UNLISENCED",
   "private": true,
   "scripts": {
-    "build": "webpack --mode production --module-bind js=babel-loader",
-    "start": "webpack-dev-server --mode development --open"
+    "build": "vite build",
+    "dev": "vite --open",
+    "preview": "vite preview",
+    "start": "vite --open",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/core": "^7.29.7",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.29.7",
-    "@babel/preset-react": "^7.29.7",
     "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
     "@material-ui/pickers": "^3.3.11",
-    "babel-loader": "^8.4.1",
-    "base64url": "^3.0.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.6.0",
     "date-fns": "^2.30.0",
     "dns-packet": "latest",
-    "file-loader": "6.0.0",
-    "filereader-stream": "^2.0.0",
-    "html-loader": "1.1.0",
-    "html-webpack-plugin": "4.3.0",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-fetch": "^2.7.0",
-    "sass": "^1.101.0",
+    "hash-wasm": "^4.12.0",
     "prop-types": "latest",
     "qrcode": "^1.5.4",
-    "random-number-csprng": "^1.0.2",
     "react": "^16.14.0",
     "react-color": "^2.19.3",
     "react-dom": "^16.14.0",
@@ -43,12 +31,13 @@
     "react-loadable": "^5.5.0",
     "react-swipeable-views": "^0.13.9",
     "regenerator-runtime": "^0.13.11",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.3.0",
-    "uuid": "8.0.0",
-    "webpack": "^4.47.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3",
-    "worker-loader": "^2.0.0"
+    "uuid": "8.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "@vitejs/plugin-react": "^5.1.2",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
   }
 }

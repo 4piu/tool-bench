@@ -14,6 +14,21 @@ import regeneratorRuntime from "regenerator-runtime";
 import Toolbar from "@material-ui/core/Toolbar";
 import MyDynamicTab from "../../MyDynamicTab";
 
+const bytesToBase64 = bytes => {
+    let binary = "";
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary);
+};
+
+const base64ToBytes = base64 => {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+};
+
+const normalizeBase64 = base64 => base64.replace(/\s/g, "").replace(/=+$/g, "");
+
 class Base64Tab extends MyDynamicTab.DataTab {
     constructor(active) {
         super(active);
@@ -97,15 +112,20 @@ class Base64Codec extends React.Component {
     decodeInput = (event, tab) => {
         const input = event.currentTarget.value;
         tab.data.encoded = input;
-        tab.data.decoded = Buffer.from(input, "base64").toString("base64") === input ?
-            Buffer.from(input, "base64").toString("utf-8") : "Malformed input";
+        try {
+            const bytes = base64ToBytes(input);
+            tab.data.decoded = normalizeBase64(bytesToBase64(bytes)) === normalizeBase64(input) ?
+                new TextDecoder().decode(bytes) : "Malformed input";
+        } catch (e) {
+            tab.data.decoded = "Malformed input";
+        }
         tab.data.focus = "decoded";
         this.setState(this.state);
     };
 
     encodeInput = (event, tab) => {
         const input = event.currentTarget.value;
-        tab.data.encoded = Buffer.from(input, "utf-8").toString("base64");
+        tab.data.encoded = bytesToBase64(new TextEncoder().encode(input));
         tab.data.decoded = input;
         tab.data.focus = "encoded";
         this.setState(this.state);

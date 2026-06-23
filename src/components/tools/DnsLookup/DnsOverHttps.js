@@ -1,8 +1,15 @@
 import dnsPacket from "dns-packet";
-import base64url from "base64url";
-import fetch from "node-fetch";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
+
+const toBase64Url = bytes => {
+    let binary = "";
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/g, "");
+};
 
 export const query = async (qName, qType = "A", qClass = "IN", url = "https://cloudflare-dns.com/dns-query", method = "GET") => {
     const buffer = dnsPacket.encode({
@@ -18,15 +25,14 @@ export const query = async (qName, qType = "A", qClass = "IN", url = "https://cl
     const serverUrl = url.endsWith("/") ? url.slice(0, -1) : url;
     let response;
     if (method === "GET") {
-        const query = base64url(buffer);
+        const query = toBase64Url(buffer);
         response = await fetch(`${serverUrl}?dns=${query}`);
     } else if (method === "POST") {
         response = await fetch(serverUrl, {
             method: "POST",
             headers: {
                 "Accept": "application/dns-message",
-                "Content-Type": "application/dns-message",
-                "Content-Length": Buffer.byteLength(buffer)
+                "Content-Type": "application/dns-message"
             },
             body: buffer
         });
@@ -34,6 +40,6 @@ export const query = async (qName, qType = "A", qClass = "IN", url = "https://cl
         throw new Error("Unsupported method");
     }
     if (!response.ok) throw new Error(response.statusText);
-    return dnsPacket.decode(Buffer.from(await response.arrayBuffer()));
+    return dnsPacket.decode(new Uint8Array(await response.arrayBuffer()));
 
 };

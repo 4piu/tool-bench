@@ -20,7 +20,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import StopIcon from "@material-ui/icons/Stop";
 import DoneIcon from "@material-ui/icons/Done";
-import FileHashWorker from "./FileHash.worker.js";
+import FileHashWorker from "./FileHash.worker.js?worker";
 import {shallowCompare} from "../../../utils/ObjectCompare";
 import MyDragAndDrop from "../../MyDragAndDrop";
 

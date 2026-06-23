@@ -17,7 +17,6 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import DoneIcon from '@material-ui/icons/Done';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {downloadText} from "../../../utils/DownloadService";
-import csprng from "random-number-csprng";
 import {shallowCompare} from "../../../utils/ObjectCompare";
 // noinspection ES6UnusedImports
 import regeneratorRuntime from "regenerator-runtime";
@@ -56,8 +55,17 @@ const styles = theme => ({
 });
 
 const randomNumber = async (min, max, useCsprng) => {
-    return useCsprng ? (await csprng(min, max)) :
-        (Math.floor(Math.random() * (max - min + 1)) + min)
+    if (!useCsprng) return Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const range = max - min + 1;
+    const limit = Math.floor(0x100000000 / range) * range;
+    const values = new Uint32Array(1);
+    let value;
+    do {
+        crypto.getRandomValues(values);
+        value = values[0];
+    } while (value >= limit);
+    return min + (value % range);
 };
 
 const randomCharacter = async (type, allowConfusing, useCsprng) => {

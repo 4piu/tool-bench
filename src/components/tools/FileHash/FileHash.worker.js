@@ -1,49 +1,54 @@
-import FileReaderStream from "filereader-stream";
-import crypto from "crypto";
+import {createMD5, createSHA1, createSHA256, createSHA512} from "hash-wasm";
 
-self.addEventListener("message", m => {
+const createHasher = async algorithm => {
+    switch (algorithm) {
+        case "MD5":
+            return createMD5();
+        case "SHA-1":
+            return createSHA1();
+        case "SHA-256":
+            return createSHA256();
+        case "SHA-512":
+            return createSHA512();
+        default:
+            throw new Error(`Unsupported hash algorithm: ${algorithm}`);
+    }
+};
+
+const resultProperty = algorithm => {
+    switch (algorithm) {
+        case "MD5":
+            return "resultMd5";
+        case "SHA-1":
+            return "resultSha1";
+        case "SHA-256":
+            return "resultSha256";
+        case "SHA-512":
+            return "resultSha512";
+        default:
+            throw new Error(`Unsupported hash algorithm: ${algorithm}`);
+    }
+};
+
+self.addEventListener("message", async m => {
     const job = m.data;
-    const fileStream = FileReaderStream(job.file);
-    switch (job.hashAlgorithm) {
-        case "MD5": {
-            const hash = crypto.createHash("md5");
-            hash.on("finish", () => {
-                job.resultMd5 = hash.read().toString("hex");
-                postMessage(job);
-                close();
-            });
-            fileStream.pipe(hash);
-            break;
+    try {
+        const hasher = await createHasher(job.hashAlgorithm);
+        hasher.init();
+
+        const reader = job.file.stream().getReader();
+        for (; ;) {
+            const {done, value} = await reader.read();
+            if (done) break;
+            hasher.update(value);
         }
-        case "SHA-1": {
-            const hash = crypto.createHash("sha1");
-            hash.on("finish", () => {
-                job.resultSha1 = hash.read().toString("hex");
-                postMessage(job);
-                close();
-            });
-            fileStream.pipe(hash);
-            break;
-        }
-        case "SHA-256": {
-            const hash = crypto.createHash("sha256");
-            hash.on("finish", () => {
-                job.resultSha256 = hash.read().toString("hex");
-                postMessage(job);
-                close();
-            });
-            fileStream.pipe(hash);
-            break;
-        }
-        case "SHA-512": {
-            const hash = crypto.createHash("sha512");
-            hash.on("finish", () => {
-                job.resultSha512 = hash.read().toString("hex");
-                postMessage(job);
-                close();
-            });
-            fileStream.pipe(hash);
-            break;
-        }
+
+        job[resultProperty(job.hashAlgorithm)] = hasher.digest();
+        postMessage(job);
+    } catch (error) {
+        job.error = error.message;
+        postMessage(job);
+    } finally {
+        close();
     }
 });

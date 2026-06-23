@@ -34,7 +34,7 @@ const QrCodeImage = async (text, options) => {
     };
     try {
         if (options.type === "svg") {
-            const base64Img = (new Buffer(await QrCode.toString(text, options))).toString("base64");
+            const base64Img = btoa(unescape(encodeURIComponent(await QrCode.toString(text, options))));
             const imgSrc = `data:image/svg+xml;base64,${base64Img}`;
             return <img alt="qr-code" title="Click to download" src={imgSrc} onClick={onImgClick}/>;
         } else {
