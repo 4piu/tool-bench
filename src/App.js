@@ -80,7 +80,6 @@ const tools = [
         icon: BrowserIcon
     },
     {
-    {
         name: "wave",
         loader: () => import("./components/tools/SoundWave/SoundWave.js"),
         title: "Sound wave generator",
