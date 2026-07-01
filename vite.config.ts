@@ -3,22 +3,11 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-    plugins: [
-        react({
-            include: "**/*.{js,jsx,ts,tsx}"
-        }),
-        tailwindcss()
-    ],
-    esbuild: {
-        loader: "jsx",
-        include: /src\/.*\.jsx?$/,
-        exclude: []
+    define: {
+        global: "globalThis"
     },
-    optimizeDeps: {
-        esbuildOptions: {
-            loader: {
-                ".js": "jsx"
-            }
-        }
-    }
+    plugins: [
+        react(),
+        tailwindcss()
+    ]
 });
