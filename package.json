@@ -22,13 +22,17 @@
     "@types/react-dom": "^19.2.3",
     "dns-packet": "latest",
     "hash-wasm": "^4.12.0",
+    "jmespath": "^0.16.0",
+    "jsonpath-plus": "^10.4.0",
     "qrcode": "^1.5.4",
     "react": "^19",
     "react-dom": "^19",
+    "ua-parser-js": "^2.0.10",
     "uuid": "8.0.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.17",
+    "@types/jmespath": "^0.15.2",
     "@vitejs/plugin-react": "^5.1.2",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",

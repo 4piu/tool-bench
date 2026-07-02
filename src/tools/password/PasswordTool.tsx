@@ -3,6 +3,7 @@ import {
     Alert,
     Box,
     Checkbox,
+    Chip,
     FormControl,
     FormControlLabel,
     FormGroup,
@@ -52,6 +53,35 @@ const secureRandomIndex = (length: number) => {
     return value % length;
 };
 
+const secureShuffle = <T,>(items: T[]) => {
+    const array = [...items];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = secureRandomIndex(i + 1);
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
+
+const dedupeConsecutive = (chars: string[], source: string) => {
+    const result = [...chars];
+    for (let i = 1; i < result.length; i++) {
+        if (result[i] !== result[i - 1]) continue;
+        const swapIndex = result.findIndex((char, index) => index > i && char !== result[i - 1] && char !== result[i + 1]);
+        if (swapIndex !== -1) {
+            [result[i], result[swapIndex]] = [result[swapIndex], result[i]];
+            continue;
+        }
+        let candidate = result[i];
+        let attempts = 0;
+        while (candidate === result[i - 1] && attempts < 20) {
+            candidate = source[secureRandomIndex(source.length)];
+            attempts++;
+        }
+        result[i] = candidate;
+    }
+    return result;
+};
+
 const PasswordTool = () => {
     const [mode, setMode] = useLocalStorageState<GenerationMode>("password.mode", "password");
     const [length, setLength] = useLocalStorageState("password.length", 20);
@@ -61,35 +91,42 @@ const PasswordTool = () => {
     const [digits, setDigits] = useLocalStorageState("password.digits", true);
     const [symbols, setSymbols] = useLocalStorageState("password.symbols", false);
     const [avoidConfusing, setAvoidConfusing] = useLocalStorageState("password.avoidConfusing", false);
+    const [noRepeatConsecutive, setNoRepeatConsecutive] = useLocalStorageState("password.noRepeatConsecutive", false);
+    const [minUpper, setMinUpper] = useLocalStorageState("password.minUpper", 1);
+    const [minLower, setMinLower] = useLocalStorageState("password.minLower", 1);
+    const [minDigits, setMinDigits] = useLocalStorageState("password.minDigits", 1);
+    const [minSymbols, setMinSymbols] = useLocalStorageState("password.minSymbols", 1);
     const [wordCount, setWordCount] = useLocalStorageState("password.wordCount", 5);
     const [separator, setSeparator] = useLocalStorageState("password.separator", "-");
     const [capitalizeWords, setCapitalizeWords] = useLocalStorageState("password.capitalizeWords", false);
     const [appendNumber, setAppendNumber] = useLocalStorageState("password.appendNumber", true);
     const [passwords, setPasswords] = React.useState<string[]>([]);
-    const selectedGroups = [
-        upper && charGroups.upper,
-        lower && charGroups.lower,
-        digits && charGroups.digits,
-        symbols && charGroups.symbols
-    ].filter(Boolean) as string[];
-    const source = selectedGroups
-        .join("")
-        .split("")
-        .filter(char => !avoidConfusing || !confusingCharacters.has(char))
-        .join("");
-    const invalid = selectedGroups.length === 0 || source.length === 0;
+    const usableChars = (chars: string) => chars.split("").filter(char => !avoidConfusing || !confusingCharacters.has(char)).join("");
+    const classConfig = [
+        {key: "upper", label: "Uppercase", enabled: upper, chars: charGroups.upper, min: minUpper, setMin: setMinUpper},
+        {key: "lower", label: "Lowercase", enabled: lower, chars: charGroups.lower, min: minLower, setMin: setMinLower},
+        {key: "digits", label: "Digits", enabled: digits, chars: charGroups.digits, min: minDigits, setMin: setMinDigits},
+        {key: "symbols", label: "Symbols", enabled: symbols, chars: charGroups.symbols, min: minSymbols, setMin: setMinSymbols}
+    ];
+    const selectedClasses = classConfig.filter(cls => cls.enabled);
+    const source = selectedClasses.map(cls => usableChars(cls.chars)).join("");
+    const requiredTotal = selectedClasses.reduce((sum, cls) => sum + Math.max(1, cls.min), 0);
+    const invalid = selectedClasses.length === 0 || source.length === 0;
+    const policyExceedsLength = !invalid && requiredTotal > length;
     const entropy = mode === "passphrase"
         ? Math.round(wordCount * Math.log2(passphraseWords.length) + (appendNumber ? Math.log2(10) : 0))
         : invalid ? 0 : Math.round(length * Math.log2(source.length));
     const output = passwords.join("\n");
 
     const generateOne = () => {
-        const required = selectedGroups.map(group => {
-            const usable = group.split("").filter(char => !avoidConfusing || !confusingCharacters.has(char)).join("");
-            return usable[secureRandomIndex(usable.length)];
+        const required = selectedClasses.flatMap(cls => {
+            const usable = usableChars(cls.chars);
+            return Array.from({length: Math.max(1, cls.min)}, () => usable[secureRandomIndex(usable.length)]);
         });
         const rest = Array.from({length: Math.max(0, length - required.length)}, () => source[secureRandomIndex(source.length)]);
-        return required.concat(rest).sort(() => crypto.getRandomValues(new Uint32Array(1))[0] - 0x80000000).join("");
+        let chars = secureShuffle(required.concat(rest));
+        if (noRepeatConsecutive) chars = dedupeConsecutive(chars, source);
+        return chars.join("");
     };
 
     const generatePassphrase = () => {
@@ -102,7 +139,7 @@ const PasswordTool = () => {
     };
 
     const generate = () => {
-        if (mode === "password" && invalid) return;
+        if (mode === "password" && (invalid || policyExceedsLength)) return;
         setPasswords(Array.from({length: count}, mode === "passphrase" ? generatePassphrase : generateOne));
     };
 
@@ -126,12 +163,49 @@ const PasswordTool = () => {
                             <Slider value={length} min={6} max={128} onChange={(_, value) => setLength(value as number)}/>
                         </Box>
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox checked={upper} onChange={event => setUpper(event.target.checked)}/>} label="Uppercase"/>
-                            <FormControlLabel control={<Checkbox checked={lower} onChange={event => setLower(event.target.checked)}/>} label="Lowercase"/>
-                            <FormControlLabel control={<Checkbox checked={digits} onChange={event => setDigits(event.target.checked)}/>} label="Digits"/>
-                            <FormControlLabel control={<Checkbox checked={symbols} onChange={event => setSymbols(event.target.checked)}/>} label="Symbols"/>
+                            {classConfig.map(cls => (
+                                <Stack key={cls.key} direction="row" spacing={2} sx={{alignItems: "center"}}>
+                                    <FormControlLabel
+                                        sx={{flex: 1}}
+                                        control={<Checkbox checked={cls.enabled} onChange={event => {
+                                            if (cls.key === "upper") setUpper(event.target.checked);
+                                            if (cls.key === "lower") setLower(event.target.checked);
+                                            if (cls.key === "digits") setDigits(event.target.checked);
+                                            if (cls.key === "symbols") setSymbols(event.target.checked);
+                                        }}/>}
+                                        label={cls.label}
+                                    />
+                                    {cls.enabled && (
+                                        <TextField
+                                            label="Min count"
+                                            type="number"
+                                            size="small"
+                                            value={cls.min}
+                                            sx={{width: 110}}
+                                            slotProps={{htmlInput: {min: 1, max: 10}}}
+                                            onChange={event => cls.setMin(Math.max(1, Math.min(10, Number(event.target.value) || 1)))}
+                                        />
+                                    )}
+                                </Stack>
+                            ))}
                             <FormControlLabel control={<Switch checked={avoidConfusing} onChange={event => setAvoidConfusing(event.target.checked)}/>} label="Avoid confusing characters"/>
+                            <FormControlLabel control={<Switch checked={noRepeatConsecutive} onChange={event => setNoRepeatConsecutive(event.target.checked)}/>} label="Avoid repeated consecutive characters"/>
                         </FormGroup>
+                        {!invalid && (
+                            <Stack direction="row" spacing={1} sx={{flexWrap: "wrap"}} useFlexGap>
+                                <Chip size="small" label={`Length ≥ ${length}`}/>
+                                {selectedClasses.map(cls => (
+                                    <Chip key={cls.key} size="small" label={`≥${Math.max(1, cls.min)} ${cls.label.toLowerCase()}`}/>
+                                ))}
+                                {avoidConfusing && <Chip size="small" label="No confusing characters"/>}
+                                {noRepeatConsecutive && <Chip size="small" label="No consecutive repeats"/>}
+                            </Stack>
+                        )}
+                        {policyExceedsLength && (
+                            <Alert severity="error">
+                                Selected policy requires at least {requiredTotal} characters. Increase length or lower per-class minimums.
+                            </Alert>
+                        )}
                     </>
                 ) : (
                     <>

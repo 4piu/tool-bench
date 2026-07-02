@@ -1,12 +1,14 @@
 import React from "react";
 import {v4 as uuidV4} from "uuid";
 import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Box, Button, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Paper, Select, Stack, Tooltip, Typography} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
 import FileHashWorker from "../../workers/fileHash.worker.ts?worker";
+import type {HashWorkerMessage} from "../../workers/fileHash.worker";
 import {copyText, downloadText} from "../shared/browser";
-import {useLocalStorageState} from "../shared/hooks";
+import {useAsyncTask, useLocalStorageState} from "../shared/hooks";
 import {CopyButton, DownloadButton, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
 type HashJob = {
@@ -18,7 +20,8 @@ type HashJob = {
     resultSha256?: string;
     resultSha512?: string;
     error?: string;
-    status?: "pending" | "processing" | "done" | "error";
+    progress?: number;
+    status?: "pending" | "processing" | "done" | "error" | "cancelled";
 };
 
 const algorithms = ["MD5", "SHA-1", "SHA-256", "SHA-512", "ALL"];
@@ -34,7 +37,10 @@ const HashTool = () => {
     const [algorithm, setAlgorithm] = useLocalStorageState("hash.algorithm", "SHA-256");
     const [concurrency, setConcurrency] = useLocalStorageState("hash.concurrency", Math.min(navigator.hardwareConcurrency || 1, 4));
     const [jobs, setJobs] = React.useState<HashJob[]>([]);
-    const [processing, setProcessing] = React.useState(false);
+    const {running: processing, run, cancel} = useAsyncTask();
+    const workersRef = React.useRef<Map<string, Worker>>(new Map());
+    const resolversRef = React.useRef<Map<string, (job: HashJob | null) => void>>(new Map());
+    const cancelledTaskIdsRef = React.useRef<Set<string>>(new Set());
 
     const addFiles = (files: FileList | null) => {
         if (!files) return;
@@ -46,37 +52,70 @@ const HashTool = () => {
         }))));
     };
 
-    const runJob = (job: HashJob) => new Promise<HashJob>(resolve => {
+    const runJob = (job: HashJob) => new Promise<HashJob | null>(resolve => {
         const worker = new FileHashWorker();
+        workersRef.current.set(job.taskId, worker);
+        resolversRef.current.set(job.taskId, resolve);
         worker.addEventListener("message", event => {
-            resolve(event.data);
+            const message = event.data as HashWorkerMessage;
+            if (message.type === "progress") {
+                setJobs(current => current.map(item => item.taskId === message.taskId ? {...item, progress: message.progress} : item));
+                return;
+            }
+            workersRef.current.delete(job.taskId);
+            resolversRef.current.delete(job.taskId);
             worker.terminate();
+            resolve(message.job);
         });
         worker.postMessage(job);
     });
 
-    const hashAll = async () => {
-        setProcessing(true);
-        const queue: HashJob[] = jobs.map(job => ({...job, status: "pending"}));
-        const nextJobs: HashJob[] = [...queue];
+    const cleanupJob = (taskId: string) => {
+        cancelledTaskIdsRef.current.add(taskId);
+        workersRef.current.get(taskId)?.terminate();
+        workersRef.current.delete(taskId);
+        resolversRef.current.get(taskId)?.(null);
+        resolversRef.current.delete(taskId);
+    };
+
+    const cancelJob = (taskId: string) => {
+        cleanupJob(taskId);
+        setJobs(current => current.map(item => item.taskId === taskId ? {...item, status: "cancelled", progress: undefined} : item));
+    };
+
+    const removeJob = (taskId: string) => {
+        cleanupJob(taskId);
+        setJobs(current => current.filter(item => item.taskId !== taskId));
+    };
+
+    const cancelAll = () => {
+        cancel();
+        jobs.filter(job => job.status === "pending" || job.status === "processing").forEach(job => cancelJob(job.taskId));
+    };
+
+    const hashAll = () => run(async isCancelled => {
+        cancelledTaskIdsRef.current.clear();
+        const queue: HashJob[] = jobs.map(job => ({...job, status: "pending", progress: undefined, error: undefined}));
+        setJobs(queue);
         let cursor = 0;
         const workerCount = Math.max(1, Math.min(concurrency, queue.length));
 
         const runNext = async (): Promise<void> => {
+            if (isCancelled()) return;
             const index = cursor++;
             if (index >= queue.length) return;
             const job = queue[index];
-            nextJobs[index] = {...job, status: "processing"};
-            setJobs([...nextJobs]);
+            if (cancelledTaskIdsRef.current.has(job.taskId)) return runNext();
+            setJobs(current => current.map(item => item.taskId === job.taskId ? {...item, status: "processing", progress: 0} : item));
             const result = await runJob(job);
-            nextJobs[index] = {...result, status: result.error ? "error" : "done"};
-            setJobs([...nextJobs]);
+            if (result && !cancelledTaskIdsRef.current.has(job.taskId)) {
+                setJobs(current => current.map(item => item.taskId === job.taskId ? {...result, status: result.error ? "error" : "done"} : item));
+            }
             await runNext();
         };
 
         await Promise.all(Array.from({length: workerCount}, runNext));
-        setProcessing(false);
-    };
+    });
 
     const updateJobAlgorithm = (taskId: string, nextAlgorithm: string) => {
         setJobs(current => current.map(job => job.taskId === taskId ? {
@@ -131,6 +170,7 @@ const HashTool = () => {
                         <input hidden multiple type="file" onChange={event => addFiles(event.target.files)}/>
                     </Button>
                     <Button variant="contained" onClick={hashAll} disabled={!jobs.length || processing}>Hash all</Button>
+                    {processing && <Button color="error" variant="outlined" startIcon={<CancelIcon/>} onClick={cancelAll}>Cancel all</Button>}
                     <DownloadButton label="Export JSON" disabled={!jobs.length} onDownload={() => downloadText("hashes.json", JSON.stringify(exportRows(), null, 2))}/>
                     <DownloadButton label="Export CSV" disabled={!jobs.length} onDownload={() => downloadText("hashes.csv", exportCsv())}/>
                 </Stack>
@@ -155,6 +195,9 @@ const HashTool = () => {
                                     <Typography variant="body2" color={job.error ? "error" : "text.secondary"} sx={{wordBreak: "break-all"}}>
                                         {job.error || resultForHash(job) || job.status || "Pending"}
                                     </Typography>
+                                    {job.status === "processing" && (
+                                        <LinearProgress variant="determinate" value={Math.round((job.progress ?? 0) * 100)} sx={{mt: 1}}/>
+                                    )}
                                 </Box>
                                 <FormControl sx={{minWidth: 120}}>
                                     <InputLabel>Algorithm</InputLabel>
@@ -163,8 +206,15 @@ const HashTool = () => {
                                     </Select>
                                 </FormControl>
                                 <CopyButton label="Copy hash" disabled={!resultForHash(job)} onCopy={() => copyText(resultForHash(job))}/>
+                                {(job.status === "pending" || job.status === "processing") && (
+                                    <Tooltip title="Cancel">
+                                        <IconButton onClick={() => cancelJob(job.taskId)}>
+                                            <CancelIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
                                 <Tooltip title="Remove">
-                                    <IconButton onClick={() => setJobs(current => current.filter(item => item.taskId !== job.taskId))}>
+                                    <IconButton onClick={() => removeJob(job.taskId)}>
                                         <DeleteIcon/>
                                     </IconButton>
                                 </Tooltip>

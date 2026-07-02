@@ -40,6 +40,12 @@ const resultProperty = (algorithm: HashAlgorithm) => {
     }
 };
 
+export type HashWorkerMessage =
+    | {type: "progress"; taskId: string; progress: number}
+    | {type: "result"; job: HashJob};
+
+const PROGRESS_INTERVAL_MS = 100;
+
 self.addEventListener("message", async (message: MessageEvent<HashJob>) => {
     const job = message.data;
     try {
@@ -52,20 +58,30 @@ self.addEventListener("message", async (message: MessageEvent<HashJob>) => {
         })));
         hashers.forEach(({hasher}) => hasher.init());
 
+        const totalBytes = job.file.size;
+        let bytesRead = 0;
+        let lastProgressAt = 0;
         const reader = job.file.stream().getReader();
         for (;;) {
             const {done, value} = await reader.read();
             if (done) break;
             hashers.forEach(({hasher}) => hasher.update(value));
+            bytesRead += value.byteLength;
+            const now = Date.now();
+            if (now - lastProgressAt > PROGRESS_INTERVAL_MS) {
+                lastProgressAt = now;
+                postMessage({type: "progress", taskId: job.taskId, progress: totalBytes ? bytesRead / totalBytes : 1} satisfies HashWorkerMessage);
+            }
         }
+        postMessage({type: "progress", taskId: job.taskId, progress: 1} satisfies HashWorkerMessage);
 
         hashers.forEach(({algorithm, hasher}) => {
             job[resultProperty(algorithm)] = hasher.digest();
         });
-        postMessage(job);
+        postMessage({type: "result", job} satisfies HashWorkerMessage);
     } catch (error) {
         job.error = error instanceof Error ? error.message : "Hashing failed";
-        postMessage(job);
+        postMessage({type: "result", job} satisfies HashWorkerMessage);
     } finally {
         close();
     }

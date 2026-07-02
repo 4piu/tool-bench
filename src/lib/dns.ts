@@ -1,3 +1,4 @@
+import {Buffer} from "buffer";
 import dnsPacket from "dns-packet";
 
 const toBase64Url = (bytes: Uint8Array) => {
@@ -44,5 +45,5 @@ export const queryDns = async (
         });
 
     if (!response.ok) throw new Error(response.statusText);
-    return dnsPacket.decode(new Uint8Array(await response.arrayBuffer()));
+    return dnsPacket.decode(Buffer.from(await response.arrayBuffer()));
 };

@@ -1,7 +1,8 @@
 import React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
+import UploadIcon from "@mui/icons-material/Upload";
 import QrCode from "qrcode";
-import {Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Slider, Stack, TextField, Typography} from "@mui/material";
+import {Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Slider, Stack, TextField, Typography} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
 import {useLocalStorageState} from "../shared/hooks";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -11,6 +12,65 @@ type ErrorCorrectionLevel = "L" | "M" | "Q" | "H";
 type QrPreset = "free" | "url" | "wifi" | "email" | "sms" | "vcard";
 
 const svgToDataUrl = (svg: string) => `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+
+const fileToDataUrl = (file: File) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error ?? new Error("Failed to read file"));
+    reader.readAsDataURL(file);
+});
+
+const loadImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Failed to load image"));
+    image.src = src;
+});
+
+const embedLogoInRaster = async (baseDataUrl: string, logoDataUrl: string, sizeRatio: number, mimeType: string, quality: number) => {
+    const [qrImage, logoImage] = await Promise.all([loadImage(baseDataUrl), loadImage(logoDataUrl)]);
+    const canvas = document.createElement("canvas");
+    canvas.width = qrImage.naturalWidth;
+    canvas.height = qrImage.naturalHeight;
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Canvas unavailable");
+    context.drawImage(qrImage, 0, 0);
+    const logoSize = Math.round(canvas.width * sizeRatio);
+    const x = (canvas.width - logoSize) / 2;
+    const y = (canvas.height - logoSize) / 2;
+    const pad = Math.round(logoSize * 0.12);
+    context.fillStyle = "#ffffff";
+    context.fillRect(x - pad, y - pad, logoSize + pad * 2, logoSize + pad * 2);
+    context.drawImage(logoImage, x, y, logoSize, logoSize);
+    return canvas.toDataURL(mimeType, quality);
+};
+
+const embedLogoInSvg = (svg: string, logoDataUrl: string, sizeRatio: number) => {
+    const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+    const svgEl = doc.documentElement;
+    const width = Number(svgEl.getAttribute("width")) || 100;
+    const height = Number(svgEl.getAttribute("height")) || 100;
+    const logoSize = width * sizeRatio;
+    const x = (width - logoSize) / 2;
+    const y = (height - logoSize) / 2;
+    const pad = logoSize * 0.12;
+    const ns = "http://www.w3.org/2000/svg";
+    const rect = doc.createElementNS(ns, "rect");
+    rect.setAttribute("x", String(x - pad));
+    rect.setAttribute("y", String(y - pad));
+    rect.setAttribute("width", String(logoSize + pad * 2));
+    rect.setAttribute("height", String(logoSize + pad * 2));
+    rect.setAttribute("fill", "#ffffff");
+    const image = doc.createElementNS(ns, "image");
+    image.setAttribute("x", String(x));
+    image.setAttribute("y", String(y));
+    image.setAttribute("width", String(logoSize));
+    image.setAttribute("height", String(logoSize));
+    image.setAttribute("href", logoDataUrl);
+    svgEl.appendChild(rect);
+    svgEl.appendChild(image);
+    return new XMLSerializer().serializeToString(svgEl);
+};
 
 const QrTool = () => {
     const [text, setText] = useLocalStorageState("qr.text", "https://github.com/");
@@ -36,8 +96,21 @@ const QrTool = () => {
         organization: "Analytical Engines",
         website: "https://example.com"
     });
+    const [logoDataUrl, setLogoDataUrl] = React.useState<string | null>(null);
+    const [logoSizeRatio, setLogoSizeRatio] = useLocalStorageState("qr.logoSizeRatio", 0.22);
+    const [logoError, setLogoError] = React.useState("");
     const [dataUrl, setDataUrl] = React.useState("");
     const extension = format === "svg" ? "svg" : format.split("/")[1];
+
+    const handleLogoFile = async (file: File | undefined) => {
+        if (!file) return;
+        try {
+            setLogoDataUrl(await fileToDataUrl(file));
+            setLogoError("");
+        } catch {
+            setLogoError("Failed to read logo image");
+        }
+    };
 
     const updatePresetField = (key: keyof typeof presetFields, value: string) => {
         setPresetFields({...presetFields, [key]: value});
@@ -64,6 +137,7 @@ const QrTool = () => {
     };
 
     React.useEffect(() => {
+        let cancelled = false;
         const options = {
             errorCorrectionLevel,
             margin,
@@ -71,12 +145,29 @@ const QrTool = () => {
             quality,
             color: {dark, light}
         };
-        if (format === "svg") {
-            QrCode.toString(text || " ", {...options, type: "svg"}).then(svg => setDataUrl(svgToDataUrl(svg)));
-        } else {
-            QrCode.toDataURL(text || " ", {...options, type: format}).then(setDataUrl);
-        }
-    }, [dark, errorCorrectionLevel, format, light, margin, quality, scale, text]);
+
+        const build = async () => {
+            try {
+                if (format === "svg") {
+                    const svg = await QrCode.toString(text || " ", {...options, type: "svg"});
+                    const finalSvg = logoDataUrl ? embedLogoInSvg(svg, logoDataUrl, logoSizeRatio) : svg;
+                    if (!cancelled) setDataUrl(svgToDataUrl(finalSvg));
+                } else {
+                    const base = await QrCode.toDataURL(text || " ", {...options, type: format});
+                    const finalDataUrl = logoDataUrl ? await embedLogoInRaster(base, logoDataUrl, logoSizeRatio, format, quality) : base;
+                    if (!cancelled) setDataUrl(finalDataUrl);
+                }
+                if (!cancelled) setLogoError("");
+            } catch (err) {
+                if (!cancelled) setLogoError(err instanceof Error ? err.message : "Failed to render QR code");
+            }
+        };
+
+        build();
+        return () => {
+            cancelled = true;
+        };
+    }, [dark, errorCorrectionLevel, format, light, logoDataUrl, logoSizeRatio, margin, quality, scale, text]);
 
     return (
         <ToolSurface>
@@ -151,6 +242,31 @@ const QrTool = () => {
                         <TextField label="Background" type="color" value={light} onChange={event => setLight(event.target.value)} fullWidth/>
                     </Grid>
                 </Grid>
+                <Stack spacing={1.5}>
+                    <Typography variant="subtitle2">Logo</Typography>
+                    <Stack direction={{xs: "column", sm: "row"}} spacing={1} sx={{alignItems: {sm: "center"}}}>
+                        <Button component="label" variant="outlined" startIcon={<UploadIcon/>}>
+                            {logoDataUrl ? "Replace logo" : "Upload logo"}
+                            <input hidden type="file" accept="image/*" onChange={event => handleLogoFile(event.target.files?.[0])}/>
+                        </Button>
+                        {logoDataUrl && (
+                            <>
+                                <Box component="img" src={logoDataUrl} alt="Logo preview" sx={{width: 40, height: 40, objectFit: "contain", borderRadius: 1, border: 1, borderColor: "divider"}}/>
+                                <Button color="inherit" onClick={() => setLogoDataUrl(null)}>Remove logo</Button>
+                            </>
+                        )}
+                    </Stack>
+                    {logoDataUrl && (
+                        <Box>
+                            <Typography gutterBottom>Logo size: {Math.round(logoSizeRatio * 100)}%</Typography>
+                            <Slider value={logoSizeRatio} min={0.1} max={0.35} step={0.01} onChange={(_, value) => setLogoSizeRatio(value as number)}/>
+                        </Box>
+                    )}
+                    {logoDataUrl && errorCorrectionLevel !== "H" && (
+                        <Alert severity="info">Use error correction level H for the most reliable scans with a logo.</Alert>
+                    )}
+                    {logoError && <Alert severity="error">{logoError}</Alert>}
+                </Stack>
                 <Box>
                     <Typography gutterBottom>Margin: {margin}</Typography>
                     <Slider value={margin} min={0} max={10} step={1} onChange={(_, value) => setMargin(value as number)}/>

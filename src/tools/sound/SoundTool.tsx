@@ -38,59 +38,11 @@ const SoundTool = () => {
     const oscillatorRef = React.useRef<OscillatorNode | null>(null);
     const gainRef = React.useRef<GainNode | null>(null);
     const panRef = React.useRef<StereoPannerNode | null>(null);
+    const analyserRef = React.useRef<AnalyserNode | null>(null);
+    const animationRef = React.useRef<number | null>(null);
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-    const stop = () => {
-        const context = audioRef.current;
-        const oscillator = oscillatorRef.current;
-        const gain = gainRef.current;
-        if (context && oscillator && gain) {
-            const now = context.currentTime;
-            gain.gain.cancelScheduledValues(now);
-            gain.gain.setValueAtTime(gain.gain.value, now);
-            gain.gain.linearRampToValueAtTime(0, now + release);
-            oscillator.stop(now + release);
-        }
-        oscillatorRef.current = null;
-        gainRef.current = null;
-        panRef.current = null;
-        setPlaying(false);
-    };
-
-    const play = async () => {
-        stop();
-        const context = audioRef.current ?? new AudioContext();
-        audioRef.current = context;
-        const oscillator = context.createOscillator();
-        const gain = context.createGain();
-        const panner = context.createStereoPanner();
-        const now = context.currentTime;
-        oscillator.type = waveform;
-        oscillator.frequency.value = frequency;
-        panner.pan.value = pan;
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(volume, now + attack);
-        gain.gain.linearRampToValueAtTime(volume * sustain, now + attack + decay);
-        oscillator.connect(gain).connect(panner).connect(context.destination);
-        oscillator.start(now);
-        oscillatorRef.current = oscillator;
-        gainRef.current = gain;
-        panRef.current = panner;
-        setPlaying(true);
-    };
-
-    React.useEffect(() => {
-        if (oscillatorRef.current) {
-            oscillatorRef.current.frequency.value = frequency;
-            oscillatorRef.current.type = waveform;
-        }
-        if (gainRef.current && audioRef.current) {
-            gainRef.current.gain.setTargetAtTime(volume * sustain, audioRef.current.currentTime, 0.02);
-        }
-        if (panRef.current) panRef.current.pan.value = pan;
-    }, [frequency, pan, sustain, volume, waveform]);
-
-    React.useEffect(() => {
+    const drawStaticPreview = () => {
         const canvas = canvasRef.current;
         const context = canvas?.getContext("2d");
         if (!canvas || !context) return;
@@ -114,7 +66,96 @@ const SoundTool = () => {
             else context.lineTo(x, y);
         });
         context.stroke();
-    }, [volume, waveform]);
+    };
+
+    const drawLiveWaveform = () => {
+        const canvas = canvasRef.current;
+        const analyser = analyserRef.current;
+        const context = canvas?.getContext("2d");
+        if (!canvas || !analyser || !context) return;
+        const bufferLength = analyser.fftSize;
+        const dataArray = new Uint8Array(bufferLength);
+        analyser.getByteTimeDomainData(dataArray);
+        const width = canvas.width;
+        const height = canvas.height;
+        context.clearRect(0, 0, width, height);
+        context.strokeStyle = "#66bb6a";
+        context.lineWidth = 3;
+        context.beginPath();
+        dataArray.forEach((value, index) => {
+            const x = (index / bufferLength) * width;
+            const y = (value / 255) * height;
+            if (index === 0) context.moveTo(x, y);
+            else context.lineTo(x, y);
+        });
+        context.stroke();
+        animationRef.current = requestAnimationFrame(drawLiveWaveform);
+    };
+
+    const stop = () => {
+        const context = audioRef.current;
+        const oscillator = oscillatorRef.current;
+        const gain = gainRef.current;
+        if (context && oscillator && gain) {
+            const now = context.currentTime;
+            gain.gain.cancelScheduledValues(now);
+            gain.gain.setValueAtTime(gain.gain.value, now);
+            gain.gain.linearRampToValueAtTime(0, now + release);
+            oscillator.stop(now + release);
+        }
+        if (animationRef.current !== null) {
+            cancelAnimationFrame(animationRef.current);
+            animationRef.current = null;
+        }
+        oscillatorRef.current = null;
+        gainRef.current = null;
+        panRef.current = null;
+        analyserRef.current = null;
+        setPlaying(false);
+        drawStaticPreview();
+    };
+
+    const play = async () => {
+        stop();
+        const context = audioRef.current ?? new AudioContext();
+        audioRef.current = context;
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const panner = context.createStereoPanner();
+        const analyser = context.createAnalyser();
+        analyser.fftSize = 2048;
+        const now = context.currentTime;
+        oscillator.type = waveform;
+        oscillator.frequency.value = frequency;
+        panner.pan.value = pan;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(volume, now + attack);
+        gain.gain.linearRampToValueAtTime(volume * sustain, now + attack + decay);
+        oscillator.connect(gain).connect(panner).connect(context.destination);
+        panner.connect(analyser);
+        oscillator.start(now);
+        oscillatorRef.current = oscillator;
+        gainRef.current = gain;
+        panRef.current = panner;
+        analyserRef.current = analyser;
+        setPlaying(true);
+        animationRef.current = requestAnimationFrame(drawLiveWaveform);
+    };
+
+    React.useEffect(() => {
+        if (oscillatorRef.current) {
+            oscillatorRef.current.frequency.value = frequency;
+            oscillatorRef.current.type = waveform;
+        }
+        if (gainRef.current && audioRef.current) {
+            gainRef.current.gain.setTargetAtTime(volume * sustain, audioRef.current.currentTime, 0.02);
+        }
+        if (panRef.current) panRef.current.pan.value = pan;
+    }, [frequency, pan, sustain, volume, waveform]);
+
+    React.useEffect(() => {
+        if (!playing) drawStaticPreview();
+    }, [playing, volume, waveform]);
 
     React.useEffect(() => stop, []);
 
@@ -183,7 +224,12 @@ const SoundTool = () => {
                         <Slider value={release} min={0} max={2} step={0.01} onChange={(_, value) => setRelease(value as number)}/>
                     </Box>
                 </Stack>
-                <Box component="canvas" ref={canvasRef} width={720} height={160} sx={{width: "100%", bgcolor: "grey.950", borderRadius: 2}}/>
+                <Box>
+                    <Box component="canvas" ref={canvasRef} width={720} height={160} sx={{width: "100%", bgcolor: "grey.950", borderRadius: 2}}/>
+                    <Typography variant="caption" color="text.secondary">
+                        {playing ? "Live audio analyser" : "Waveform preview"}
+                    </Typography>
+                </Box>
                 <Button variant="contained" startIcon={playing ? <StopIcon/> : <PlayArrowIcon/>} onClick={playing ? stop : play}>
                     {playing ? "Stop" : "Play"}
                 </Button>

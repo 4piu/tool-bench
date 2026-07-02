@@ -79,23 +79,41 @@ The rewrite intentionally simplified the app shell and tool implementations. The
   - Added note presets, stereo pan, ADSR envelope controls, and waveform preview.
   - Restored persisted settings.
 
+## Implementation Summary - 2026-07-01
+
+### Restored In This Pass
+
+- Cross-tool:
+  - Added shared `useAsyncTask` hook (running/cancel state for any cancellable async operation).
+  - Added shared `useDocumentTabs` / `DocumentTabsBar` (multi-document tabs with persisted state, add/close/close-all) and wired it into Base64 and JSON.
+- Password:
+  - Added per-character-class minimum-count controls (uppercase/lowercase/digits/symbols).
+  - Added "avoid repeated consecutive characters" option.
+  - Added a policy summary (chip row) and a hard validation error when the policy can't fit in the chosen length.
+  - Replaced the biased sort-based shuffle with a proper Fisher-Yates shuffle.
+- JSON:
+  - Added full JSONPath query mode via `jsonpath-plus`.
+  - Added JMESPath query mode via `jmespath`.
+  - Restored multi-document tabs (replacing the single shared input/output).
+- QR Code:
+  - Added logo embedding (upload an image, adjustable size) for both raster formats (canvas compositing) and SVG (embedded `<image>`/`<rect>`), with an error-correction-level hint.
+- File Hash:
+  - Added streamed per-file hashing progress (worker reports progress messages, throttled).
+  - Added per-file cancellation and a "Cancel all" action that stops in-flight and not-yet-started jobs.
+- User Agent:
+  - Replaced the hand-rolled UA regex parser with `ua-parser-js` (browser/engine/OS/device/CPU detail).
+  - Added a "Parse UA" tab for parsing an arbitrary pasted UA string, plus a "Parse" shortcut from the examples table.
+- Sound Wave:
+  - Added a live Web Audio `AnalyserNode` oscilloscope visualizer while playing; falls back to the theoretical waveform preview when stopped.
+
 ### Still Worth Doing
 
 - Cross-tool:
-  - Add reusable multi-document tabs for text tools.
-  - Add a shared async task/cancellation hook.
+  - Consider a shared task/cancellation UI affordance (progress + cancel button) beyond the hook itself.
 - Password:
-  - Add stronger password policy controls.
-- JSON:
-  - Add full JSONPath/JMESPath query mode.
-- QR Code:
-  - Add logo embedding.
+  - Consider named policy presets (e.g. NIST, common site rules) instead of freeform per-class minimums.
 - File Hash:
-  - Add per-file cancellation and progress for very large files.
-- User Agent:
-  - Add richer UA parsing library or parser table.
-- Sound Wave:
-  - Add live audio analyser visualizer.
+  - Consider a global aggregate progress bar (sum of per-file progress) in addition to per-file bars.
 
 ## Cross-Tool Gaps
 
