@@ -1,12 +1,11 @@
 import React from "react";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {search as jmesSearch} from "jmespath";
 import {JSONPath} from "jsonpath-plus";
 import {Alert, Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
 import {copyText, downloadText} from "../shared/browser";
 import {DocumentTabsBar, useDocumentTabs} from "../shared/DocumentTabs";
-import {DownloadButton, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
+import {CopyIconButton, DownloadIconButton, FieldLabelRow, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
 type QueryMode = "pointer" | "jsonpath" | "jmespath";
 
@@ -90,7 +89,7 @@ const createDocument = (): JsonDocument => ({
 });
 
 const JsonTool = () => {
-    const {documents, activeId, activeDocument, setActiveId, addDocument, closeDocument, closeAll, updateDocument} =
+    const {documents, activeId, activeDocument, setActiveId, addDocument, closeDocument, closeAll, renameDocument, updateDocument} =
         useDocumentTabs<JsonDocument>("json", createDocument);
     const {input, output, indent, sortKeys, query, queryMode, diffInput, error} = activeDocument;
 
@@ -133,15 +132,6 @@ const JsonTool = () => {
         }
     };
 
-    const copyFormatted = (compact = false) => {
-        try {
-            copyText(formatParsed(JSON.parse(input), indent, sortKeys, compact));
-            updateDocument(activeId, {error: ""});
-        } catch (err) {
-            updateDocument(activeId, {error: err instanceof Error ? err.message : "Invalid JSON"});
-        }
-    };
-
     return (
         <ToolSurface>
             <ToolHeader title="JSON Formatter" description="Format, query, and diff JSON with local parsing across multiple tabs."/>
@@ -153,6 +143,7 @@ const JsonTool = () => {
                     onAdd={addDocument}
                     onClose={closeDocument}
                     onCloseAll={closeAll}
+                    onRename={renameDocument}
                 />
                 <Stack direction={{xs: "column", sm: "row"}} spacing={1} sx={{flexWrap: "wrap"}} useFlexGap>
                     <Button variant="contained" onClick={() => transform("format")}>Format</Button>
@@ -160,10 +151,6 @@ const JsonTool = () => {
                     <Button variant="outlined" onClick={validate}>Validate</Button>
                     <Button variant="outlined" onClick={runQuery}>Query</Button>
                     <Button variant="outlined" onClick={runDiff}>Diff</Button>
-                    <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(output)} disabled={!output}>Copy output</Button>
-                    <Button startIcon={<ContentCopyIcon/>} onClick={() => copyFormatted(false)}>Copy pretty</Button>
-                    <Button startIcon={<ContentCopyIcon/>} onClick={() => copyFormatted(true)}>Copy compact</Button>
-                    <DownloadButton label="Download output" onDownload={() => downloadText("json-output.txt", output)} disabled={!output}/>
                 </Stack>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <FormControl sx={{minWidth: 140}}>
@@ -200,13 +187,23 @@ const JsonTool = () => {
                 {error && <Alert severity="error">{error}</Alert>}
                 <Grid container spacing={2}>
                     <Grid size={{xs: 12, md: 6}}>
-                        <TextField label="Input" value={input} onChange={event => updateDocument(activeId, {input: event.target.value})} multiline minRows={14} fullWidth/>
+                        <FieldLabelRow label="Input">
+                            <CopyIconButton onCopy={() => copyText(input)}/>
+                        </FieldLabelRow>
+                        <TextField value={input} onChange={event => updateDocument(activeId, {input: event.target.value})} multiline minRows={14} fullWidth/>
                     </Grid>
                     <Grid size={{xs: 12, md: 6}}>
-                        <TextField label="Output" value={output} multiline minRows={14} fullWidth slotProps={{htmlInput: {readOnly: true}}}/>
+                        <FieldLabelRow label="Output">
+                            <CopyIconButton onCopy={() => copyText(output)} disabled={!output}/>
+                            <DownloadIconButton title="Download output" onDownload={() => downloadText("json-output.txt", output)} disabled={!output}/>
+                        </FieldLabelRow>
+                        <TextField value={output} multiline minRows={14} fullWidth slotProps={{htmlInput: {readOnly: true}}}/>
                     </Grid>
                     <Grid size={{xs: 12}}>
-                        <TextField label="Diff target JSON" value={diffInput} onChange={event => updateDocument(activeId, {diffInput: event.target.value})} multiline minRows={6} fullWidth/>
+                        <FieldLabelRow label="Diff target JSON">
+                            <CopyIconButton onCopy={() => copyText(diffInput)}/>
+                        </FieldLabelRow>
+                        <TextField value={diffInput} onChange={event => updateDocument(activeId, {diffInput: event.target.value})} multiline minRows={6} fullWidth/>
                     </Grid>
                 </Grid>
             </Stack>

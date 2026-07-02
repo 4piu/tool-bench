@@ -1,8 +1,9 @@
 import React from "react";
-import {Button, FormControlLabel, Grid, Stack, Switch, TextField} from "@mui/material";
-import {base64ToBytes, bytesToBase64, copyText, downloadBytes, downloadText} from "../shared/browser";
+import FileOpenIcon from "@mui/icons-material/FileOpen";
+import {FormControlLabel, Grid, IconButton, Stack, Switch, TextField, Tooltip} from "@mui/material";
+import {base64ToBytes, bytesToBase64, copyText, downloadText} from "../shared/browser";
 import {DocumentTabsBar, useDocumentTabs} from "../shared/DocumentTabs";
-import {CopyButton, DownloadButton, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
+import {CopyIconButton, DownloadIconButton, FieldLabelRow, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -17,7 +18,6 @@ const formatBase64 = (raw: string, urlSafe: boolean) => urlSafe ? toUrlSafe(raw)
 type Base64Document = {
     plainText: string;
     base64: string;
-    fileName: string;
     urlSafe: boolean;
     error: string;
 };
@@ -27,16 +27,15 @@ const createDocument = (): Base64Document => {
     return {
         plainText,
         base64: bytesToBase64(encoder.encode(plainText)),
-        fileName: "decoded.bin",
         urlSafe: false,
         error: ""
     };
 };
 
 const Base64Tool = () => {
-    const {documents, activeId, activeDocument, setActiveId, addDocument, closeDocument, closeAll, updateDocument} =
+    const {documents, activeId, activeDocument, setActiveId, addDocument, closeDocument, closeAll, renameDocument, updateDocument} =
         useDocumentTabs<Base64Document>("base64", createDocument);
-    const {plainText, base64, fileName, urlSafe, error} = activeDocument;
+    const {plainText, base64, urlSafe, error} = activeDocument;
 
     const encode = (value: string) => {
         const raw = bytesToBase64(encoder.encode(value));
@@ -63,17 +62,8 @@ const Base64Tool = () => {
         updateDocument(activeId, {
             base64: formatBase64(raw, urlSafe),
             plainText: `[${file.name}] ${bytes.byteLength} bytes`,
-            fileName: file.name,
             error: ""
         });
-    };
-
-    const downloadDecodedFile = () => {
-        try {
-            downloadBytes(fileName || "decoded.bin", base64ToBytes(urlSafe ? fromUrlSafe(base64) : base64));
-        } catch {
-            updateDocument(activeId, {error: "Malformed Base64 input"});
-        }
     };
 
     return (
@@ -87,29 +77,33 @@ const Base64Tool = () => {
                     onAdd={addDocument}
                     onClose={closeDocument}
                     onCloseAll={closeAll}
+                    onRename={renameDocument}
                 />
                 <FormControlLabel
                     control={<Switch checked={urlSafe} onChange={event => toggleUrlSafe(event.target.checked)}/>}
                     label="URL-safe Base64"
                 />
-                <Stack direction={{xs: "column", sm: "row"}} spacing={1} sx={{flexWrap: "wrap"}} useFlexGap>
-                    <CopyButton label="Copy plain text" onCopy={() => copyText(plainText)}/>
-                    <DownloadButton label="Download plain text" onDownload={() => downloadText("decoded.txt", plainText)}/>
-                    <CopyButton label="Copy Base64" onCopy={() => copyText(base64)}/>
-                    <DownloadButton label="Download Base64" onDownload={() => downloadText("encoded.txt", base64)}/>
-                    <DownloadButton label="Download decoded file" onDownload={downloadDecodedFile} disabled={!base64}/>
-                    <Button component="label">
-                        Encode file
-                        <input hidden type="file" onChange={event => event.target.files?.[0] && encodeFile(event.target.files[0])}/>
-                    </Button>
-                </Stack>
             </Stack>
             <Grid container spacing={2} sx={{mt: 1}}>
                 <Grid size={{xs: 12, md: 6}}>
-                    <TextField label="Plain text" value={plainText} onChange={event => encode(event.target.value)} multiline minRows={12} fullWidth/>
+                    <FieldLabelRow label="Plain text">
+                        <Tooltip title="Open file">
+                            <IconButton size="small" component="label">
+                                <FileOpenIcon fontSize="small"/>
+                                <input hidden type="file" onChange={event => event.target.files?.[0] && encodeFile(event.target.files[0])}/>
+                            </IconButton>
+                        </Tooltip>
+                        <CopyIconButton onCopy={() => copyText(plainText)}/>
+                        <DownloadIconButton title="Download plain text" onDownload={() => downloadText("decoded.txt", plainText)}/>
+                    </FieldLabelRow>
+                    <TextField value={plainText} onChange={event => encode(event.target.value)} multiline minRows={12} fullWidth/>
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
-                    <TextField label="Base64" value={base64} onChange={event => decode(event.target.value)} multiline minRows={12} fullWidth error={Boolean(error)} helperText={error}/>
+                    <FieldLabelRow label="Base64">
+                        <CopyIconButton onCopy={() => copyText(base64)}/>
+                        <DownloadIconButton title="Download Base64 text" onDownload={() => downloadText("encoded.txt", base64)}/>
+                    </FieldLabelRow>
+                    <TextField value={base64} onChange={event => decode(event.target.value)} multiline minRows={12} fullWidth error={Boolean(error)} helperText={error}/>
                 </Grid>
             </Grid>
         </ToolSurface>

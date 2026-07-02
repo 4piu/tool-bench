@@ -2,7 +2,7 @@ import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import {v4 as uuidV4} from "uuid";
-import {Box, IconButton, Stack, Tab, Tabs, Tooltip} from "@mui/material";
+import {Box, IconButton, InputBase, Stack, Tab, Tabs, Tooltip} from "@mui/material";
 import {useLocalStorageState} from "./hooks";
 
 export type TabDocument<T> = T & { id: string; name: string };
@@ -67,50 +67,105 @@ export const useDocumentTabs = <T extends object,>(storageKey: string, createDoc
     } as const;
 };
 
-export const DocumentTabsBar = <T extends object,>({documents, activeId, onSelect, onAdd, onClose, onCloseAll}: {
+export const DocumentTabsBar = <T extends object,>({documents, activeId, onSelect, onAdd, onClose, onCloseAll, onRename}: {
     documents: Array<TabDocument<T>>;
     activeId: string;
     onSelect: (id: string) => void;
     onAdd: () => void;
     onClose: (id: string) => void;
     onCloseAll: () => void;
-}) => (
-    <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
-        <Tabs
-            value={activeId}
-            onChange={(_, value) => onSelect(value)}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{flex: 1, minHeight: 0, borderBottom: 1, borderColor: "divider"}}
-        >
-            {documents.map(doc => (
-                <Tab
-                    key={doc.id}
-                    value={doc.id}
-                    sx={{minHeight: 40, py: 0.5, textTransform: "none"}}
-                    label={
-                        <Stack direction="row" spacing={0.75} sx={{alignItems: "center"}}>
-                            <Box component="span">{doc.name}</Box>
-                            {documents.length > 1 && (
-                                <CloseIcon
-                                    fontSize="inherit"
-                                    onClick={event => {
-                                        event.stopPropagation();
-                                        onClose(doc.id);
-                                    }}
-                                    sx={{fontSize: 16, opacity: 0.6, "&:hover": {opacity: 1}}}
-                                />
-                            )}
-                        </Stack>
-                    }
-                />
-            ))}
-        </Tabs>
-        <Tooltip title="New tab">
-            <IconButton size="small" onClick={onAdd}><AddIcon fontSize="small"/></IconButton>
-        </Tooltip>
-        <Tooltip title="Close all tabs">
-            <IconButton size="small" onClick={onCloseAll}><CloseIcon fontSize="small"/></IconButton>
-        </Tooltip>
-    </Stack>
-);
+    onRename: (id: string, name: string) => void;
+}) => {
+    const [editingId, setEditingId] = React.useState<string | null>(null);
+    const [draftName, setDraftName] = React.useState("");
+    const cancelledRef = React.useRef(false);
+
+    const startRename = (doc: TabDocument<T>) => {
+        cancelledRef.current = false;
+        setEditingId(doc.id);
+        setDraftName(doc.name);
+    };
+
+    const commitRename = () => {
+        if (cancelledRef.current) {
+            cancelledRef.current = false;
+            return;
+        }
+        const trimmed = draftName.trim();
+        if (editingId && trimmed) onRename(editingId, trimmed);
+        setEditingId(null);
+    };
+
+    const cancelRename = () => {
+        cancelledRef.current = true;
+        setEditingId(null);
+    };
+
+    return (
+        <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
+            <Tabs
+                value={activeId}
+                onChange={(_, value) => onSelect(value)}
+                variant="scrollable"
+                scrollButtons="auto"
+                sx={{flex: 1, minHeight: 0, borderBottom: 1, borderColor: "divider"}}
+            >
+                {documents.map(doc => (
+                    <Tab
+                        key={doc.id}
+                        value={doc.id}
+                        component="div"
+                        sx={{minHeight: 40, py: 0.5, textTransform: "none"}}
+                        label={
+                            <Stack direction="row" spacing={0.75} sx={{alignItems: "center"}}>
+                                {editingId === doc.id ? (
+                                    <InputBase
+                                        autoFocus
+                                        value={draftName}
+                                        onChange={event => setDraftName(event.target.value)}
+                                        onClick={event => event.stopPropagation()}
+                                        onMouseDown={event => event.stopPropagation()}
+                                        onBlur={commitRename}
+                                        onKeyDown={event => {
+                                            if (event.key === "Enter") commitRename();
+                                            if (event.key === "Escape") cancelRename();
+                                        }}
+                                        sx={{font: "inherit", width: 100}}
+                                    />
+                                ) : (
+                                    <Box
+                                        component="span"
+                                        onClick={event => {
+                                            if (doc.id === activeId) {
+                                                event.stopPropagation();
+                                                startRename(doc);
+                                            }
+                                        }}
+                                    >
+                                        {doc.name}
+                                    </Box>
+                                )}
+                                {documents.length > 1 && editingId !== doc.id && (
+                                    <CloseIcon
+                                        fontSize="inherit"
+                                        onClick={event => {
+                                            event.stopPropagation();
+                                            onClose(doc.id);
+                                        }}
+                                        sx={{fontSize: 16, opacity: 0.6, "&:hover": {opacity: 1}}}
+                                    />
+                                )}
+                            </Stack>
+                        }
+                    />
+                ))}
+            </Tabs>
+            <Tooltip title="New tab">
+                <IconButton size="small" onClick={onAdd}><AddIcon fontSize="small"/></IconButton>
+            </Tooltip>
+            <Tooltip title="Close all tabs">
+                <IconButton size="small" onClick={onCloseAll}><CloseIcon fontSize="small"/></IconButton>
+            </Tooltip>
+        </Stack>
+    );
+};

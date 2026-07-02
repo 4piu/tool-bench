@@ -3,7 +3,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
 import DownloadIcon from "@mui/icons-material/Download";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import {Box, Button, Container, Paper, Stack, Typography} from "@mui/material";
+import {Box, Button, Container, IconButton, Paper, Stack, Tooltip, Typography} from "@mui/material";
 
 export const ToolSurface = ({children}: { children: React.ReactNode }) => (
     <Container maxWidth="md" sx={{py: 4}}>
@@ -60,4 +60,49 @@ export const DownloadButton = ({onDownload, disabled = false, label = "Download"
     <Button startIcon={<DownloadIcon/>} onClick={onDownload} disabled={disabled}>
         {label}
     </Button>
+);
+
+export const FieldLabelRow = ({label, children}: { label: string; children: React.ReactNode }) => (
+    <Stack direction="row" spacing={0.5} sx={{alignItems: "center", justifyContent: "space-between", mb: 0.5}}>
+        <Typography variant="subtitle2" color="text.secondary">{label}</Typography>
+        <Stack direction="row" spacing={0.25}>{children}</Stack>
+    </Stack>
+);
+
+export const CopyIconButton = ({onCopy, disabled = false, title = "Copy"}: {
+    onCopy: () => void | Promise<void>;
+    disabled?: boolean;
+    title?: string;
+}) => {
+    const [copied, setCopied] = React.useState(false);
+
+    const handleCopy = async () => {
+        await onCopy();
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1500);
+    };
+
+    return (
+        <Tooltip title={copied ? "Copied" : title}>
+            <span>
+                <IconButton size="small" onClick={handleCopy} disabled={disabled}>
+                    {copied ? <DoneIcon fontSize="small"/> : <ContentCopyIcon fontSize="small"/>}
+                </IconButton>
+            </span>
+        </Tooltip>
+    );
+};
+
+export const DownloadIconButton = ({onDownload, disabled = false, title = "Download"}: {
+    onDownload: () => void;
+    disabled?: boolean;
+    title?: string;
+}) => (
+    <Tooltip title={title}>
+        <span>
+            <IconButton size="small" onClick={onDownload} disabled={disabled}>
+                <DownloadIcon fontSize="small"/>
+            </IconButton>
+        </span>
+    </Tooltip>
 );
