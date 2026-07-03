@@ -3,6 +3,7 @@ import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import KeyIcon from "@mui/icons-material/Key";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import SearchIcon from "@mui/icons-material/Search";
+import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
 import TagIcon from "@mui/icons-material/Tag";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
@@ -80,6 +81,13 @@ export const tools: ToolDefinition[] = [
         description: "Generate a tone",
         icon: <GraphicEqIcon/>,
         loader: () => import("./sound/SoundTool")
+    },
+    {
+        id: "oui",
+        title: "OUI Lookup",
+        description: "Find MAC address vendors",
+        icon: <SettingsEthernetIcon/>,
+        loader: () => import("./oui/OuiTool")
     }
 ];
 

@@ -10,7 +10,8 @@ export type ToolId =
     | "dns"
     | "hash"
     | "ua"
-    | "sound";
+    | "sound"
+    | "oui";
 
 export type ToolModule = {
     default: React.ComponentType;
