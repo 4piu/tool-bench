@@ -199,7 +199,7 @@
   "hash": {
     "title": "Suma de verificación de archivos",
     "description": "Calcula hashes de archivos localmente en un Web Worker.",
-    "algorithm": "Algoritmo",
+    "algorithms": "Algoritmos",
     "concurrency": "Concurrencia",
     "addFiles": "Añadir archivos",
     "hashAll": "Calcular todo",

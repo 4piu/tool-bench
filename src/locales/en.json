@@ -199,7 +199,7 @@
   "hash": {
     "title": "File Checksum",
     "description": "Hash files locally in a Web Worker.",
-    "algorithm": "Algorithm",
+    "algorithms": "Algorithms",
     "concurrency": "Concurrency",
     "addFiles": "Add files",
     "hashAll": "Hash all",

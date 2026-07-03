@@ -1,12 +1,11 @@
 import {createMD5, createSHA1, createSHA256, createSHA512} from "hash-wasm";
 
 type HashAlgorithm = "MD5" | "SHA-1" | "SHA-256" | "SHA-512";
-type HashSelection = HashAlgorithm | "ALL";
 
 type HashJob = {
     taskId: string;
     file: File;
-    hashAlgorithm: HashSelection;
+    hashAlgorithms: HashAlgorithm[];
     resultMd5?: string;
     resultSha1?: string;
     resultSha256?: string;
@@ -49,9 +48,7 @@ const PROGRESS_INTERVAL_MS = 100;
 self.addEventListener("message", async (message: MessageEvent<HashJob>) => {
     const job = message.data;
     try {
-        const selectedAlgorithms: HashAlgorithm[] = job.hashAlgorithm === "ALL"
-            ? ["MD5", "SHA-1", "SHA-256", "SHA-512"]
-            : [job.hashAlgorithm];
+        const selectedAlgorithms = job.hashAlgorithms;
         const hashers = await Promise.all(selectedAlgorithms.map(async algorithm => ({
             algorithm,
             hasher: await createHasher(algorithm)

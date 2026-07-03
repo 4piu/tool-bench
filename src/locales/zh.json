@@ -199,7 +199,7 @@
   "hash": {
     "title": "文件校验和",
     "description": "在 Web Worker 中于本地计算文件哈希。",
-    "algorithm": "算法",
+    "algorithms": "算法",
     "concurrency": "并发数",
     "addFiles": "添加文件",
     "hashAll": "全部计算",

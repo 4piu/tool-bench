@@ -199,7 +199,7 @@
   "hash": {
     "title": "Контрольная сумма файла",
     "description": "Вычисляет хеши файлов локально в Web Worker.",
-    "algorithm": "Алгоритм",
+    "algorithms": "Алгоритмы",
     "concurrency": "Параллелизм",
     "addFiles": "Добавить файлы",
     "hashAll": "Хешировать всё",

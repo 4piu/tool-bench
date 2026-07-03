@@ -199,7 +199,7 @@
   "hash": {
     "title": "Somme de contrôle de fichier",
     "description": "Hache les fichiers localement dans un Web Worker.",
-    "algorithm": "Algorithme",
+    "algorithms": "Algorithmes",
     "concurrency": "Concurrence",
     "addFiles": "Ajouter des fichiers",
     "hashAll": "Tout hacher",

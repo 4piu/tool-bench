@@ -108,30 +108,30 @@ const DnsTool = () => {
         <ToolSurface>
             <ToolHeader title={t("dns.title")} description={t("dns.description")}/>
             <Stack spacing={2}>
-                <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
-                    <TextField label={t("dns.domains")} helperText={t("dns.domainsHelp")} value={name} onChange={event => setName(event.target.value)} fullWidth multiline minRows={1}/>
-                    <FormControl sx={{minWidth: 120}}>
+                <Stack direction="row" spacing={2} sx={{flexWrap: "wrap", alignItems: "flex-start"}} useFlexGap>
+                    <TextField label={t("dns.domains")} helperText={t("dns.domainsHelp")} value={name} onChange={event => setName(event.target.value)} multiline minRows={1} sx={{flex: "1 1 240px"}}/>
+                    <FormControl sx={{minWidth: 120, flex: "0 0 auto"}}>
                         <InputLabel>{t("dns.type")}</InputLabel>
                         <Select value={type} label={t("dns.type")} onChange={(event: SelectChangeEvent) => setType(event.target.value)}>
                             {typeOptions.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <FormControl sx={{minWidth: 110}}>
+                    <FormControl sx={{minWidth: 110, flex: "0 0 auto"}}>
                         <InputLabel>{t("dns.class")}</InputLabel>
                         <Select value={dnsClass} label={t("dns.class")} onChange={(event: SelectChangeEvent) => setDnsClass(event.target.value)}>
                             {dnsClasses.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <Button variant="contained" startIcon={<SearchIcon/>} onClick={lookup}>{t("dns.lookup")}</Button>
+                    <Button variant="contained" startIcon={<SearchIcon/>} onClick={lookup} sx={{flex: "0 0 auto"}}>{t("dns.lookup")}</Button>
                 </Stack>
-                <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
-                    <FormControl fullWidth>
+                <Stack direction="row" spacing={2} sx={{flexWrap: "wrap"}} useFlexGap>
+                    <FormControl sx={{flex: "1 1 240px"}}>
                         <InputLabel>{t("dns.dohProvider")}</InputLabel>
                         <Select value={serverUrl} label={t("dns.dohProvider")} onChange={(event: SelectChangeEvent) => setServerUrl(event.target.value)}>
                             {dnsProviders.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <FormControl sx={{minWidth: 120}}>
+                    <FormControl sx={{minWidth: 120, flex: "0 0 auto"}}>
                         <InputLabel>{t("dns.method")}</InputLabel>
                         <Select value={method} label={t("dns.method")} onChange={(event: SelectChangeEvent) => setMethod(event.target.value as "GET" | "POST")}>
                             <MenuItem value="GET">GET</MenuItem>

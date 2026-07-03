@@ -3,7 +3,7 @@ import {v4 as uuidV4} from "uuid";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Box, Button, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Paper, Select, Stack, Tooltip, Typography} from "@mui/material";
+import {Box, Button, Checkbox, FormControl, IconButton, InputLabel, LinearProgress, ListItemText, MenuItem, Paper, Select, Stack, Tooltip, Typography} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
 import {useTranslation} from "react-i18next";
 import FileHashWorker from "../../workers/fileHash.worker.ts?worker";
@@ -15,7 +15,7 @@ import {CopyButton, DownloadButton, ToolHeader, ToolSurface} from "../shared/Too
 type HashJob = {
     taskId: string;
     file: File;
-    hashAlgorithm: string;
+    hashAlgorithms: string[];
     resultMd5?: string;
     resultSha1?: string;
     resultSha256?: string;
@@ -25,7 +25,7 @@ type HashJob = {
     status?: "pending" | "processing" | "done" | "error" | "cancelled";
 };
 
-const algorithms = ["MD5", "SHA-1", "SHA-256", "SHA-512", "ALL"];
+const algorithms = ["MD5", "SHA-1", "SHA-256", "SHA-512"];
 const resultEntries = (job: HashJob) => [
     ["MD5", job.resultMd5],
     ["SHA-1", job.resultSha1],
@@ -36,7 +36,7 @@ const resultForHash = (job: HashJob) => resultEntries(job).map(([name, value]) =
 
 const HashTool = () => {
     const {t} = useTranslation();
-    const [algorithm, setAlgorithm] = useLocalStorageState("hash.algorithm", "SHA-256");
+    const [selectedAlgorithms, setSelectedAlgorithms] = useLocalStorageState<string[]>("hash.algorithms", ["SHA-256"]);
     const [concurrency, setConcurrency] = useLocalStorageState("hash.concurrency", Math.min(navigator.hardwareConcurrency || 1, 4));
     const [jobs, setJobs] = React.useState<HashJob[]>([]);
     const {running: processing, run, cancel} = useAsyncTask();
@@ -49,7 +49,7 @@ const HashTool = () => {
         setJobs(current => current.concat(Array.from(files).map(file => ({
             taskId: uuidV4(),
             file,
-            hashAlgorithm: algorithm,
+            hashAlgorithms: [],
             status: "pending"
         }))));
     };
@@ -97,7 +97,17 @@ const HashTool = () => {
 
     const hashAll = () => run(async isCancelled => {
         cancelledTaskIdsRef.current.clear();
-        const queue: HashJob[] = jobs.map(job => ({...job, status: "pending", progress: undefined, error: undefined}));
+        const queue: HashJob[] = jobs.map(job => ({
+            ...job,
+            hashAlgorithms: selectedAlgorithms,
+            status: "pending",
+            progress: undefined,
+            error: undefined,
+            resultMd5: undefined,
+            resultSha1: undefined,
+            resultSha256: undefined,
+            resultSha512: undefined
+        }));
         setJobs(queue);
         let cursor = 0;
         const workerCount = Math.max(1, Math.min(concurrency, queue.length));
@@ -119,23 +129,10 @@ const HashTool = () => {
         await Promise.all(Array.from({length: workerCount}, runNext));
     });
 
-    const updateJobAlgorithm = (taskId: string, nextAlgorithm: string) => {
-        setJobs(current => current.map(job => job.taskId === taskId ? {
-            ...job,
-            hashAlgorithm: nextAlgorithm,
-            status: "pending",
-            resultMd5: undefined,
-            resultSha1: undefined,
-            resultSha256: undefined,
-            resultSha512: undefined,
-            error: undefined
-        } : job));
-    };
-
     const exportRows = () => jobs
         .map(job => ({
             file: job.file.name,
-            algorithm: job.hashAlgorithm,
+            algorithms: job.hashAlgorithms.join(" + "),
             md5: job.resultMd5 ?? "",
             sha1: job.resultSha1 ?? "",
             sha256: job.resultSha256 ?? "",
@@ -144,8 +141,8 @@ const HashTool = () => {
         }));
 
     const exportCsv = () => [
-        "file,algorithm,md5,sha1,sha256,sha512,error",
-        ...exportRows().map(row => [row.file, row.algorithm, row.md5, row.sha1, row.sha256, row.sha512, row.error]
+        "file,algorithms,md5,sha1,sha256,sha512,error",
+        ...exportRows().map(row => [row.file, row.algorithms, row.md5, row.sha1, row.sha256, row.sha512, row.error]
             .map(value => `"${value.replace(/"/g, "\"\"")}"`)
             .join(","))
     ].join("\n");
@@ -154,25 +151,39 @@ const HashTool = () => {
         <ToolSurface>
             <ToolHeader title={t("hash.title")} description={t("hash.description")}/>
             <Stack spacing={2}>
-                <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
-                    <FormControl sx={{minWidth: 160}}>
-                        <InputLabel>{t("hash.algorithm")}</InputLabel>
-                        <Select value={algorithm} label={t("hash.algorithm")} onChange={(event: SelectChangeEvent) => setAlgorithm(event.target.value)}>
-                            {algorithms.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
+                <Stack direction="row" spacing={2} sx={{flexWrap: "wrap"}} useFlexGap>
+                    <FormControl sx={{minWidth: 220, flex: "0 0 auto"}}>
+                        <InputLabel>{t("hash.algorithms")}</InputLabel>
+                        <Select<string[]>
+                            multiple
+                            value={selectedAlgorithms}
+                            label={t("hash.algorithms")}
+                            onChange={(event: SelectChangeEvent<string[]>) => {
+                                const value = event.target.value;
+                                setSelectedAlgorithms(typeof value === "string" ? value.split(",") : value);
+                            }}
+                            renderValue={selected => selected.join(", ")}
+                        >
+                            {algorithms.map(value => (
+                                <MenuItem key={value} value={value}>
+                                    <Checkbox checked={selectedAlgorithms.includes(value)} size="small"/>
+                                    <ListItemText primary={value}/>
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
-                    <FormControl sx={{minWidth: 140}}>
+                    <FormControl sx={{minWidth: 140, flex: "0 0 auto"}}>
                         <InputLabel>{t("hash.concurrency")}</InputLabel>
                         <Select value={String(concurrency)} label={t("hash.concurrency")} onChange={(event: SelectChangeEvent) => setConcurrency(Number(event.target.value))}>
                             {[1, 2, 4, 8, 16].map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <Button component="label" startIcon={<AddIcon/>} variant="outlined">
+                    <Button component="label" startIcon={<AddIcon/>} variant="outlined" sx={{flex: "0 0 auto"}}>
                         {t("hash.addFiles")}
                         <input hidden multiple type="file" onChange={event => addFiles(event.target.files)}/>
                     </Button>
-                    <Button variant="contained" onClick={hashAll} disabled={!jobs.length || processing}>{t("hash.hashAll")}</Button>
-                    {processing && <Button color="error" variant="outlined" startIcon={<CancelIcon/>} onClick={cancelAll}>{t("hash.cancelAll")}</Button>}
+                    <Button variant="contained" onClick={hashAll} disabled={!jobs.length || processing || !selectedAlgorithms.length} sx={{flex: "0 0 auto"}}>{t("hash.hashAll")}</Button>
+                    {processing && <Button color="error" variant="outlined" startIcon={<CancelIcon/>} onClick={cancelAll} sx={{flex: "0 0 auto"}}>{t("hash.cancelAll")}</Button>}
                     <DownloadButton label={t("hash.exportJson")} disabled={!jobs.length} onDownload={() => downloadText("hashes.json", JSON.stringify(exportRows(), null, 2))}/>
                     <DownloadButton label={t("hash.exportCsv")} disabled={!jobs.length} onDownload={() => downloadText("hashes.csv", exportCsv())}/>
                 </Stack>
@@ -191,22 +202,16 @@ const HashTool = () => {
                 <Stack spacing={1}>
                     {jobs.map(job => (
                         <Paper key={job.taskId} variant="outlined" sx={{p: 2}}>
-                            <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
-                                <Box sx={{flex: 1, minWidth: 0}}>
+                            <Stack direction="row" spacing={1} sx={{alignItems: "center", flexWrap: "wrap"}} useFlexGap>
+                                <Box sx={{flex: "1 1 200px", minWidth: 0}}>
                                     <Typography noWrap>{job.file.name}</Typography>
-                                    <Typography variant="body2" color={job.error ? "error" : "text.secondary"} sx={{wordBreak: "break-all"}}>
+                                    <Typography variant="body2" color={job.error ? "error" : resultForHash(job) ? "text.primary" : "text.secondary"} sx={{wordBreak: "break-all", whiteSpace: "pre-line"}}>
                                         {job.error || resultForHash(job) || t(`hash.status.${job.status ?? "pending"}`)}
                                     </Typography>
                                     {job.status === "processing" && (
                                         <LinearProgress variant="determinate" value={Math.round((job.progress ?? 0) * 100)} sx={{mt: 1}}/>
                                     )}
                                 </Box>
-                                <FormControl sx={{minWidth: 120}}>
-                                    <InputLabel>{t("hash.algorithm")}</InputLabel>
-                                    <Select value={job.hashAlgorithm} label={t("hash.algorithm")} onChange={(event: SelectChangeEvent) => updateJobAlgorithm(job.taskId, event.target.value)} disabled={processing}>
-                                        {algorithms.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
-                                    </Select>
-                                </FormControl>
                                 <CopyButton label={t("hash.copyHash")} disabled={!resultForHash(job)} onCopy={() => copyText(resultForHash(job))}/>
                                 {(job.status === "pending" || job.status === "processing") && (
                                     <Tooltip title={t("hash.cancel")}>

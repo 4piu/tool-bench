@@ -199,7 +199,7 @@
   "hash": {
     "title": "بصمة الملف",
     "description": "يحسب بصمات الملفات محليًا داخل Web Worker.",
-    "algorithm": "الخوارزمية",
+    "algorithms": "الخوارزميات",
     "concurrency": "التزامن",
     "addFiles": "إضافة ملفات",
     "hashAll": "حساب بصمة الكل",
