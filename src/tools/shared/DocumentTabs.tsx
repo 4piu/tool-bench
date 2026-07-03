@@ -3,13 +3,15 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import {v4 as uuidV4} from "uuid";
 import {Box, IconButton, InputBase, Stack, Tab, Tabs, Tooltip} from "@mui/material";
+import {useTranslation} from "react-i18next";
 import {useLocalStorageState} from "./hooks";
 
 export type TabDocument<T> = T & { id: string; name: string };
 
 export const useDocumentTabs = <T extends object,>(storageKey: string, createDocument: () => T) => {
+    const {t} = useTranslation();
     const makeDocument = React.useCallback((name: string): TabDocument<T> => ({id: uuidV4(), name, ...createDocument()}), []);
-    const initialDocuments = React.useMemo(() => [makeDocument("Untitled 1")], []);
+    const initialDocuments = React.useMemo(() => [makeDocument(t("documentTabs.untitled", {n: 1}))], []);
     const [documents, setDocuments] = useLocalStorageState<Array<TabDocument<T>>>(`${storageKey}.documents`, initialDocuments);
     const [activeId, setActiveId] = useLocalStorageState(`${storageKey}.active`, initialDocuments[0].id);
 
@@ -22,7 +24,7 @@ export const useDocumentTabs = <T extends object,>(storageKey: string, createDoc
     }, [documents, activeId, setActiveId]);
 
     const addDocument = () => {
-        const doc = makeDocument(`Untitled ${documents.length + 1}`);
+        const doc = makeDocument(t("documentTabs.untitled", {n: documents.length + 1}));
         setDocuments([...documents, doc]);
         setActiveId(doc.id);
         return doc.id;
@@ -31,7 +33,7 @@ export const useDocumentTabs = <T extends object,>(storageKey: string, createDoc
     const closeDocument = (id: string) => {
         const next = documents.filter(doc => doc.id !== id);
         if (!next.length) {
-            const fresh = makeDocument("Untitled 1");
+            const fresh = makeDocument(t("documentTabs.untitled", {n: 1}));
             setDocuments([fresh]);
             setActiveId(fresh.id);
             return;
@@ -41,7 +43,7 @@ export const useDocumentTabs = <T extends object,>(storageKey: string, createDoc
     };
 
     const closeAll = () => {
-        const fresh = makeDocument("Untitled 1");
+        const fresh = makeDocument(t("documentTabs.untitled", {n: 1}));
         setDocuments([fresh]);
         setActiveId(fresh.id);
     };
@@ -76,6 +78,7 @@ export const DocumentTabsBar = <T extends object,>({documents, activeId, onSelec
     onCloseAll: () => void;
     onRename: (id: string, name: string) => void;
 }) => {
+    const {t} = useTranslation();
     const [editingId, setEditingId] = React.useState<string | null>(null);
     const [draftName, setDraftName] = React.useState("");
     const cancelledRef = React.useRef(false);
@@ -160,10 +163,10 @@ export const DocumentTabsBar = <T extends object,>({documents, activeId, onSelec
                     />
                 ))}
             </Tabs>
-            <Tooltip title="New tab">
+            <Tooltip title={t("documentTabs.newTab")}>
                 <IconButton size="small" onClick={onAdd}><AddIcon fontSize="small"/></IconButton>
             </Tooltip>
-            <Tooltip title="Close all tabs">
+            <Tooltip title={t("documentTabs.closeAllTabs")}>
                 <IconButton size="small" onClick={onCloseAll}><CloseIcon fontSize="small"/></IconButton>
             </Tooltip>
         </Stack>

@@ -4,6 +4,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import QrCode from "qrcode";
 import {Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Slider, Stack, TextField, Typography} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {useLocalStorageState} from "../shared/hooks";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
@@ -73,6 +74,7 @@ const embedLogoInSvg = (svg: string, logoDataUrl: string, sizeRatio: number) => 
 };
 
 const QrTool = () => {
+    const {t} = useTranslation();
     const [text, setText] = useLocalStorageState("qr.text", "https://github.com/");
     const [format, setFormat] = useLocalStorageState<QrFormat>("qr.format", "image/png");
     const [errorCorrectionLevel, setErrorCorrectionLevel] = useLocalStorageState<ErrorCorrectionLevel>("qr.ec", "M");
@@ -108,7 +110,7 @@ const QrTool = () => {
             setLogoDataUrl(await fileToDataUrl(file));
             setLogoError("");
         } catch {
-            setLogoError("Failed to read logo image");
+            setLogoError(t("qr.logoReadFailed"));
         }
     };
 
@@ -159,7 +161,7 @@ const QrTool = () => {
                 }
                 if (!cancelled) setLogoError("");
             } catch (err) {
-                if (!cancelled) setLogoError(err instanceof Error ? err.message : "Failed to render QR code");
+                if (!cancelled) setLogoError(err instanceof Error ? err.message : t("qr.renderFailed"));
             }
         };
 
@@ -167,56 +169,56 @@ const QrTool = () => {
         return () => {
             cancelled = true;
         };
-    }, [dark, errorCorrectionLevel, format, light, logoDataUrl, logoSizeRatio, margin, quality, scale, text]);
+    }, [dark, errorCorrectionLevel, format, light, logoDataUrl, logoSizeRatio, margin, quality, scale, text, t]);
 
     return (
         <ToolSurface>
-            <ToolHeader title="QR Code Creator" description="Generate downloadable QR codes with format, color, and correction controls."/>
+            <ToolHeader title={t("qr.title")} description={t("qr.description")}/>
             <Stack spacing={3}>
                 <FormControl>
-                    <InputLabel>Preset builder</InputLabel>
-                    <Select value={preset} label="Preset builder" onChange={(event: SelectChangeEvent) => setPreset(event.target.value as QrPreset)}>
-                        <MenuItem value="free">Free text</MenuItem>
-                        <MenuItem value="url">URL</MenuItem>
-                        <MenuItem value="wifi">Wi-Fi</MenuItem>
-                        <MenuItem value="email">Email</MenuItem>
-                        <MenuItem value="sms">SMS</MenuItem>
-                        <MenuItem value="vcard">vCard</MenuItem>
+                    <InputLabel>{t("qr.presetBuilder")}</InputLabel>
+                    <Select value={preset} label={t("qr.presetBuilder")} onChange={(event: SelectChangeEvent) => setPreset(event.target.value as QrPreset)}>
+                        <MenuItem value="free">{t("qr.presetOption.free")}</MenuItem>
+                        <MenuItem value="url">{t("qr.presetOption.url")}</MenuItem>
+                        <MenuItem value="wifi">{t("qr.presetOption.wifi")}</MenuItem>
+                        <MenuItem value="email">{t("qr.presetOption.email")}</MenuItem>
+                        <MenuItem value="sms">{t("qr.presetOption.sms")}</MenuItem>
+                        <MenuItem value="vcard">{t("qr.presetOption.vcard")}</MenuItem>
                     </Select>
                 </FormControl>
                 {preset !== "free" && (
                     <Grid container spacing={2}>
-                        {preset === "url" && <Grid size={{xs: 12}}><TextField label="URL" value={presetFields.url} onChange={event => updatePresetField("url", event.target.value)} fullWidth/></Grid>}
+                        {preset === "url" && <Grid size={{xs: 12}}><TextField label={t("qr.field.url")} value={presetFields.url} onChange={event => updatePresetField("url", event.target.value)} fullWidth/></Grid>}
                         {preset === "wifi" && (
                             <>
-                                <Grid size={{xs: 12, sm: 4}}><TextField label="SSID" value={presetFields.ssid} onChange={event => updatePresetField("ssid", event.target.value)} fullWidth/></Grid>
-                                <Grid size={{xs: 12, sm: 4}}><TextField label="Password" value={presetFields.password} onChange={event => updatePresetField("password", event.target.value)} fullWidth/></Grid>
-                                <Grid size={{xs: 12, sm: 4}}><TextField label="Encryption" value={presetFields.encryption} onChange={event => updatePresetField("encryption", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 4}}><TextField label={t("qr.field.ssid")} value={presetFields.ssid} onChange={event => updatePresetField("ssid", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 4}}><TextField label={t("qr.field.password")} value={presetFields.password} onChange={event => updatePresetField("password", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 4}}><TextField label={t("qr.field.encryption")} value={presetFields.encryption} onChange={event => updatePresetField("encryption", event.target.value)} fullWidth/></Grid>
                             </>
                         )}
-                        {(preset === "email" || preset === "vcard") && <Grid size={{xs: 12, sm: 6}}><TextField label="Email" value={presetFields.email} onChange={event => updatePresetField("email", event.target.value)} fullWidth/></Grid>}
-                        {preset === "email" && <Grid size={{xs: 12, sm: 6}}><TextField label="Subject" value={presetFields.subject} onChange={event => updatePresetField("subject", event.target.value)} fullWidth/></Grid>}
-                        {(preset === "email" || preset === "sms") && <Grid size={{xs: 12}}><TextField label="Body" value={presetFields.body} onChange={event => updatePresetField("body", event.target.value)} fullWidth/></Grid>}
-                        {(preset === "sms" || preset === "vcard") && <Grid size={{xs: 12, sm: 6}}><TextField label="Phone" value={presetFields.phone} onChange={event => updatePresetField("phone", event.target.value)} fullWidth/></Grid>}
+                        {(preset === "email" || preset === "vcard") && <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.email")} value={presetFields.email} onChange={event => updatePresetField("email", event.target.value)} fullWidth/></Grid>}
+                        {preset === "email" && <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.subject")} value={presetFields.subject} onChange={event => updatePresetField("subject", event.target.value)} fullWidth/></Grid>}
+                        {(preset === "email" || preset === "sms") && <Grid size={{xs: 12}}><TextField label={t("qr.field.body")} value={presetFields.body} onChange={event => updatePresetField("body", event.target.value)} fullWidth/></Grid>}
+                        {(preset === "sms" || preset === "vcard") && <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.phone")} value={presetFields.phone} onChange={event => updatePresetField("phone", event.target.value)} fullWidth/></Grid>}
                         {preset === "vcard" && (
                             <>
-                                <Grid size={{xs: 12, sm: 6}}><TextField label="First name" value={presetFields.firstName} onChange={event => updatePresetField("firstName", event.target.value)} fullWidth/></Grid>
-                                <Grid size={{xs: 12, sm: 6}}><TextField label="Last name" value={presetFields.lastName} onChange={event => updatePresetField("lastName", event.target.value)} fullWidth/></Grid>
-                                <Grid size={{xs: 12, sm: 6}}><TextField label="Organization" value={presetFields.organization} onChange={event => updatePresetField("organization", event.target.value)} fullWidth/></Grid>
-                                <Grid size={{xs: 12, sm: 6}}><TextField label="Website" value={presetFields.website} onChange={event => updatePresetField("website", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.firstName")} value={presetFields.firstName} onChange={event => updatePresetField("firstName", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.lastName")} value={presetFields.lastName} onChange={event => updatePresetField("lastName", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.organization")} value={presetFields.organization} onChange={event => updatePresetField("organization", event.target.value)} fullWidth/></Grid>
+                                <Grid size={{xs: 12, sm: 6}}><TextField label={t("qr.field.website")} value={presetFields.website} onChange={event => updatePresetField("website", event.target.value)} fullWidth/></Grid>
                             </>
                         )}
                         <Grid size={{xs: 12}}>
-                            <Button variant="contained" onClick={applyPreset}>Apply preset</Button>
+                            <Button variant="contained" onClick={applyPreset}>{t("qr.applyPreset")}</Button>
                         </Grid>
                     </Grid>
                 )}
-                <TextField label="Text" value={text} onChange={event => setText(event.target.value)} multiline minRows={4}/>
+                <TextField label={t("qr.text")} value={text} onChange={event => setText(event.target.value)} multiline minRows={4}/>
                 <Grid container spacing={2}>
                     <Grid size={{xs: 12, sm: 6}}>
                         <FormControl fullWidth>
-                            <InputLabel>Format</InputLabel>
-                            <Select value={format} label="Format" onChange={(event: SelectChangeEvent) => setFormat(event.target.value as QrFormat)}>
+                            <InputLabel>{t("qr.format")}</InputLabel>
+                            <Select value={format} label={t("qr.format")} onChange={(event: SelectChangeEvent) => setFormat(event.target.value as QrFormat)}>
                                 <MenuItem value="svg">SVG</MenuItem>
                                 <MenuItem value="image/png">PNG</MenuItem>
                                 <MenuItem value="image/jpeg">JPG</MenuItem>
@@ -226,8 +228,8 @@ const QrTool = () => {
                     </Grid>
                     <Grid size={{xs: 12, sm: 6}}>
                         <FormControl fullWidth>
-                            <InputLabel>Error correction</InputLabel>
-                            <Select value={errorCorrectionLevel} label="Error correction" onChange={(event: SelectChangeEvent) => setErrorCorrectionLevel(event.target.value as ErrorCorrectionLevel)}>
+                            <InputLabel>{t("qr.errorCorrection")}</InputLabel>
+                            <Select value={errorCorrectionLevel} label={t("qr.errorCorrection")} onChange={(event: SelectChangeEvent) => setErrorCorrectionLevel(event.target.value as ErrorCorrectionLevel)}>
                                 <MenuItem value="L">L (~7%)</MenuItem>
                                 <MenuItem value="M">M (~15%)</MenuItem>
                                 <MenuItem value="Q">Q (~25%)</MenuItem>
@@ -236,54 +238,54 @@ const QrTool = () => {
                         </FormControl>
                     </Grid>
                     <Grid size={{xs: 12, sm: 6}}>
-                        <TextField label="Foreground" type="color" value={dark} onChange={event => setDark(event.target.value)} fullWidth/>
+                        <TextField label={t("qr.foreground")} type="color" value={dark} onChange={event => setDark(event.target.value)} fullWidth/>
                     </Grid>
                     <Grid size={{xs: 12, sm: 6}}>
-                        <TextField label="Background" type="color" value={light} onChange={event => setLight(event.target.value)} fullWidth/>
+                        <TextField label={t("qr.background")} type="color" value={light} onChange={event => setLight(event.target.value)} fullWidth/>
                     </Grid>
                 </Grid>
                 <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Logo</Typography>
+                    <Typography variant="subtitle2">{t("qr.logo")}</Typography>
                     <Stack direction={{xs: "column", sm: "row"}} spacing={1} sx={{alignItems: {sm: "center"}}}>
                         <Button component="label" variant="outlined" startIcon={<UploadIcon/>}>
-                            {logoDataUrl ? "Replace logo" : "Upload logo"}
+                            {logoDataUrl ? t("qr.replaceLogo") : t("qr.uploadLogo")}
                             <input hidden type="file" accept="image/*" onChange={event => handleLogoFile(event.target.files?.[0])}/>
                         </Button>
                         {logoDataUrl && (
                             <>
-                                <Box component="img" src={logoDataUrl} alt="Logo preview" sx={{width: 40, height: 40, objectFit: "contain", borderRadius: 1, border: 1, borderColor: "divider"}}/>
-                                <Button color="inherit" onClick={() => setLogoDataUrl(null)}>Remove logo</Button>
+                                <Box component="img" src={logoDataUrl} alt={t("qr.logoPreviewAlt")} sx={{width: 40, height: 40, objectFit: "contain", borderRadius: 1, border: 1, borderColor: "divider"}}/>
+                                <Button color="inherit" onClick={() => setLogoDataUrl(null)}>{t("qr.removeLogo")}</Button>
                             </>
                         )}
                     </Stack>
                     {logoDataUrl && (
                         <Box>
-                            <Typography gutterBottom>Logo size: {Math.round(logoSizeRatio * 100)}%</Typography>
+                            <Typography gutterBottom>{t("qr.logoSize", {percent: Math.round(logoSizeRatio * 100)})}</Typography>
                             <Slider value={logoSizeRatio} min={0.1} max={0.35} step={0.01} onChange={(_, value) => setLogoSizeRatio(value as number)}/>
                         </Box>
                     )}
                     {logoDataUrl && errorCorrectionLevel !== "H" && (
-                        <Alert severity="info">Use error correction level H for the most reliable scans with a logo.</Alert>
+                        <Alert severity="info">{t("qr.useHighErrorCorrection")}</Alert>
                     )}
                     {logoError && <Alert severity="error">{logoError}</Alert>}
                 </Stack>
                 <Box>
-                    <Typography gutterBottom>Margin: {margin}</Typography>
+                    <Typography gutterBottom>{t("qr.margin", {margin})}</Typography>
                     <Slider value={margin} min={0} max={10} step={1} onChange={(_, value) => setMargin(value as number)}/>
                 </Box>
                 <Box>
-                    <Typography gutterBottom>Scale: {scale}</Typography>
+                    <Typography gutterBottom>{t("qr.scale", {scale})}</Typography>
                     <Slider value={scale} min={2} max={16} step={1} onChange={(_, value) => setScale(value as number)}/>
                 </Box>
                 {(format === "image/jpeg" || format === "image/webp") && (
                     <Box>
-                        <Typography gutterBottom>Quality: {quality}</Typography>
+                        <Typography gutterBottom>{t("qr.quality", {quality})}</Typography>
                         <Slider value={quality} min={0.1} max={1} step={0.05} onChange={(_, value) => setQuality(value as number)}/>
                     </Box>
                 )}
                 {dataUrl && (
                     <Box sx={{textAlign: "center"}}>
-                        <Box component="img" src={dataUrl} alt="QR code" sx={{width: "100%", maxWidth: 360, borderRadius: 2}}/>
+                        <Box component="img" src={dataUrl} alt={t("qr.qrCodeAlt")} sx={{width: "100%", maxWidth: 360, borderRadius: 2}}/>
                     </Box>
                 )}
                 <Button
@@ -292,7 +294,7 @@ const QrTool = () => {
                     download={`qr-code.${extension}`}
                     disabled={!dataUrl}
                 >
-                    Download {extension.toUpperCase()}
+                    {t("qr.download", {extension: extension.toUpperCase()})}
                 </Button>
             </Stack>
         </ToolSurface>

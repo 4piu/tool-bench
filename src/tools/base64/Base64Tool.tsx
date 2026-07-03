@@ -1,6 +1,7 @@
 import React from "react";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
 import {FormControlLabel, Grid, IconButton, Stack, Switch, TextField, Tooltip} from "@mui/material";
+import {useTranslation} from "react-i18next";
 import {base64ToBytes, bytesToBase64, copyText, downloadText} from "../shared/browser";
 import {DocumentTabsBar, useDocumentTabs} from "../shared/DocumentTabs";
 import {CopyIconButton, DownloadIconButton, FieldLabelRow, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -33,6 +34,7 @@ const createDocument = (): Base64Document => {
 };
 
 const Base64Tool = () => {
+    const {t} = useTranslation();
     const {documents, activeId, activeDocument, setActiveId, addDocument, closeDocument, closeAll, renameDocument, updateDocument} =
         useDocumentTabs<Base64Document>("base64", createDocument);
     const {plainText, base64, urlSafe, error} = activeDocument;
@@ -47,7 +49,7 @@ const Base64Tool = () => {
             const nextPlainText = decoder.decode(base64ToBytes(urlSafe ? fromUrlSafe(value) : value));
             updateDocument(activeId, {base64: value, plainText: nextPlainText, error: ""});
         } catch {
-            updateDocument(activeId, {base64: value, error: "Malformed Base64 input"});
+            updateDocument(activeId, {base64: value, error: t("base64.malformed")});
         }
     };
 
@@ -61,14 +63,14 @@ const Base64Tool = () => {
         const raw = bytesToBase64(bytes);
         updateDocument(activeId, {
             base64: formatBase64(raw, urlSafe),
-            plainText: `[${file.name}] ${bytes.byteLength} bytes`,
+            plainText: t("base64.fileSummary", {name: file.name, bytes: bytes.byteLength}),
             error: ""
         });
     };
 
     return (
         <ToolSurface>
-            <ToolHeader title="Base64 Encoder / Decoder" description="Encode and decode UTF-8 text across multiple tabs."/>
+            <ToolHeader title={t("base64.title")} description={t("base64.description")}/>
             <Stack spacing={2}>
                 <DocumentTabsBar
                     documents={documents}
@@ -81,27 +83,27 @@ const Base64Tool = () => {
                 />
                 <FormControlLabel
                     control={<Switch checked={urlSafe} onChange={event => toggleUrlSafe(event.target.checked)}/>}
-                    label="URL-safe Base64"
+                    label={t("base64.urlSafe")}
                 />
             </Stack>
             <Grid container spacing={2} sx={{mt: 1}}>
                 <Grid size={{xs: 12, md: 6}}>
-                    <FieldLabelRow label="Plain text">
-                        <Tooltip title="Open file">
+                    <FieldLabelRow label={t("base64.plainText")}>
+                        <Tooltip title={t("base64.openFile")}>
                             <IconButton size="small" component="label">
                                 <FileOpenIcon fontSize="small"/>
                                 <input hidden type="file" onChange={event => event.target.files?.[0] && encodeFile(event.target.files[0])}/>
                             </IconButton>
                         </Tooltip>
                         <CopyIconButton onCopy={() => copyText(plainText)}/>
-                        <DownloadIconButton title="Download plain text" onDownload={() => downloadText("decoded.txt", plainText)}/>
+                        <DownloadIconButton title={t("base64.downloadPlainText")} onDownload={() => downloadText("decoded.txt", plainText)}/>
                     </FieldLabelRow>
                     <TextField value={plainText} onChange={event => encode(event.target.value)} multiline minRows={12} fullWidth/>
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
-                    <FieldLabelRow label="Base64">
+                    <FieldLabelRow label={t("base64.base64")}>
                         <CopyIconButton onCopy={() => copyText(base64)}/>
-                        <DownloadIconButton title="Download Base64 text" onDownload={() => downloadText("encoded.txt", base64)}/>
+                        <DownloadIconButton title={t("base64.downloadBase64Text")} onDownload={() => downloadText("encoded.txt", base64)}/>
                     </FieldLabelRow>
                     <TextField value={base64} onChange={event => decode(event.target.value)} multiline minRows={12} fullWidth error={Boolean(error)} helperText={error}/>
                 </Grid>

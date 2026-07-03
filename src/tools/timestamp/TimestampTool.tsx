@@ -2,6 +2,7 @@ import React from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {Alert, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {copyText} from "../shared/browser";
 import {useLocalStorageState} from "../shared/hooks";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -17,6 +18,7 @@ const formatDate = (timestamp: string, format: OutputFormat, milliseconds: boole
 };
 
 const TimestampTool = () => {
+    const {t} = useTranslation();
     const [dateTime, setDateTime] = useLocalStorageState("timestamp.dateTime", new Date().toISOString().slice(0, 16));
     const [timestampInput, setTimestampInput] = useLocalStorageState("timestamp.input", String(Math.floor(Date.now() / 1000)));
     const [format, setFormat] = useLocalStorageState<OutputFormat>("timestamp.format", "Locale");
@@ -37,43 +39,43 @@ const TimestampTool = () => {
 
     return (
         <ToolSurface>
-            <ToolHeader title="Timestamp Converter" description="Convert dates, Unix timestamps, and common time string formats."/>
+            <ToolHeader title={t("timestamp.title")} description={t("timestamp.description")}/>
             <Stack spacing={3}>
                 <Stack spacing={2}>
-                    <TextField label="Date and time" type="datetime-local" value={dateTime} onChange={event => setDateTime(event.target.value)} slotProps={{inputLabel: {shrink: true}}}/>
+                    <TextField label={t("timestamp.dateTime")} type="datetime-local" value={dateTime} onChange={event => setDateTime(event.target.value)} slotProps={{inputLabel: {shrink: true}}}/>
                     <FormControl>
-                        <InputLabel>Timezone offset</InputLabel>
-                        <Select value={String(timezoneOffset)} label="Timezone offset" onChange={(event: SelectChangeEvent) => setTimezoneOffset(Number(event.target.value))}>
+                        <InputLabel>{t("timestamp.timezoneOffset")}</InputLabel>
+                        <Select value={String(timezoneOffset)} label={t("timestamp.timezoneOffset")} onChange={(event: SelectChangeEvent) => setTimezoneOffset(Number(event.target.value))}>
                             {Array.from({length: 27}, (_, index) => index - 12).map(hour => (
                                 <MenuItem key={hour} value={String(hour * -60)}>UTC{hour >= 0 ? `+${hour}` : hour}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                     <FormControl>
-                        <InputLabel>Precision</InputLabel>
-                        <Select value={milliseconds ? "ms" : "s"} label="Precision" onChange={(event: SelectChangeEvent) => setMilliseconds(event.target.value === "ms")}>
-                            <MenuItem value="s">Seconds</MenuItem>
-                            <MenuItem value="ms">Milliseconds</MenuItem>
+                        <InputLabel>{t("timestamp.precision")}</InputLabel>
+                        <Select value={milliseconds ? "ms" : "s"} label={t("timestamp.precision")} onChange={(event: SelectChangeEvent) => setMilliseconds(event.target.value === "ms")}>
+                            <MenuItem value="s">{t("timestamp.precisionOption.seconds")}</MenuItem>
+                            <MenuItem value="ms">{t("timestamp.precisionOption.milliseconds")}</MenuItem>
                         </Select>
                     </FormControl>
-                    <TextField label="Unix timestamp from date" value={timestamp} slotProps={{htmlInput: {readOnly: true}}}/>
+                    <TextField label={t("timestamp.timestampFromDate")} value={timestamp} slotProps={{htmlInput: {readOnly: true}}}/>
                     <Stack direction={{xs: "column", sm: "row"}} spacing={1}>
-                        <Button variant="contained" onClick={useNow}>Now</Button>
-                        <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(timestamp)} disabled={!timestamp}>Copy timestamp</Button>
+                        <Button variant="contained" onClick={useNow}>{t("timestamp.now")}</Button>
+                        <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(timestamp)} disabled={!timestamp}>{t("timestamp.copyTimestamp")}</Button>
                     </Stack>
                 </Stack>
                 <Stack spacing={2}>
-                    <TextField label={milliseconds ? "Unix timestamp in milliseconds" : "Unix timestamp in seconds"} type="number" value={timestampInput} onChange={event => setTimestampInput(event.target.value)}/>
+                    <TextField label={milliseconds ? t("timestamp.timestampInMilliseconds") : t("timestamp.timestampInSeconds")} type="number" value={timestampInput} onChange={event => setTimestampInput(event.target.value)}/>
                     <FormControl>
-                        <InputLabel>Format</InputLabel>
-                        <Select value={format} label="Format" onChange={(event: SelectChangeEvent) => setFormat(event.target.value as OutputFormat)}>
-                            <MenuItem value="Locale">Locale</MenuItem>
-                            <MenuItem value="ISO-8601">ISO-8601</MenuItem>
-                            <MenuItem value="RFC-1123">RFC-1123</MenuItem>
+                        <InputLabel>{t("timestamp.format")}</InputLabel>
+                        <Select value={format} label={t("timestamp.format")} onChange={(event: SelectChangeEvent) => setFormat(event.target.value as OutputFormat)}>
+                            <MenuItem value="Locale">{t("timestamp.formatOption.locale")}</MenuItem>
+                            <MenuItem value="ISO-8601">{t("timestamp.formatOption.iso8601")}</MenuItem>
+                            <MenuItem value="RFC-1123">{t("timestamp.formatOption.rfc1123")}</MenuItem>
                         </Select>
                     </FormControl>
-                    {formatted ? <Alert severity="info">{formatted}</Alert> : <Alert severity="error">Invalid timestamp</Alert>}
-                    <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(formatted)} disabled={!formatted}>Copy formatted time</Button>
+                    {formatted ? <Alert severity="info">{formatted}</Alert> : <Alert severity="error">{t("timestamp.invalidTimestamp")}</Alert>}
+                    <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(formatted)} disabled={!formatted}>{t("timestamp.copyFormatted")}</Button>
                 </Stack>
             </Stack>
         </ToolSurface>

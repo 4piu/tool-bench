@@ -5,6 +5,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Box, Button, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Paper, Select, Stack, Tooltip, Typography} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import FileHashWorker from "../../workers/fileHash.worker.ts?worker";
 import type {HashWorkerMessage} from "../../workers/fileHash.worker";
 import {copyText, downloadText} from "../shared/browser";
@@ -34,6 +35,7 @@ const resultEntries = (job: HashJob) => [
 const resultForHash = (job: HashJob) => resultEntries(job).map(([name, value]) => `${name}: ${value}`).join("\n");
 
 const HashTool = () => {
+    const {t} = useTranslation();
     const [algorithm, setAlgorithm] = useLocalStorageState("hash.algorithm", "SHA-256");
     const [concurrency, setConcurrency] = useLocalStorageState("hash.concurrency", Math.min(navigator.hardwareConcurrency || 1, 4));
     const [jobs, setJobs] = React.useState<HashJob[]>([]);
@@ -150,29 +152,29 @@ const HashTool = () => {
 
     return (
         <ToolSurface>
-            <ToolHeader title="File Checksum" description="Hash files locally in a Web Worker."/>
+            <ToolHeader title={t("hash.title")} description={t("hash.description")}/>
             <Stack spacing={2}>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <FormControl sx={{minWidth: 160}}>
-                        <InputLabel>Algorithm</InputLabel>
-                        <Select value={algorithm} label="Algorithm" onChange={(event: SelectChangeEvent) => setAlgorithm(event.target.value)}>
+                        <InputLabel>{t("hash.algorithm")}</InputLabel>
+                        <Select value={algorithm} label={t("hash.algorithm")} onChange={(event: SelectChangeEvent) => setAlgorithm(event.target.value)}>
                             {algorithms.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <FormControl sx={{minWidth: 140}}>
-                        <InputLabel>Concurrency</InputLabel>
-                        <Select value={String(concurrency)} label="Concurrency" onChange={(event: SelectChangeEvent) => setConcurrency(Number(event.target.value))}>
+                        <InputLabel>{t("hash.concurrency")}</InputLabel>
+                        <Select value={String(concurrency)} label={t("hash.concurrency")} onChange={(event: SelectChangeEvent) => setConcurrency(Number(event.target.value))}>
                             {[1, 2, 4, 8, 16].map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <Button component="label" startIcon={<AddIcon/>} variant="outlined">
-                        Add files
+                        {t("hash.addFiles")}
                         <input hidden multiple type="file" onChange={event => addFiles(event.target.files)}/>
                     </Button>
-                    <Button variant="contained" onClick={hashAll} disabled={!jobs.length || processing}>Hash all</Button>
-                    {processing && <Button color="error" variant="outlined" startIcon={<CancelIcon/>} onClick={cancelAll}>Cancel all</Button>}
-                    <DownloadButton label="Export JSON" disabled={!jobs.length} onDownload={() => downloadText("hashes.json", JSON.stringify(exportRows(), null, 2))}/>
-                    <DownloadButton label="Export CSV" disabled={!jobs.length} onDownload={() => downloadText("hashes.csv", exportCsv())}/>
+                    <Button variant="contained" onClick={hashAll} disabled={!jobs.length || processing}>{t("hash.hashAll")}</Button>
+                    {processing && <Button color="error" variant="outlined" startIcon={<CancelIcon/>} onClick={cancelAll}>{t("hash.cancelAll")}</Button>}
+                    <DownloadButton label={t("hash.exportJson")} disabled={!jobs.length} onDownload={() => downloadText("hashes.json", JSON.stringify(exportRows(), null, 2))}/>
+                    <DownloadButton label={t("hash.exportCsv")} disabled={!jobs.length} onDownload={() => downloadText("hashes.csv", exportCsv())}/>
                 </Stack>
                 <Paper
                     variant="outlined"
@@ -183,7 +185,7 @@ const HashTool = () => {
                         addFiles(event.dataTransfer.files);
                     }}
                 >
-                    Drag and drop files here
+                    {t("hash.dragDrop")}
                 </Paper>
                 {processing && <LinearProgress/>}
                 <Stack spacing={1}>
@@ -193,27 +195,27 @@ const HashTool = () => {
                                 <Box sx={{flex: 1, minWidth: 0}}>
                                     <Typography noWrap>{job.file.name}</Typography>
                                     <Typography variant="body2" color={job.error ? "error" : "text.secondary"} sx={{wordBreak: "break-all"}}>
-                                        {job.error || resultForHash(job) || job.status || "Pending"}
+                                        {job.error || resultForHash(job) || t(`hash.status.${job.status ?? "pending"}`)}
                                     </Typography>
                                     {job.status === "processing" && (
                                         <LinearProgress variant="determinate" value={Math.round((job.progress ?? 0) * 100)} sx={{mt: 1}}/>
                                     )}
                                 </Box>
                                 <FormControl sx={{minWidth: 120}}>
-                                    <InputLabel>Algorithm</InputLabel>
-                                    <Select value={job.hashAlgorithm} label="Algorithm" onChange={(event: SelectChangeEvent) => updateJobAlgorithm(job.taskId, event.target.value)} disabled={processing}>
+                                    <InputLabel>{t("hash.algorithm")}</InputLabel>
+                                    <Select value={job.hashAlgorithm} label={t("hash.algorithm")} onChange={(event: SelectChangeEvent) => updateJobAlgorithm(job.taskId, event.target.value)} disabled={processing}>
                                         {algorithms.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                                     </Select>
                                 </FormControl>
-                                <CopyButton label="Copy hash" disabled={!resultForHash(job)} onCopy={() => copyText(resultForHash(job))}/>
+                                <CopyButton label={t("hash.copyHash")} disabled={!resultForHash(job)} onCopy={() => copyText(resultForHash(job))}/>
                                 {(job.status === "pending" || job.status === "processing") && (
-                                    <Tooltip title="Cancel">
+                                    <Tooltip title={t("hash.cancel")}>
                                         <IconButton onClick={() => cancelJob(job.taskId)}>
                                             <CancelIcon/>
                                         </IconButton>
                                     </Tooltip>
                                 )}
-                                <Tooltip title="Remove">
+                                <Tooltip title={t("hash.remove")}>
                                     <IconButton onClick={() => removeJob(job.taskId)}>
                                         <DeleteIcon/>
                                     </IconButton>

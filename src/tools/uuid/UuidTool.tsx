@@ -2,6 +2,7 @@ import React from "react";
 import {v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5} from "uuid";
 import {FormControl, InputLabel, MenuItem, Select, Stack, TextField} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {copyText, downloadText} from "../shared/browser";
 import {useLocalStorageState} from "../shared/hooks";
 import {ActionRow, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -38,6 +39,7 @@ const formatOutput = (uuids: string[], outputMode: OutputMode) => {
 };
 
 const UuidTool = () => {
+    const {t} = useTranslation();
     const [version, setVersion] = useLocalStorageState<UuidVersion>("uuid.version", "v4");
     const [count, setCount] = useLocalStorageState("uuid.count", 8);
     const [name, setName] = useLocalStorageState("uuid.name", "example.com");
@@ -59,21 +61,21 @@ const UuidTool = () => {
 
     return (
         <ToolSurface>
-            <ToolHeader title="UUID Generator" description="Generate random, time-based, or deterministic namespace UUIDs."/>
+            <ToolHeader title={t("uuid.title")} description={t("uuid.description")}/>
             <Stack spacing={2}>
                 <FormControl>
-                    <InputLabel>Version</InputLabel>
-                    <Select value={version} label="Version" onChange={(event: SelectChangeEvent) => setVersion(event.target.value as UuidVersion)}>
-                        <MenuItem value="v1">v1 - time based</MenuItem>
-                        <MenuItem value="v3">v3 - namespace/name MD5</MenuItem>
-                        <MenuItem value="v4">v4 - random</MenuItem>
-                        <MenuItem value="v5">v5 - namespace/name SHA-1</MenuItem>
-                        <MenuItem value="v7">v7 - timestamp sortable</MenuItem>
+                    <InputLabel>{t("uuid.version")}</InputLabel>
+                    <Select value={version} label={t("uuid.version")} onChange={(event: SelectChangeEvent) => setVersion(event.target.value as UuidVersion)}>
+                        <MenuItem value="v1">{t("uuid.versionOption.v1")}</MenuItem>
+                        <MenuItem value="v3">{t("uuid.versionOption.v3")}</MenuItem>
+                        <MenuItem value="v4">{t("uuid.versionOption.v4")}</MenuItem>
+                        <MenuItem value="v5">{t("uuid.versionOption.v5")}</MenuItem>
+                        <MenuItem value="v7">{t("uuid.versionOption.v7")}</MenuItem>
                     </Select>
                 </FormControl>
                 {!usesNamespace && (
                     <TextField
-                        label="Count"
+                        label={t("uuid.count")}
                         type="number"
                         value={count}
                         slotProps={{htmlInput: {min: 1, max: 1000}}}
@@ -82,28 +84,28 @@ const UuidTool = () => {
                 )}
                 {usesNamespace && (
                     <>
-                        <TextField label="Name" value={name} onChange={event => setName(event.target.value)}/>
+                        <TextField label={t("uuid.name")} value={name} onChange={event => setName(event.target.value)}/>
                         <FormControl>
-                            <InputLabel>Namespace preset</InputLabel>
-                            <Select value={namespace} label="Namespace preset" onChange={(event: SelectChangeEvent) => setNamespace(event.target.value)}>
+                            <InputLabel>{t("uuid.namespacePreset")}</InputLabel>
+                            <Select value={namespace} label={t("uuid.namespacePreset")} onChange={(event: SelectChangeEvent) => setNamespace(event.target.value)}>
                                 {Object.entries(namespacePresets).map(([label, value]) => <MenuItem key={label} value={value}>{label}</MenuItem>)}
                             </Select>
                         </FormControl>
                         <TextField
-                            label="Namespace UUID"
+                            label={t("uuid.namespaceUuid")}
                             value={namespace}
                             onChange={event => setNamespace(event.target.value)}
                             error={namespaceInvalid}
-                            helperText={namespaceInvalid ? "Must be a valid UUID" : "Use a preset or enter a custom namespace UUID."}
+                            helperText={namespaceInvalid ? t("uuid.namespaceInvalid") : t("uuid.namespaceHelp")}
                         />
                     </>
                 )}
                 <FormControl>
-                    <InputLabel>Output</InputLabel>
-                    <Select value={outputMode} label="Output" onChange={(event: SelectChangeEvent) => setOutputMode(event.target.value as OutputMode)}>
-                        <MenuItem value="lines">Lines</MenuItem>
-                        <MenuItem value="json">JSON array</MenuItem>
-                        <MenuItem value="csv">CSV</MenuItem>
+                    <InputLabel>{t("uuid.output")}</InputLabel>
+                    <Select value={outputMode} label={t("uuid.output")} onChange={(event: SelectChangeEvent) => setOutputMode(event.target.value as OutputMode)}>
+                        <MenuItem value="lines">{t("uuid.outputOption.lines")}</MenuItem>
+                        <MenuItem value="json">{t("uuid.outputOption.json")}</MenuItem>
+                        <MenuItem value="csv">{t("uuid.outputOption.csv")}</MenuItem>
                     </Select>
                 </FormControl>
                 <ActionRow

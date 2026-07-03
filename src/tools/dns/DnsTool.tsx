@@ -21,6 +21,7 @@ import {
     TextField
 } from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {queryDns} from "../../lib/dns";
 import {useLocalStorageState} from "../shared/hooks";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -65,6 +66,7 @@ const stringifyData = (data: unknown) => {
 };
 
 const DnsTool = () => {
+    const {t} = useTranslation();
     const [name, setName] = useLocalStorageState("dns.name", "example.com");
     const [type, setType] = useLocalStorageState("dns.type", "A");
     const [dnsClass, setDnsClass] = useLocalStorageState("dns.class", "IN");
@@ -86,7 +88,7 @@ const DnsTool = () => {
         setResult("");
         try {
             const names = parseNames(name);
-            if (!names.length) throw new Error("Enter at least one domain name");
+            if (!names.length) throw new Error(t("dns.enterDomain"));
             const started = performance.now();
             const responses = await Promise.all(names.map(async query => ({
                 query,
@@ -96,7 +98,7 @@ const DnsTool = () => {
             setRows(responses.flatMap(({query, response}) => (response.answers ?? []).map(answer => ({...answer, query}))));
             setResult(JSON.stringify(responses.length === 1 ? responses[0].response : responses, null, 2));
         } catch (err) {
-            setError(err instanceof Error ? err.message : "DNS lookup failed");
+            setError(err instanceof Error ? err.message : t("dns.lookupFailed"));
         } finally {
             setLoading(false);
         }
@@ -104,58 +106,58 @@ const DnsTool = () => {
 
     return (
         <ToolSurface>
-            <ToolHeader title="DNS Lookup" description="Query DNS over HTTPS from your browser."/>
+            <ToolHeader title={t("dns.title")} description={t("dns.description")}/>
             <Stack spacing={2}>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
-                    <TextField label="Domains" helperText="Use spaces, commas, or new lines for batch lookups." value={name} onChange={event => setName(event.target.value)} fullWidth multiline minRows={1}/>
+                    <TextField label={t("dns.domains")} helperText={t("dns.domainsHelp")} value={name} onChange={event => setName(event.target.value)} fullWidth multiline minRows={1}/>
                     <FormControl sx={{minWidth: 120}}>
-                        <InputLabel>Type</InputLabel>
-                        <Select value={type} label="Type" onChange={(event: SelectChangeEvent) => setType(event.target.value)}>
+                        <InputLabel>{t("dns.type")}</InputLabel>
+                        <Select value={type} label={t("dns.type")} onChange={(event: SelectChangeEvent) => setType(event.target.value)}>
                             {typeOptions.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <FormControl sx={{minWidth: 110}}>
-                        <InputLabel>Class</InputLabel>
-                        <Select value={dnsClass} label="Class" onChange={(event: SelectChangeEvent) => setDnsClass(event.target.value)}>
+                        <InputLabel>{t("dns.class")}</InputLabel>
+                        <Select value={dnsClass} label={t("dns.class")} onChange={(event: SelectChangeEvent) => setDnsClass(event.target.value)}>
                             {dnsClasses.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <Button variant="contained" startIcon={<SearchIcon/>} onClick={lookup}>Lookup</Button>
+                    <Button variant="contained" startIcon={<SearchIcon/>} onClick={lookup}>{t("dns.lookup")}</Button>
                 </Stack>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <FormControl fullWidth>
-                        <InputLabel>DoH provider</InputLabel>
-                        <Select value={serverUrl} label="DoH provider" onChange={(event: SelectChangeEvent) => setServerUrl(event.target.value)}>
+                        <InputLabel>{t("dns.dohProvider")}</InputLabel>
+                        <Select value={serverUrl} label={t("dns.dohProvider")} onChange={(event: SelectChangeEvent) => setServerUrl(event.target.value)}>
                             {dnsProviders.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
                         </Select>
                     </FormControl>
                     <FormControl sx={{minWidth: 120}}>
-                        <InputLabel>Method</InputLabel>
-                        <Select value={method} label="Method" onChange={(event: SelectChangeEvent) => setMethod(event.target.value as "GET" | "POST")}>
+                        <InputLabel>{t("dns.method")}</InputLabel>
+                        <Select value={method} label={t("dns.method")} onChange={(event: SelectChangeEvent) => setMethod(event.target.value as "GET" | "POST")}>
                             <MenuItem value="GET">GET</MenuItem>
                             <MenuItem value="POST">POST</MenuItem>
                         </Select>
                     </FormControl>
                 </Stack>
-                <TextField label="Custom DoH URL" value={serverUrl} onChange={event => setServerUrl(event.target.value)}/>
+                <TextField label={t("dns.customDohUrl")} value={serverUrl} onChange={event => setServerUrl(event.target.value)}/>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={1}>
-                    <FormControlLabel control={<Switch checked={showAdvanced} onChange={event => setShowAdvanced(event.target.checked)}/>} label="Show advanced record types"/>
-                    <FormControlLabel control={<Switch checked={showRaw} onChange={event => setShowRaw(event.target.checked)}/>} label="Show raw DNS message"/>
+                    <FormControlLabel control={<Switch checked={showAdvanced} onChange={event => setShowAdvanced(event.target.checked)}/>} label={t("dns.showAdvanced")}/>
+                    <FormControlLabel control={<Switch checked={showRaw} onChange={event => setShowRaw(event.target.checked)}/>} label={t("dns.showRaw")}/>
                 </Stack>
                 {loading && <LinearProgress/>}
                 {error && <Alert severity="error">{error}</Alert>}
-                {latency !== null && !loading && <Alert severity="info">Resolver latency: {latency} ms</Alert>}
+                {latency !== null && !loading && <Alert severity="info">{t("dns.latency", {latency})}</Alert>}
                 {!showRaw && rows.length > 0 && (
                     <TableContainer component={Paper} variant="outlined">
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Query</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Type</TableCell>
-                                    <TableCell>Class</TableCell>
-                                    <TableCell>TTL</TableCell>
-                                    <TableCell>Data</TableCell>
+                                    <TableCell>{t("dns.column.query")}</TableCell>
+                                    <TableCell>{t("dns.column.name")}</TableCell>
+                                    <TableCell>{t("dns.column.type")}</TableCell>
+                                    <TableCell>{t("dns.column.class")}</TableCell>
+                                    <TableCell>{t("dns.column.ttl")}</TableCell>
+                                    <TableCell>{t("dns.column.data")}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -173,7 +175,7 @@ const DnsTool = () => {
                         </Table>
                     </TableContainer>
                 )}
-                {!showRaw && !loading && !error && result && rows.length === 0 && <Alert severity="warning">No answers returned.</Alert>}
+                {!showRaw && !loading && !error && result && rows.length === 0 && <Alert severity="warning">{t("dns.noAnswers")}</Alert>}
                 {showRaw && <TextField value={result} multiline minRows={12} fullWidth slotProps={{htmlInput: {readOnly: true}}}/>}
             </Stack>
         </ToolSurface>

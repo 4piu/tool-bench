@@ -3,6 +3,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import {Box, Button, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Slider, Stack, Switch, TextField, Typography} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {useLocalStorageState} from "../shared/hooks";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
@@ -24,6 +25,7 @@ const notePresets = [
 ] as const;
 
 const SoundTool = () => {
+    const {t} = useTranslation();
     const [frequency, setFrequency] = useLocalStorageState("sound.frequency", 440);
     const [waveform, setWaveform] = useLocalStorageState<OscillatorWaveform>("sound.waveform", "sine");
     const [volume, setVolume] = useLocalStorageState("sound.volume", 0.25);
@@ -161,15 +163,15 @@ const SoundTool = () => {
 
     return (
         <ToolSurface>
-            <ToolHeader title="Sound Wave" description="Generate simple oscillator tones."/>
+            <ToolHeader title={t("sound.title")} description={t("sound.description")}/>
             <Stack spacing={3}>
                 <FormControl>
-                    <InputLabel>Waveform</InputLabel>
-                    <Select value={waveform} label="Waveform" onChange={(event: SelectChangeEvent) => setWaveform(event.target.value as OscillatorWaveform)}>
-                        <MenuItem value="sine">Sine</MenuItem>
-                        <MenuItem value="square">Square</MenuItem>
-                        <MenuItem value="triangle">Triangle</MenuItem>
-                        <MenuItem value="sawtooth">Sawtooth</MenuItem>
+                    <InputLabel>{t("sound.waveform")}</InputLabel>
+                    <Select value={waveform} label={t("sound.waveform")} onChange={(event: SelectChangeEvent) => setWaveform(event.target.value as OscillatorWaveform)}>
+                        <MenuItem value="sine">{t("sound.waveformOption.sine")}</MenuItem>
+                        <MenuItem value="square">{t("sound.waveformOption.square")}</MenuItem>
+                        <MenuItem value="triangle">{t("sound.waveformOption.triangle")}</MenuItem>
+                        <MenuItem value="sawtooth">{t("sound.waveformOption.sawtooth")}</MenuItem>
                     </Select>
                 </FormControl>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={1}>
@@ -180,14 +182,14 @@ const SoundTool = () => {
                     ))}
                 </Stack>
                 <TextField
-                    label="Frequency (Hz)"
+                    label={t("sound.frequencyHz")}
                     type="number"
                     value={frequency}
                     slotProps={{htmlInput: {min: minFrequency, max: maxFrequency}}}
                     onChange={event => setFrequency(Math.max(minFrequency, Math.min(maxFrequency, Number(event.target.value) || 440)))}
                 />
                 <Box>
-                    <Typography gutterBottom>Frequency: {frequency} Hz</Typography>
+                    <Typography gutterBottom>{t("sound.frequency", {frequency})}</Typography>
                     <Slider
                         value={linearScale ? frequency : toLogSlider(frequency)}
                         min={linearScale ? minFrequency : 0}
@@ -195,43 +197,51 @@ const SoundTool = () => {
                         onChange={(_, value) => setFrequency(linearScale ? value as number : fromLogSlider(value as number))}
                     />
                 </Box>
-                <FormControlLabel control={<Switch checked={linearScale} onChange={event => setLinearScale(event.target.checked)}/>} label="Linear frequency slider"/>
+                <FormControlLabel control={<Switch checked={linearScale} onChange={event => setLinearScale(event.target.checked)}/>} label={t("sound.linearScale")}/>
                 <Box>
-                    <Typography gutterBottom>Volume: {Math.round(volume * 100)}%</Typography>
+                    <Typography gutterBottom>{t("sound.volume", {percent: Math.round(volume * 100)})}</Typography>
                     <Slider value={volume} min={0} max={1} step={0.01} onChange={(_, value) => setVolume(value as number)}/>
                 </Box>
                 <Box>
-                    <Typography gutterBottom>Pan: {pan === 0 ? "Center" : pan < 0 ? `${Math.round(Math.abs(pan) * 100)}% left` : `${Math.round(pan * 100)}% right`}</Typography>
+                    <Typography gutterBottom>
+                        {t("sound.pan", {
+                            direction: pan === 0
+                                ? t("sound.panCenter")
+                                : pan < 0
+                                    ? t("sound.panLeft", {percent: Math.round(Math.abs(pan) * 100)})
+                                    : t("sound.panRight", {percent: Math.round(pan * 100)})
+                        })}
+                    </Typography>
                     <Slider value={pan} min={-1} max={1} step={0.01} onChange={(_, value) => setPan(value as number)}/>
                 </Box>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <Box sx={{flex: 1}}>
-                        <Typography gutterBottom>Attack: {attack.toFixed(2)}s</Typography>
+                        <Typography gutterBottom>{t("sound.attack", {value: attack.toFixed(2)})}</Typography>
                         <Slider value={attack} min={0} max={2} step={0.01} onChange={(_, value) => setAttack(value as number)}/>
                     </Box>
                     <Box sx={{flex: 1}}>
-                        <Typography gutterBottom>Decay: {decay.toFixed(2)}s</Typography>
+                        <Typography gutterBottom>{t("sound.decay", {value: decay.toFixed(2)})}</Typography>
                         <Slider value={decay} min={0} max={2} step={0.01} onChange={(_, value) => setDecay(value as number)}/>
                     </Box>
                 </Stack>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <Box sx={{flex: 1}}>
-                        <Typography gutterBottom>Sustain: {Math.round(sustain * 100)}%</Typography>
+                        <Typography gutterBottom>{t("sound.sustain", {percent: Math.round(sustain * 100)})}</Typography>
                         <Slider value={sustain} min={0} max={1} step={0.01} onChange={(_, value) => setSustain(value as number)}/>
                     </Box>
                     <Box sx={{flex: 1}}>
-                        <Typography gutterBottom>Release: {release.toFixed(2)}s</Typography>
+                        <Typography gutterBottom>{t("sound.release", {value: release.toFixed(2)})}</Typography>
                         <Slider value={release} min={0} max={2} step={0.01} onChange={(_, value) => setRelease(value as number)}/>
                     </Box>
                 </Stack>
                 <Box>
                     <Box component="canvas" ref={canvasRef} width={720} height={160} sx={{width: "100%", bgcolor: "grey.950", borderRadius: 2}}/>
                     <Typography variant="caption" color="text.secondary">
-                        {playing ? "Live audio analyser" : "Waveform preview"}
+                        {playing ? t("sound.liveAnalyser") : t("sound.waveformPreview")}
                     </Typography>
                 </Box>
                 <Button variant="contained" startIcon={playing ? <StopIcon/> : <PlayArrowIcon/>} onClick={playing ? stop : play}>
-                    {playing ? "Stop" : "Play"}
+                    {playing ? t("sound.stop") : t("sound.play")}
                 </Button>
             </Stack>
         </ToolSurface>

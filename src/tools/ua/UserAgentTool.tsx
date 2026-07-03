@@ -2,6 +2,7 @@ import React from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {UAParser} from "ua-parser-js";
 import {Alert, Box, Button, Paper, Stack, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField} from "@mui/material";
+import {useTranslation} from "react-i18next";
 import {copyText} from "../shared/browser";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
@@ -15,66 +16,68 @@ const uaExamples = [
     {browser: "Googlebot", os: "-", value: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}
 ];
 
-const navigatorRows = () => {
-    const nav = navigator as Navigator & {
-        deviceMemory?: number;
-        userAgentData?: unknown;
-    };
-    return [
-        ["User agent", nav.userAgent],
-        ["Platform", nav.platform],
-        ["Language", nav.language],
-        ["Languages", nav.languages?.join(", ") ?? ""],
-        ["Cookies enabled", String(nav.cookieEnabled)],
-        ["Online", String(nav.onLine)],
-        ["Hardware concurrency", String(nav.hardwareConcurrency ?? "")],
-        ["Device memory", nav.deviceMemory ? `${nav.deviceMemory} GB` : "Unavailable"],
-        ["Max touch points", String(nav.maxTouchPoints ?? "")],
-        ["Do not track", nav.doNotTrack ?? "Unavailable"],
-        ["User-Agent Client Hints", nav.userAgentData ? JSON.stringify(nav.userAgentData) : "Unavailable"]
-    ];
-};
-
-const parsedRows = (result: UAParser.IResult): [string, string][] => [
-    ["Browser", [result.browser.name, result.browser.version].filter(Boolean).join(" ") || "Unknown"],
-    ["Browser type", result.browser.type ?? "browser"],
-    ["Engine", [result.engine.name, result.engine.version].filter(Boolean).join(" ") || "Unknown"],
-    ["OS", [result.os.name, result.os.version].filter(Boolean).join(" ") || "Unknown"],
-    ["Device vendor", result.device.vendor ?? "Unavailable"],
-    ["Device model", result.device.model ?? "Unavailable"],
-    ["Device type", result.device.type ?? "desktop"],
-    ["CPU architecture", result.cpu.architecture ?? "Unavailable"]
-];
-
 const UserAgentTool = () => {
+    const {t} = useTranslation();
     const [tab, setTab] = React.useState("mine");
     const [customUa, setCustomUa] = React.useState(uaExamples[0].value);
+
+    const navigatorRows = () => {
+        const nav = navigator as Navigator & {
+            deviceMemory?: number;
+            userAgentData?: unknown;
+        };
+        return [
+            [t("ua.field.userAgent"), nav.userAgent],
+            [t("ua.field.platform"), nav.platform],
+            [t("ua.field.language"), nav.language],
+            [t("ua.field.languages"), nav.languages?.join(", ") ?? ""],
+            [t("ua.field.cookiesEnabled"), String(nav.cookieEnabled)],
+            [t("ua.field.online"), String(nav.onLine)],
+            [t("ua.field.hardwareConcurrency"), String(nav.hardwareConcurrency ?? "")],
+            [t("ua.field.deviceMemory"), nav.deviceMemory ? `${nav.deviceMemory} GB` : t("ua.unavailable")],
+            [t("ua.field.maxTouchPoints"), String(nav.maxTouchPoints ?? "")],
+            [t("ua.field.doNotTrack"), nav.doNotTrack ?? t("ua.unavailable")],
+            [t("ua.field.clientHints"), nav.userAgentData ? JSON.stringify(nav.userAgentData) : t("ua.unavailable")]
+        ];
+    };
+
+    const parsedRows = (result: UAParser.IResult): [string, string][] => [
+        [t("ua.field.browser"), [result.browser.name, result.browser.version].filter(Boolean).join(" ") || t("ua.unknown")],
+        [t("ua.field.browserType"), result.browser.type ?? t("ua.field.browserTypeDefault")],
+        [t("ua.field.engine"), [result.engine.name, result.engine.version].filter(Boolean).join(" ") || t("ua.unknown")],
+        [t("ua.field.os"), [result.os.name, result.os.version].filter(Boolean).join(" ") || t("ua.unknown")],
+        [t("ua.field.deviceVendor"), result.device.vendor ?? t("ua.unavailable")],
+        [t("ua.field.deviceModel"), result.device.model ?? t("ua.unavailable")],
+        [t("ua.field.deviceType"), result.device.type ?? t("ua.field.deviceTypeDefault")],
+        [t("ua.field.cpuArchitecture"), result.cpu.architecture ?? t("ua.unavailable")]
+    ];
+
     const rows = navigatorRows();
     const myResult = React.useMemo(() => new UAParser(navigator.userAgent).getResult(), []);
     const customResult = React.useMemo(() => new UAParser(customUa).getResult(), [customUa]);
 
     return (
         <ToolSurface>
-            <ToolHeader title="User Agent" description="Inspect and parse browser user-agent strings."/>
+            <ToolHeader title={t("ua.title")} description={t("ua.description")}/>
             <Stack spacing={2}>
                 <Tabs value={tab} onChange={(_, value) => setTab(value)}>
-                    <Tab value="mine" label="My UA"/>
-                    <Tab value="parse" label="Parse UA"/>
-                    <Tab value="examples" label="UA examples"/>
+                    <Tab value="mine" label={t("ua.tab.mine")}/>
+                    <Tab value="parse" label={t("ua.tab.parse")}/>
+                    <Tab value="examples" label={t("ua.tab.examples")}/>
                 </Tabs>
                 {tab === "mine" && (
                     <>
                         <TextField label="navigator.userAgent" value={navigator.userAgent} multiline minRows={4} slotProps={{htmlInput: {readOnly: true}}}/>
                         <Alert severity="info">
-                            Modern browsers may intentionally reduce or freeze UA details; Client Hints can also be permission/browser dependent.
+                            {t("ua.freezeNotice")}
                         </Alert>
-                        <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(JSON.stringify({...Object.fromEntries(rows), parsed: myResult}, null, 2))}>Copy as JSON</Button>
+                        <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(JSON.stringify({...Object.fromEntries(rows), parsed: myResult}, null, 2))}>{t("ua.copyAsJson")}</Button>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
                                 <TableBody>
                                     {parsedRows(myResult).map(([label, value]) => (
                                         <TableRow key={label}>
-                                            <TableCell sx={{fontWeight: 700, width: 220}}>Parsed {label}</TableCell>
+                                            <TableCell sx={{fontWeight: 700, width: 220}}>{t("ua.parsedLabel", {label})}</TableCell>
                                             <TableCell sx={{wordBreak: "break-all"}}>{value}</TableCell>
                                         </TableRow>
                                     ))}
@@ -92,14 +95,14 @@ const UserAgentTool = () => {
                 {tab === "parse" && (
                     <>
                         <TextField
-                            label="User-Agent string to parse"
+                            label={t("ua.parseInputLabel")}
                             value={customUa}
                             onChange={event => setCustomUa(event.target.value)}
                             multiline
                             minRows={4}
                             fullWidth
                         />
-                        <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(JSON.stringify(customResult, null, 2))}>Copy parsed result as JSON</Button>
+                        <Button startIcon={<ContentCopyIcon/>} onClick={() => copyText(JSON.stringify(customResult, null, 2))}>{t("ua.copyParsedAsJson")}</Button>
                         <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
                                 <TableBody>
@@ -119,9 +122,9 @@ const UserAgentTool = () => {
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Browser</TableCell>
-                                    <TableCell>OS</TableCell>
-                                    <TableCell>User agent</TableCell>
+                                    <TableCell>{t("ua.column.browser")}</TableCell>
+                                    <TableCell>{t("ua.column.os")}</TableCell>
+                                    <TableCell>{t("ua.column.userAgent")}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -132,13 +135,13 @@ const UserAgentTool = () => {
                                         <TableCell sx={{wordBreak: "break-all"}}>
                                             <Box>{example.value}</Box>
                                             <Stack direction="row" spacing={1}>
-                                                <Button size="small" onClick={() => copyText(example.value)}>Copy</Button>
+                                                <Button size="small" onClick={() => copyText(example.value)}>{t("toolScaffold.copy")}</Button>
                                                 <Button size="small" onClick={() => {
                                                     setCustomUa(example.value);
                                                     setTab("parse");
                                                 }}
                                                 >
-                                                    Parse
+                                                    {t("ua.parse")}
                                                 </Button>
                                             </Stack>
                                         </TableCell>

@@ -69,5 +69,293 @@
     },
     "policyExceeds": "所选策略至少需要 {{count}} 个字符，请增加长度或降低各类型的最少数量。",
     "output": "密码输出"
+  },
+  "documentTabs": {
+    "untitled": "未命名 {{n}}",
+    "newTab": "新建标签页",
+    "closeAllTabs": "关闭所有标签页"
+  },
+  "uuid": {
+    "title": "UUID 生成器",
+    "description": "生成随机、基于时间或确定性命名空间的 UUID。",
+    "version": "版本",
+    "versionOption": {
+      "v1": "v1 - 基于时间",
+      "v3": "v3 - 命名空间/名称 MD5",
+      "v4": "v4 - 随机",
+      "v5": "v5 - 命名空间/名称 SHA-1",
+      "v7": "v7 - 时间戳可排序"
+    },
+    "count": "数量",
+    "name": "名称",
+    "namespacePreset": "命名空间预设",
+    "namespaceUuid": "命名空间 UUID",
+    "namespaceInvalid": "必须是有效的 UUID",
+    "namespaceHelp": "使用预设或输入自定义命名空间 UUID。",
+    "output": "输出",
+    "outputOption": {
+      "lines": "逐行",
+      "json": "JSON 数组",
+      "csv": "CSV"
+    }
+  },
+  "timestamp": {
+    "title": "时间戳转换器",
+    "description": "转换日期、Unix 时间戳与常见时间字符串格式。",
+    "dateTime": "日期和时间",
+    "timezoneOffset": "时区偏移",
+    "precision": "精度",
+    "precisionOption": {
+      "seconds": "秒",
+      "milliseconds": "毫秒"
+    },
+    "timestampFromDate": "由日期得到的 Unix 时间戳",
+    "now": "当前时间",
+    "copyTimestamp": "复制时间戳",
+    "timestampInMilliseconds": "毫秒级 Unix 时间戳",
+    "timestampInSeconds": "秒级 Unix 时间戳",
+    "format": "格式",
+    "formatOption": {
+      "locale": "本地格式",
+      "iso8601": "ISO-8601",
+      "rfc1123": "RFC-1123"
+    },
+    "invalidTimestamp": "无效的时间戳",
+    "copyFormatted": "复制格式化时间"
+  },
+  "dns": {
+    "title": "DNS 查询",
+    "description": "在浏览器中通过 DNS over HTTPS 查询。",
+    "enterDomain": "请至少输入一个域名",
+    "lookupFailed": "DNS 查询失败",
+    "domains": "域名",
+    "domainsHelp": "使用空格、逗号或换行分隔以批量查询。",
+    "type": "类型",
+    "class": "类",
+    "lookup": "查询",
+    "dohProvider": "DoH 服务商",
+    "method": "方法",
+    "customDohUrl": "自定义 DoH URL",
+    "showAdvanced": "显示高级记录类型",
+    "showRaw": "显示原始 DNS 消息",
+    "latency": "解析延迟：{{latency}} ms",
+    "column": {
+      "query": "查询",
+      "name": "名称",
+      "type": "类型",
+      "class": "类",
+      "ttl": "TTL",
+      "data": "数据"
+    },
+    "noAnswers": "未返回任何应答记录。"
+  },
+  "qr": {
+    "title": "二维码生成器",
+    "description": "生成可下载的二维码，支持格式、颜色与纠错级别设置。",
+    "logoReadFailed": "读取徽标图片失败",
+    "renderFailed": "生成二维码失败",
+    "presetBuilder": "预设构建器",
+    "presetOption": {
+      "free": "自由文本",
+      "url": "URL",
+      "wifi": "Wi-Fi",
+      "email": "电子邮件",
+      "sms": "短信",
+      "vcard": "vCard 名片"
+    },
+    "field": {
+      "url": "URL",
+      "ssid": "SSID",
+      "password": "密码",
+      "encryption": "加密方式",
+      "email": "电子邮件",
+      "subject": "主题",
+      "body": "正文",
+      "phone": "电话",
+      "firstName": "名",
+      "lastName": "姓",
+      "organization": "组织",
+      "website": "网站"
+    },
+    "applyPreset": "应用预设",
+    "text": "文本",
+    "format": "格式",
+    "errorCorrection": "纠错级别",
+    "foreground": "前景色",
+    "background": "背景色",
+    "logo": "徽标",
+    "replaceLogo": "更换徽标",
+    "uploadLogo": "上传徽标",
+    "logoPreviewAlt": "徽标预览",
+    "removeLogo": "移除徽标",
+    "logoSize": "徽标大小：{{percent}}%",
+    "useHighErrorCorrection": "使用纠错级别 H 可让带徽标的二维码扫描更可靠。",
+    "margin": "边距：{{margin}}",
+    "scale": "缩放：{{scale}}",
+    "quality": "质量：{{quality}}",
+    "qrCodeAlt": "二维码",
+    "download": "下载 {{extension}}"
+  },
+  "hash": {
+    "title": "文件校验和",
+    "description": "在 Web Worker 中于本地计算文件哈希。",
+    "algorithm": "算法",
+    "concurrency": "并发数",
+    "addFiles": "添加文件",
+    "hashAll": "全部计算",
+    "cancelAll": "全部取消",
+    "exportJson": "导出 JSON",
+    "exportCsv": "导出 CSV",
+    "dragDrop": "将文件拖放到此处",
+    "status": {
+      "pending": "等待中",
+      "processing": "计算中",
+      "done": "已完成",
+      "error": "出错",
+      "cancelled": "已取消"
+    },
+    "copyHash": "复制哈希值",
+    "cancel": "取消",
+    "remove": "移除"
+  },
+  "ua": {
+    "title": "User Agent",
+    "description": "查看并解析浏览器的 User-Agent 字符串。",
+    "field": {
+      "userAgent": "User agent",
+      "platform": "平台",
+      "language": "语言",
+      "languages": "语言列表",
+      "cookiesEnabled": "是否启用 Cookie",
+      "online": "是否在线",
+      "hardwareConcurrency": "硬件并发数",
+      "deviceMemory": "设备内存",
+      "maxTouchPoints": "最大触点数",
+      "doNotTrack": "请勿跟踪",
+      "clientHints": "User-Agent Client Hints",
+      "browser": "浏览器",
+      "browserType": "浏览器类型",
+      "browserTypeDefault": "浏览器",
+      "engine": "引擎",
+      "os": "操作系统",
+      "deviceVendor": "设备厂商",
+      "deviceModel": "设备型号",
+      "deviceType": "设备类型",
+      "deviceTypeDefault": "桌面端",
+      "cpuArchitecture": "CPU 架构"
+    },
+    "unavailable": "不可用",
+    "unknown": "未知",
+    "tab": {
+      "mine": "我的 UA",
+      "parse": "解析 UA",
+      "examples": "UA 示例"
+    },
+    "freezeNotice": "现代浏览器可能会主动精简或冻结 UA 信息；Client Hints 也可能受权限或浏览器限制。",
+    "copyAsJson": "复制为 JSON",
+    "parsedLabel": "解析：{{label}}",
+    "parseInputLabel": "待解析的 User-Agent 字符串",
+    "copyParsedAsJson": "复制解析结果为 JSON",
+    "column": {
+      "browser": "浏览器",
+      "os": "操作系统",
+      "userAgent": "User agent"
+    },
+    "parse": "解析"
+  },
+  "sound": {
+    "title": "音频波形",
+    "description": "生成简单的振荡器音调。",
+    "waveform": "波形",
+    "waveformOption": {
+      "sine": "正弦波",
+      "square": "方波",
+      "triangle": "三角波",
+      "sawtooth": "锯齿波"
+    },
+    "frequencyHz": "频率（Hz）",
+    "frequency": "频率：{{frequency}} Hz",
+    "linearScale": "线性频率滑块",
+    "volume": "音量：{{percent}}%",
+    "pan": "声像：{{direction}}",
+    "panCenter": "居中",
+    "panLeft": "左 {{percent}}%",
+    "panRight": "右 {{percent}}%",
+    "attack": "起音：{{value}}s",
+    "decay": "衰减：{{value}}s",
+    "sustain": "延音：{{percent}}%",
+    "release": "释音：{{value}}s",
+    "liveAnalyser": "实时音频分析",
+    "waveformPreview": "波形预览",
+    "stop": "停止",
+    "play": "播放"
+  },
+  "json": {
+    "title": "JSON 格式化",
+    "description": "在多个标签页中本地格式化、查询与比较 JSON。",
+    "invalidJson": "无效的 JSON",
+    "validSummary": "JSON 有效\n根类型：{{rootType}}\n顶层条目数：{{count}}",
+    "queryFailed": "JSON 查询失败",
+    "noDifferences": "没有差异",
+    "diffFailed": "JSON 比较失败",
+    "format": "格式化",
+    "minify": "压缩",
+    "validate": "校验",
+    "query": "查询",
+    "diff": "比较",
+    "indent": "缩进",
+    "indentOption": {
+      "spaces": "{{count}} 个空格",
+      "tab": "制表符"
+    },
+    "sortKeys": "按键排序",
+    "queryMode": "查询模式",
+    "queryModeOption": {
+      "pointer": "JSON Pointer",
+      "jsonpath": "JSONPath",
+      "jmespath": "JMESPath"
+    },
+    "queryLabel": "查询表达式",
+    "queryExample": "示例：{{example}}",
+    "input": "输入",
+    "output": "输出",
+    "downloadOutput": "下载输出",
+    "diffTarget": "比较目标 JSON"
+  },
+  "base64": {
+    "title": "Base64 编解码",
+    "description": "在多个标签页中编码与解码 UTF-8 文本。",
+    "malformed": "Base64 输入格式有误",
+    "fileSummary": "[{{name}}] {{bytes}} 字节",
+    "urlSafe": "URL 安全 Base64",
+    "plainText": "明文",
+    "openFile": "打开文件",
+    "downloadPlainText": "下载明文",
+    "base64": "Base64",
+    "downloadBase64Text": "下载 Base64 文本"
+  },
+  "oui": {
+    "title": "OUI 查询",
+    "description": "使用快速本地索引查找 MAC 地址厂商（MA-L / MA-M / MA-S）。",
+    "loadFailed": "加载 OUI 数据库失败",
+    "loading": "正在加载厂商数据库…",
+    "entryCount": "{{count}} 条记录",
+    "updatedAt": "更新于 {{date}}",
+    "refreshNow": "立即刷新数据库",
+    "staleWarning": "刷新失败 — 正在显示上一次成功获取的数据（{{date}}）。",
+    "earlierSession": "较早的会话",
+    "macAddresses": "MAC 地址",
+    "macAddressesHelp": "每行一个。分隔符（: - . 空格）将被忽略；支持部分前缀（6、7 或 9 位十六进制数字）。",
+    "column": {
+      "input": "输入",
+      "registry": "注册表",
+      "vendor": "厂商"
+    },
+    "noMatch": "未找到匹配项",
+    "parseError": {
+      "nonHex": "包含非十六进制字符",
+      "tooShort": "过短 — 至少需要 6 位十六进制数字",
+      "tooLong": "过长 — MAC 最多 12 位十六进制数字"
+    }
   }
 }

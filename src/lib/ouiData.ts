@@ -90,30 +90,32 @@ export const lookupOui = (index: OuiIndex, hex: string): OuiMatch | null => {
     return null;
 };
 
+export type MacLineErrorCode = "nonHex" | "tooShort" | "tooLong";
+
 export type ParsedMacLine = {
     raw: string;
     hex: string | null;
     formatted: string | null;
-    error: string | null;
+    errorCode: MacLineErrorCode | null;
 };
 
 const formatHex = (hex: string) => hex.length === 12 ? (hex.match(/.{2}/g) ?? [hex]).join(":") : hex;
 
 export const parseMacLine = (line: string): ParsedMacLine => {
     const trimmed = line.trim();
-    if (!trimmed) return {raw: line, hex: null, formatted: null, error: null};
+    if (!trimmed) return {raw: line, hex: null, formatted: null, errorCode: null};
 
     const stripped = trimmed.replace(/[:\-.\s]/g, "");
     if (!/^[0-9A-Fa-f]+$/.test(stripped)) {
-        return {raw: line, hex: null, formatted: null, error: "Contains non-hex characters"};
+        return {raw: line, hex: null, formatted: null, errorCode: "nonHex"};
     }
     if (stripped.length < 6) {
-        return {raw: line, hex: null, formatted: null, error: "Too short — need at least 6 hex digits"};
+        return {raw: line, hex: null, formatted: null, errorCode: "tooShort"};
     }
     if (stripped.length > 12) {
-        return {raw: line, hex: null, formatted: null, error: "Too long — a MAC is at most 12 hex digits"};
+        return {raw: line, hex: null, formatted: null, errorCode: "tooLong"};
     }
 
     const hex = stripped.toUpperCase();
-    return {raw: line, hex, formatted: formatHex(hex), error: null};
+    return {raw: line, hex, formatted: formatHex(hex), errorCode: null};
 };

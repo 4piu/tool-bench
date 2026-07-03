@@ -3,6 +3,7 @@ import {search as jmesSearch} from "jmespath";
 import {JSONPath} from "jsonpath-plus";
 import {Alert, Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Switch, TextField} from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {copyText, downloadText} from "../shared/browser";
 import {DocumentTabsBar, useDocumentTabs} from "../shared/DocumentTabs";
 import {CopyIconButton, DownloadIconButton, FieldLabelRow, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -89,6 +90,7 @@ const createDocument = (): JsonDocument => ({
 });
 
 const JsonTool = () => {
+    const {t} = useTranslation();
     const {documents, activeId, activeDocument, setActiveId, addDocument, closeDocument, closeAll, renameDocument, updateDocument} =
         useDocumentTabs<JsonDocument>("json", createDocument);
     const {input, output, indent, sortKeys, query, queryMode, diffInput, error} = activeDocument;
@@ -97,7 +99,7 @@ const JsonTool = () => {
         try {
             updateDocument(activeId, {output: formatParsed(JSON.parse(input), indent, sortKeys, mode === "minify"), error: ""});
         } catch (err) {
-            updateDocument(activeId, {error: err instanceof Error ? err.message : "Invalid JSON"});
+            updateDocument(activeId, {error: err instanceof Error ? err.message : t("json.invalidJson")});
         }
     };
 
@@ -106,11 +108,11 @@ const JsonTool = () => {
             const parsed = JSON.parse(input);
             const objectCount = parsed && typeof parsed === "object" ? Object.keys(parsed as object).length : 0;
             updateDocument(activeId, {
-                output: `Valid JSON\nRoot type: ${Array.isArray(parsed) ? "array" : typeof parsed}\nTop-level entries: ${objectCount}`,
+                output: t("json.validSummary", {rootType: Array.isArray(parsed) ? "array" : typeof parsed, count: objectCount}),
                 error: ""
             });
         } catch (err) {
-            updateDocument(activeId, {error: err instanceof Error ? err.message : "Invalid JSON"});
+            updateDocument(activeId, {error: err instanceof Error ? err.message : t("json.invalidJson")});
         }
     };
 
@@ -119,22 +121,22 @@ const JsonTool = () => {
             const result = runQueryMode(queryMode, JSON.parse(input), query);
             updateDocument(activeId, {output: JSON.stringify(result, null, 2), error: ""});
         } catch (err) {
-            updateDocument(activeId, {error: err instanceof Error ? err.message : "JSON query failed"});
+            updateDocument(activeId, {error: err instanceof Error ? err.message : t("json.queryFailed")});
         }
     };
 
     const runDiff = () => {
         try {
             const changes = diffJson(JSON.parse(input), JSON.parse(diffInput));
-            updateDocument(activeId, {output: changes.length ? changes.join("\n") : "No differences", error: ""});
+            updateDocument(activeId, {output: changes.length ? changes.join("\n") : t("json.noDifferences"), error: ""});
         } catch (err) {
-            updateDocument(activeId, {error: err instanceof Error ? err.message : "JSON diff failed"});
+            updateDocument(activeId, {error: err instanceof Error ? err.message : t("json.diffFailed")});
         }
     };
 
     return (
         <ToolSurface>
-            <ToolHeader title="JSON Formatter" description="Format, query, and diff JSON with local parsing across multiple tabs."/>
+            <ToolHeader title={t("json.title")} description={t("json.description")}/>
             <Stack spacing={2}>
                 <DocumentTabsBar
                     documents={documents}
@@ -146,61 +148,61 @@ const JsonTool = () => {
                     onRename={renameDocument}
                 />
                 <Stack direction={{xs: "column", sm: "row"}} spacing={1} sx={{flexWrap: "wrap"}} useFlexGap>
-                    <Button variant="contained" onClick={() => transform("format")}>Format</Button>
-                    <Button variant="outlined" onClick={() => transform("minify")}>Minify</Button>
-                    <Button variant="outlined" onClick={validate}>Validate</Button>
-                    <Button variant="outlined" onClick={runQuery}>Query</Button>
-                    <Button variant="outlined" onClick={runDiff}>Diff</Button>
+                    <Button variant="contained" onClick={() => transform("format")}>{t("json.format")}</Button>
+                    <Button variant="outlined" onClick={() => transform("minify")}>{t("json.minify")}</Button>
+                    <Button variant="outlined" onClick={validate}>{t("json.validate")}</Button>
+                    <Button variant="outlined" onClick={runQuery}>{t("json.query")}</Button>
+                    <Button variant="outlined" onClick={runDiff}>{t("json.diff")}</Button>
                 </Stack>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <FormControl sx={{minWidth: 140}}>
-                        <InputLabel>Indent</InputLabel>
-                        <Select value={indent} label="Indent" onChange={(event: SelectChangeEvent) => updateDocument(activeId, {indent: event.target.value})}>
-                            <MenuItem value="2">2 spaces</MenuItem>
-                            <MenuItem value="3">3 spaces</MenuItem>
-                            <MenuItem value="4">4 spaces</MenuItem>
-                            <MenuItem value="tab">Tab</MenuItem>
+                        <InputLabel>{t("json.indent")}</InputLabel>
+                        <Select value={indent} label={t("json.indent")} onChange={(event: SelectChangeEvent) => updateDocument(activeId, {indent: event.target.value})}>
+                            <MenuItem value="2">{t("json.indentOption.spaces", {count: 2})}</MenuItem>
+                            <MenuItem value="3">{t("json.indentOption.spaces", {count: 3})}</MenuItem>
+                            <MenuItem value="4">{t("json.indentOption.spaces", {count: 4})}</MenuItem>
+                            <MenuItem value="tab">{t("json.indentOption.tab")}</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControlLabel
                         control={<Switch checked={sortKeys} onChange={event => updateDocument(activeId, {sortKeys: event.target.checked})}/>}
-                        label="Sort object keys"
+                        label={t("json.sortKeys")}
                     />
                 </Stack>
                 <Stack direction={{xs: "column", sm: "row"}} spacing={2}>
                     <FormControl sx={{minWidth: 160}}>
-                        <InputLabel>Query mode</InputLabel>
-                        <Select value={queryMode} label="Query mode" onChange={(event: SelectChangeEvent) => updateDocument(activeId, {queryMode: event.target.value as QueryMode})}>
-                            <MenuItem value="pointer">JSON Pointer</MenuItem>
-                            <MenuItem value="jsonpath">JSONPath</MenuItem>
-                            <MenuItem value="jmespath">JMESPath</MenuItem>
+                        <InputLabel>{t("json.queryMode")}</InputLabel>
+                        <Select value={queryMode} label={t("json.queryMode")} onChange={(event: SelectChangeEvent) => updateDocument(activeId, {queryMode: event.target.value as QueryMode})}>
+                            <MenuItem value="pointer">{t("json.queryModeOption.pointer")}</MenuItem>
+                            <MenuItem value="jsonpath">{t("json.queryModeOption.jsonpath")}</MenuItem>
+                            <MenuItem value="jmespath">{t("json.queryModeOption.jmespath")}</MenuItem>
                         </Select>
                     </FormControl>
                     <TextField
-                        label="Query"
+                        label={t("json.queryLabel")}
                         value={query}
                         onChange={event => updateDocument(activeId, {query: event.target.value})}
-                        helperText={`Example: ${queryPlaceholders[queryMode]}`}
+                        helperText={t("json.queryExample", {example: queryPlaceholders[queryMode]})}
                         fullWidth
                     />
                 </Stack>
                 {error && <Alert severity="error">{error}</Alert>}
                 <Grid container spacing={2}>
                     <Grid size={{xs: 12, md: 6}}>
-                        <FieldLabelRow label="Input">
+                        <FieldLabelRow label={t("json.input")}>
                             <CopyIconButton onCopy={() => copyText(input)}/>
                         </FieldLabelRow>
                         <TextField value={input} onChange={event => updateDocument(activeId, {input: event.target.value})} multiline minRows={14} fullWidth/>
                     </Grid>
                     <Grid size={{xs: 12, md: 6}}>
-                        <FieldLabelRow label="Output">
+                        <FieldLabelRow label={t("json.output")}>
                             <CopyIconButton onCopy={() => copyText(output)} disabled={!output}/>
-                            <DownloadIconButton title="Download output" onDownload={() => downloadText("json-output.txt", output)} disabled={!output}/>
+                            <DownloadIconButton title={t("json.downloadOutput")} onDownload={() => downloadText("json-output.txt", output)} disabled={!output}/>
                         </FieldLabelRow>
                         <TextField value={output} multiline minRows={14} fullWidth slotProps={{htmlInput: {readOnly: true}}}/>
                     </Grid>
                     <Grid size={{xs: 12}}>
-                        <FieldLabelRow label="Diff target JSON">
+                        <FieldLabelRow label={t("json.diffTarget")}>
                             <CopyIconButton onCopy={() => copyText(diffInput)}/>
                         </FieldLabelRow>
                         <TextField value={diffInput} onChange={event => updateDocument(activeId, {diffInput: event.target.value})} multiline minRows={6} fullWidth/>

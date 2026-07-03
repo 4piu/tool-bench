@@ -69,5 +69,293 @@
     },
     "policyExceeds": "Selected policy requires at least {{count}} characters. Increase length or lower per-class minimums.",
     "output": "Password output"
+  },
+  "documentTabs": {
+    "untitled": "Untitled {{n}}",
+    "newTab": "New tab",
+    "closeAllTabs": "Close all tabs"
+  },
+  "uuid": {
+    "title": "UUID Generator",
+    "description": "Generate random, time-based, or deterministic namespace UUIDs.",
+    "version": "Version",
+    "versionOption": {
+      "v1": "v1 - time based",
+      "v3": "v3 - namespace/name MD5",
+      "v4": "v4 - random",
+      "v5": "v5 - namespace/name SHA-1",
+      "v7": "v7 - timestamp sortable"
+    },
+    "count": "Count",
+    "name": "Name",
+    "namespacePreset": "Namespace preset",
+    "namespaceUuid": "Namespace UUID",
+    "namespaceInvalid": "Must be a valid UUID",
+    "namespaceHelp": "Use a preset or enter a custom namespace UUID.",
+    "output": "Output",
+    "outputOption": {
+      "lines": "Lines",
+      "json": "JSON array",
+      "csv": "CSV"
+    }
+  },
+  "timestamp": {
+    "title": "Timestamp Converter",
+    "description": "Convert dates, Unix timestamps, and common time string formats.",
+    "dateTime": "Date and time",
+    "timezoneOffset": "Timezone offset",
+    "precision": "Precision",
+    "precisionOption": {
+      "seconds": "Seconds",
+      "milliseconds": "Milliseconds"
+    },
+    "timestampFromDate": "Unix timestamp from date",
+    "now": "Now",
+    "copyTimestamp": "Copy timestamp",
+    "timestampInMilliseconds": "Unix timestamp in milliseconds",
+    "timestampInSeconds": "Unix timestamp in seconds",
+    "format": "Format",
+    "formatOption": {
+      "locale": "Locale",
+      "iso8601": "ISO-8601",
+      "rfc1123": "RFC-1123"
+    },
+    "invalidTimestamp": "Invalid timestamp",
+    "copyFormatted": "Copy formatted time"
+  },
+  "dns": {
+    "title": "DNS Lookup",
+    "description": "Query DNS over HTTPS from your browser.",
+    "enterDomain": "Enter at least one domain name",
+    "lookupFailed": "DNS lookup failed",
+    "domains": "Domains",
+    "domainsHelp": "Use spaces, commas, or new lines for batch lookups.",
+    "type": "Type",
+    "class": "Class",
+    "lookup": "Lookup",
+    "dohProvider": "DoH provider",
+    "method": "Method",
+    "customDohUrl": "Custom DoH URL",
+    "showAdvanced": "Show advanced record types",
+    "showRaw": "Show raw DNS message",
+    "latency": "Resolver latency: {{latency}} ms",
+    "column": {
+      "query": "Query",
+      "name": "Name",
+      "type": "Type",
+      "class": "Class",
+      "ttl": "TTL",
+      "data": "Data"
+    },
+    "noAnswers": "No answers returned."
+  },
+  "qr": {
+    "title": "QR Code Creator",
+    "description": "Generate downloadable QR codes with format, color, and correction controls.",
+    "logoReadFailed": "Failed to read logo image",
+    "renderFailed": "Failed to render QR code",
+    "presetBuilder": "Preset builder",
+    "presetOption": {
+      "free": "Free text",
+      "url": "URL",
+      "wifi": "Wi-Fi",
+      "email": "Email",
+      "sms": "SMS",
+      "vcard": "vCard"
+    },
+    "field": {
+      "url": "URL",
+      "ssid": "SSID",
+      "password": "Password",
+      "encryption": "Encryption",
+      "email": "Email",
+      "subject": "Subject",
+      "body": "Body",
+      "phone": "Phone",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "organization": "Organization",
+      "website": "Website"
+    },
+    "applyPreset": "Apply preset",
+    "text": "Text",
+    "format": "Format",
+    "errorCorrection": "Error correction",
+    "foreground": "Foreground",
+    "background": "Background",
+    "logo": "Logo",
+    "replaceLogo": "Replace logo",
+    "uploadLogo": "Upload logo",
+    "logoPreviewAlt": "Logo preview",
+    "removeLogo": "Remove logo",
+    "logoSize": "Logo size: {{percent}}%",
+    "useHighErrorCorrection": "Use error correction level H for the most reliable scans with a logo.",
+    "margin": "Margin: {{margin}}",
+    "scale": "Scale: {{scale}}",
+    "quality": "Quality: {{quality}}",
+    "qrCodeAlt": "QR code",
+    "download": "Download {{extension}}"
+  },
+  "hash": {
+    "title": "File Checksum",
+    "description": "Hash files locally in a Web Worker.",
+    "algorithm": "Algorithm",
+    "concurrency": "Concurrency",
+    "addFiles": "Add files",
+    "hashAll": "Hash all",
+    "cancelAll": "Cancel all",
+    "exportJson": "Export JSON",
+    "exportCsv": "Export CSV",
+    "dragDrop": "Drag and drop files here",
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "done": "Done",
+      "error": "Error",
+      "cancelled": "Cancelled"
+    },
+    "copyHash": "Copy hash",
+    "cancel": "Cancel",
+    "remove": "Remove"
+  },
+  "ua": {
+    "title": "User Agent",
+    "description": "Inspect and parse browser user-agent strings.",
+    "field": {
+      "userAgent": "User agent",
+      "platform": "Platform",
+      "language": "Language",
+      "languages": "Languages",
+      "cookiesEnabled": "Cookies enabled",
+      "online": "Online",
+      "hardwareConcurrency": "Hardware concurrency",
+      "deviceMemory": "Device memory",
+      "maxTouchPoints": "Max touch points",
+      "doNotTrack": "Do not track",
+      "clientHints": "User-Agent Client Hints",
+      "browser": "Browser",
+      "browserType": "Browser type",
+      "browserTypeDefault": "browser",
+      "engine": "Engine",
+      "os": "OS",
+      "deviceVendor": "Device vendor",
+      "deviceModel": "Device model",
+      "deviceType": "Device type",
+      "deviceTypeDefault": "desktop",
+      "cpuArchitecture": "CPU architecture"
+    },
+    "unavailable": "Unavailable",
+    "unknown": "Unknown",
+    "tab": {
+      "mine": "My UA",
+      "parse": "Parse UA",
+      "examples": "UA examples"
+    },
+    "freezeNotice": "Modern browsers may intentionally reduce or freeze UA details; Client Hints can also be permission/browser dependent.",
+    "copyAsJson": "Copy as JSON",
+    "parsedLabel": "Parsed {{label}}",
+    "parseInputLabel": "User-Agent string to parse",
+    "copyParsedAsJson": "Copy parsed result as JSON",
+    "column": {
+      "browser": "Browser",
+      "os": "OS",
+      "userAgent": "User agent"
+    },
+    "parse": "Parse"
+  },
+  "sound": {
+    "title": "Sound Wave",
+    "description": "Generate simple oscillator tones.",
+    "waveform": "Waveform",
+    "waveformOption": {
+      "sine": "Sine",
+      "square": "Square",
+      "triangle": "Triangle",
+      "sawtooth": "Sawtooth"
+    },
+    "frequencyHz": "Frequency (Hz)",
+    "frequency": "Frequency: {{frequency}} Hz",
+    "linearScale": "Linear frequency slider",
+    "volume": "Volume: {{percent}}%",
+    "pan": "Pan: {{direction}}",
+    "panCenter": "Center",
+    "panLeft": "{{percent}}% left",
+    "panRight": "{{percent}}% right",
+    "attack": "Attack: {{value}}s",
+    "decay": "Decay: {{value}}s",
+    "sustain": "Sustain: {{percent}}%",
+    "release": "Release: {{value}}s",
+    "liveAnalyser": "Live audio analyser",
+    "waveformPreview": "Waveform preview",
+    "stop": "Stop",
+    "play": "Play"
+  },
+  "json": {
+    "title": "JSON Formatter",
+    "description": "Format, query, and diff JSON with local parsing across multiple tabs.",
+    "invalidJson": "Invalid JSON",
+    "validSummary": "Valid JSON\nRoot type: {{rootType}}\nTop-level entries: {{count}}",
+    "queryFailed": "JSON query failed",
+    "noDifferences": "No differences",
+    "diffFailed": "JSON diff failed",
+    "format": "Format",
+    "minify": "Minify",
+    "validate": "Validate",
+    "query": "Query",
+    "diff": "Diff",
+    "indent": "Indent",
+    "indentOption": {
+      "spaces": "{{count}} spaces",
+      "tab": "Tab"
+    },
+    "sortKeys": "Sort object keys",
+    "queryMode": "Query mode",
+    "queryModeOption": {
+      "pointer": "JSON Pointer",
+      "jsonpath": "JSONPath",
+      "jmespath": "JMESPath"
+    },
+    "queryLabel": "Query",
+    "queryExample": "Example: {{example}}",
+    "input": "Input",
+    "output": "Output",
+    "downloadOutput": "Download output",
+    "diffTarget": "Diff target JSON"
+  },
+  "base64": {
+    "title": "Base64 Encoder / Decoder",
+    "description": "Encode and decode UTF-8 text across multiple tabs.",
+    "malformed": "Malformed Base64 input",
+    "fileSummary": "[{{name}}] {{bytes}} bytes",
+    "urlSafe": "URL-safe Base64",
+    "plainText": "Plain text",
+    "openFile": "Open file",
+    "downloadPlainText": "Download plain text",
+    "base64": "Base64",
+    "downloadBase64Text": "Download Base64 text"
+  },
+  "oui": {
+    "title": "OUI Lookup",
+    "description": "Look up MAC address vendors (MA-L / MA-M / MA-S) with a fast local index.",
+    "loadFailed": "Failed to load OUI database",
+    "loading": "Loading vendor database...",
+    "entryCount": "{{count}} entries",
+    "updatedAt": "updated {{date}}",
+    "refreshNow": "Refresh database now",
+    "staleWarning": "Refresh failed — showing the last known-good copy from {{date}}.",
+    "earlierSession": "an earlier session",
+    "macAddresses": "MAC addresses",
+    "macAddressesHelp": "One per line. Delimiters (: - . space) are ignored; partial prefixes (6, 7, or 9 hex digits) are accepted.",
+    "column": {
+      "input": "Input",
+      "registry": "Registry",
+      "vendor": "Vendor"
+    },
+    "noMatch": "No match found",
+    "parseError": {
+      "nonHex": "Contains non-hex characters",
+      "tooShort": "Too short — need at least 6 hex digits",
+      "tooLong": "Too long — a MAC is at most 12 hex digits"
+    }
   }
 }
