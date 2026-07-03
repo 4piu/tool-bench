@@ -12,7 +12,6 @@ import {
     CardContent,
     CircularProgress,
     Container,
-    Divider,
     Grid,
     IconButton,
     Paper,
@@ -90,7 +89,6 @@ const Home = ({onSelectTool}: { onSelectTool: (toolId: ToolId) => void }) => {
     return (
         <Container maxWidth="lg" sx={{py: 5}}>
             <Stack spacing={2} sx={{mb: 4}}>
-                <Typography variant="h3" component="h1">ToolBench</Typography>
                 <Typography color="text.secondary">A tiny static workbench of browser-native utilities.</Typography>
                 <TextField label="Search tools" value={query} onChange={event => setQuery(event.target.value)} fullWidth/>
             </Stack>
@@ -303,10 +301,15 @@ const App = () => {
                 )}
             </Box>
 
-            <Box component="footer">
-                <Divider/>
+            <Box
+                component="footer"
+                sx={{
+                    bgcolor: theme => theme.palette.mode === "dark" ? "grey.950" : "grey.900",
+                    color: "grey.400"
+                }}
+            >
                 <Container maxWidth="lg" sx={{py: 3}}>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="inherit">
                         Built with React 19, TypeScript, Vite, Bun, Tailwind CSS, and MUI.
                     </Typography>
                 </Container>
