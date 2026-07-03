@@ -14,9 +14,8 @@
     "dark": "主题：深色"
   },
   "language": {
-    "system": "语言：跟随系统",
-    "en": "语言：English",
-    "zh": "语言：中文"
+    "label": "语言",
+    "system": "跟随系统"
   },
   "toolScaffold": {
     "generate": "生成",

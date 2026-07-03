@@ -14,9 +14,8 @@
     "dark": "Theme: dark"
   },
   "language": {
-    "system": "Language: System",
-    "en": "Language: English",
-    "zh": "Language: 中文"
+    "label": "Language",
+    "system": "System"
   },
   "toolScaffold": {
     "generate": "Generate",

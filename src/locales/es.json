@@ -1,0 +1,361 @@
+{
+  "app": {
+    "tagline": "Un pequeño banco de herramientas estático con utilidades nativas del navegador.",
+    "searchLabel": "Buscar herramientas",
+    "searchPlaceholder": "Buscar una herramienta",
+    "noMatchingTools": "No hay herramientas coincidentes.",
+    "closeSearch": "Cerrar búsqueda",
+    "loadingTool": "Cargando herramienta...",
+    "footer": "Creado con React 19, TypeScript, Vite, Bun, Tailwind CSS y MUI."
+  },
+  "theme": {
+    "system": "Tema: sistema",
+    "light": "Tema: claro",
+    "dark": "Tema: oscuro"
+  },
+  "language": {
+    "label": "Idioma",
+    "system": "Sistema"
+  },
+  "toolScaffold": {
+    "generate": "Generar",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "download": "Descargar"
+  },
+  "tools": {
+    "uuid": {"title": "UUID", "description": "Generar UUID en lote"},
+    "password": {"title": "Contraseña", "description": "Generar contraseñas seguras"},
+    "base64": {"title": "Base64", "description": "Codificar y decodificar texto"},
+    "json": {"title": "JSON", "description": "Formatear y minificar JSON"},
+    "timestamp": {"title": "Marca de tiempo", "description": "Convertir tiempo Unix"},
+    "qr": {"title": "Código QR", "description": "Crear códigos QR"},
+    "dns": {"title": "DNS", "description": "Consulta DNS over HTTPS"},
+    "hash": {"title": "Hash de archivo", "description": "Calcular sumas de verificación"},
+    "ua": {"title": "User Agent", "description": "Inspeccionar tu navegador"},
+    "sound": {"title": "Sonido", "description": "Generar un tono"},
+    "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
+  },
+  "password": {
+    "title": "Generador de contraseñas",
+    "description": "Genera contraseñas del lado del cliente con aleatoriedad de Web Crypto.",
+    "mode": {
+      "label": "Modo",
+      "password": "Contraseña",
+      "passphrase": "Frase de contraseña"
+    },
+    "length": "Longitud: {{length}}",
+    "class": {
+      "upper": "Mayúsculas",
+      "lower": "Minúsculas",
+      "digits": "Dígitos",
+      "symbols": "Símbolos"
+    },
+    "minCount": "Cantidad mínima",
+    "avoidConfusing": "Evitar caracteres confusos",
+    "avoidRepeat": "Evitar caracteres consecutivos repetidos",
+    "words": "Palabras: {{count}}",
+    "separator": "Separador",
+    "capitalizeWords": "Poner en mayúscula las palabras",
+    "appendNumber": "Añadir un dígito",
+    "batchCount": "Cantidad por lote",
+    "invalidClasses": "Selecciona al menos una clase de carácter utilizable.",
+    "entropy": "Entropía estimada: {{entropy}} bits",
+    "policy": {
+      "length": "Longitud ≥ {{length}}",
+      "class": "≥{{count}} {{label}}",
+      "noConfusing": "Sin caracteres confusos",
+      "noRepeat": "Sin repeticiones consecutivas"
+    },
+    "policyExceeds": "La política seleccionada requiere al menos {{count}} caracteres. Aumenta la longitud o reduce los mínimos por clase.",
+    "output": "Salida de contraseña"
+  },
+  "documentTabs": {
+    "untitled": "Sin título {{n}}",
+    "newTab": "Nueva pestaña",
+    "closeAllTabs": "Cerrar todas las pestañas"
+  },
+  "uuid": {
+    "title": "Generador de UUID",
+    "description": "Genera UUID aleatorios, basados en el tiempo o de espacio de nombres determinista.",
+    "version": "Versión",
+    "versionOption": {
+      "v1": "v1 - basado en tiempo",
+      "v3": "v3 - espacio de nombres/nombre MD5",
+      "v4": "v4 - aleatorio",
+      "v5": "v5 - espacio de nombres/nombre SHA-1",
+      "v7": "v7 - ordenable por marca de tiempo"
+    },
+    "count": "Cantidad",
+    "name": "Nombre",
+    "namespacePreset": "Preajuste de espacio de nombres",
+    "namespaceUuid": "UUID de espacio de nombres",
+    "namespaceInvalid": "Debe ser un UUID válido",
+    "namespaceHelp": "Usa un preajuste o introduce un UUID de espacio de nombres personalizado.",
+    "output": "Salida",
+    "outputOption": {
+      "lines": "Líneas",
+      "json": "Array JSON",
+      "csv": "CSV"
+    }
+  },
+  "timestamp": {
+    "title": "Conversor de marcas de tiempo",
+    "description": "Convierte fechas, marcas de tiempo Unix y formatos de cadena de tiempo comunes.",
+    "dateTime": "Fecha y hora",
+    "timezoneOffset": "Desfase horario",
+    "precision": "Precisión",
+    "precisionOption": {
+      "seconds": "Segundos",
+      "milliseconds": "Milisegundos"
+    },
+    "timestampFromDate": "Marca de tiempo Unix a partir de la fecha",
+    "now": "Ahora",
+    "copyTimestamp": "Copiar marca de tiempo",
+    "timestampInMilliseconds": "Marca de tiempo Unix en milisegundos",
+    "timestampInSeconds": "Marca de tiempo Unix en segundos",
+    "format": "Formato",
+    "formatOption": {
+      "locale": "Local",
+      "iso8601": "ISO-8601",
+      "rfc1123": "RFC-1123"
+    },
+    "invalidTimestamp": "Marca de tiempo no válida",
+    "copyFormatted": "Copiar hora formateada"
+  },
+  "dns": {
+    "title": "Búsqueda DNS",
+    "description": "Consulta DNS over HTTPS desde tu navegador.",
+    "enterDomain": "Introduce al menos un nombre de dominio",
+    "lookupFailed": "Error en la búsqueda DNS",
+    "domains": "Dominios",
+    "domainsHelp": "Usa espacios, comas o saltos de línea para búsquedas por lote.",
+    "type": "Tipo",
+    "class": "Clase",
+    "lookup": "Buscar",
+    "dohProvider": "Proveedor de DoH",
+    "method": "Método",
+    "customDohUrl": "URL de DoH personalizada",
+    "showAdvanced": "Mostrar tipos de registro avanzados",
+    "showRaw": "Mostrar mensaje DNS sin procesar",
+    "latency": "Latencia del resolutor: {{latency}} ms",
+    "column": {
+      "query": "Consulta",
+      "name": "Nombre",
+      "type": "Tipo",
+      "class": "Clase",
+      "ttl": "TTL",
+      "data": "Datos"
+    },
+    "noAnswers": "No se devolvieron respuestas."
+  },
+  "qr": {
+    "title": "Creador de códigos QR",
+    "description": "Genera códigos QR descargables con controles de formato, color y corrección.",
+    "logoReadFailed": "No se pudo leer la imagen del logotipo",
+    "renderFailed": "No se pudo generar el código QR",
+    "presetBuilder": "Constructor de preajustes",
+    "presetOption": {
+      "free": "Texto libre",
+      "url": "URL",
+      "wifi": "Wi-Fi",
+      "email": "Correo electrónico",
+      "sms": "SMS",
+      "vcard": "vCard"
+    },
+    "field": {
+      "url": "URL",
+      "ssid": "SSID",
+      "password": "Contraseña",
+      "encryption": "Cifrado",
+      "email": "Correo electrónico",
+      "subject": "Asunto",
+      "body": "Cuerpo",
+      "phone": "Teléfono",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "organization": "Organización",
+      "website": "Sitio web"
+    },
+    "applyPreset": "Aplicar preajuste",
+    "text": "Texto",
+    "format": "Formato",
+    "errorCorrection": "Corrección de errores",
+    "foreground": "Primer plano",
+    "background": "Fondo",
+    "logo": "Logotipo",
+    "replaceLogo": "Reemplazar logotipo",
+    "uploadLogo": "Subir logotipo",
+    "logoPreviewAlt": "Vista previa del logotipo",
+    "removeLogo": "Eliminar logotipo",
+    "logoSize": "Tamaño del logotipo: {{percent}}%",
+    "useHighErrorCorrection": "Usa el nivel de corrección de errores H para escaneos más fiables con un logotipo.",
+    "margin": "Margen: {{margin}}",
+    "scale": "Escala: {{scale}}",
+    "quality": "Calidad: {{quality}}",
+    "qrCodeAlt": "Código QR",
+    "download": "Descargar {{extension}}"
+  },
+  "hash": {
+    "title": "Suma de verificación de archivos",
+    "description": "Calcula hashes de archivos localmente en un Web Worker.",
+    "algorithm": "Algoritmo",
+    "concurrency": "Concurrencia",
+    "addFiles": "Añadir archivos",
+    "hashAll": "Calcular todo",
+    "cancelAll": "Cancelar todo",
+    "exportJson": "Exportar JSON",
+    "exportCsv": "Exportar CSV",
+    "dragDrop": "Arrastra y suelta archivos aquí",
+    "status": {
+      "pending": "Pendiente",
+      "processing": "Procesando",
+      "done": "Completado",
+      "error": "Error",
+      "cancelled": "Cancelado"
+    },
+    "copyHash": "Copiar hash",
+    "cancel": "Cancelar",
+    "remove": "Eliminar"
+  },
+  "ua": {
+    "title": "User Agent",
+    "description": "Inspecciona y analiza cadenas de user-agent del navegador.",
+    "field": {
+      "userAgent": "User agent",
+      "platform": "Plataforma",
+      "language": "Idioma",
+      "languages": "Idiomas",
+      "cookiesEnabled": "Cookies habilitadas",
+      "online": "En línea",
+      "hardwareConcurrency": "Concurrencia de hardware",
+      "deviceMemory": "Memoria del dispositivo",
+      "maxTouchPoints": "Puntos táctiles máximos",
+      "doNotTrack": "No rastrear",
+      "clientHints": "User-Agent Client Hints",
+      "browser": "Navegador",
+      "browserType": "Tipo de navegador",
+      "browserTypeDefault": "navegador",
+      "engine": "Motor",
+      "os": "SO",
+      "deviceVendor": "Fabricante del dispositivo",
+      "deviceModel": "Modelo del dispositivo",
+      "deviceType": "Tipo de dispositivo",
+      "deviceTypeDefault": "escritorio",
+      "cpuArchitecture": "Arquitectura de la CPU"
+    },
+    "unavailable": "No disponible",
+    "unknown": "Desconocido",
+    "tab": {
+      "mine": "Mi UA",
+      "parse": "Analizar UA",
+      "examples": "Ejemplos de UA"
+    },
+    "freezeNotice": "Los navegadores modernos pueden reducir o congelar intencionadamente los detalles de UA; Client Hints también puede depender de permisos o del navegador.",
+    "copyAsJson": "Copiar como JSON",
+    "parsedLabel": "Analizado: {{label}}",
+    "parseInputLabel": "Cadena de User-Agent a analizar",
+    "copyParsedAsJson": "Copiar resultado analizado como JSON",
+    "column": {
+      "browser": "Navegador",
+      "os": "SO",
+      "userAgent": "User agent"
+    },
+    "parse": "Analizar"
+  },
+  "sound": {
+    "title": "Onda de sonido",
+    "description": "Genera tonos de oscilador simples.",
+    "waveform": "Forma de onda",
+    "waveformOption": {
+      "sine": "Senoidal",
+      "square": "Cuadrada",
+      "triangle": "Triangular",
+      "sawtooth": "Diente de sierra"
+    },
+    "frequencyHz": "Frecuencia (Hz)",
+    "frequency": "Frecuencia: {{frequency}} Hz",
+    "linearScale": "Control deslizante de frecuencia lineal",
+    "volume": "Volumen: {{percent}}%",
+    "pan": "Balance: {{direction}}",
+    "panCenter": "Centro",
+    "panLeft": "{{percent}}% izquierda",
+    "panRight": "{{percent}}% derecha",
+    "attack": "Ataque: {{value}}s",
+    "decay": "Caída: {{value}}s",
+    "sustain": "Sostenido: {{percent}}%",
+    "release": "Liberación: {{value}}s",
+    "liveAnalyser": "Analizador de audio en vivo",
+    "waveformPreview": "Vista previa de la forma de onda",
+    "stop": "Detener",
+    "play": "Reproducir"
+  },
+  "json": {
+    "title": "Formateador JSON",
+    "description": "Formatea, consulta y compara JSON con análisis local en varias pestañas.",
+    "invalidJson": "JSON no válido",
+    "validSummary": "JSON válido\nTipo raíz: {{rootType}}\nEntradas de nivel superior: {{count}}",
+    "queryFailed": "Error en la consulta JSON",
+    "noDifferences": "Sin diferencias",
+    "diffFailed": "Error al comparar JSON",
+    "format": "Formatear",
+    "minify": "Minificar",
+    "validate": "Validar",
+    "query": "Consultar",
+    "diff": "Comparar",
+    "indent": "Sangría",
+    "indentOption": {
+      "spaces": "{{count}} espacios",
+      "tab": "Tabulación"
+    },
+    "sortKeys": "Ordenar claves del objeto",
+    "queryMode": "Modo de consulta",
+    "queryModeOption": {
+      "pointer": "JSON Pointer",
+      "jsonpath": "JSONPath",
+      "jmespath": "JMESPath"
+    },
+    "queryLabel": "Consulta",
+    "queryExample": "Ejemplo: {{example}}",
+    "input": "Entrada",
+    "output": "Salida",
+    "downloadOutput": "Descargar salida",
+    "diffTarget": "JSON objetivo de comparación"
+  },
+  "base64": {
+    "title": "Codificador / decodificador Base64",
+    "description": "Codifica y decodifica texto UTF-8 en varias pestañas.",
+    "malformed": "Entrada Base64 mal formada",
+    "fileSummary": "[{{name}}] {{bytes}} bytes",
+    "urlSafe": "Base64 seguro para URL",
+    "plainText": "Texto sin formato",
+    "openFile": "Abrir archivo",
+    "downloadPlainText": "Descargar texto sin formato",
+    "base64": "Base64",
+    "downloadBase64Text": "Descargar texto Base64"
+  },
+  "oui": {
+    "title": "Búsqueda OUI",
+    "description": "Busca fabricantes de direcciones MAC (MA-L / MA-M / MA-S) con un índice local rápido.",
+    "loadFailed": "No se pudo cargar la base de datos OUI",
+    "loading": "Cargando base de datos de fabricantes...",
+    "entryCount": "{{count}} entradas",
+    "updatedAt": "actualizado {{date}}",
+    "refreshNow": "Actualizar base de datos ahora",
+    "staleWarning": "Error al actualizar — mostrando la última copia válida conocida de {{date}}.",
+    "earlierSession": "una sesión anterior",
+    "macAddresses": "Direcciones MAC",
+    "macAddressesHelp": "Una por línea. Los delimitadores (: - . espacio) se ignoran; se aceptan prefijos parciales (6, 7 o 9 dígitos hexadecimales).",
+    "column": {
+      "input": "Entrada",
+      "registry": "Registro",
+      "vendor": "Fabricante"
+    },
+    "noMatch": "No se encontraron coincidencias",
+    "parseError": {
+      "nonHex": "Contiene caracteres no hexadecimales",
+      "tooShort": "Demasiado corto — se necesitan al menos 6 dígitos hexadecimales",
+      "tooLong": "Demasiado largo — una MAC tiene como máximo 12 dígitos hexadecimales"
+    }
+  }
+}

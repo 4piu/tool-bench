@@ -1,5 +1,6 @@
 import React from "react";
 import i18n, {supportedLanguages, type LanguageCode} from "./i18n";
+import {isRtlLanguage} from "./rtl";
 import {useLocalStorageState} from "../tools/shared/hooks";
 
 export type LanguageMode = "system" | LanguageCode;
@@ -18,6 +19,7 @@ const detectSystemLanguage = (): LanguageCode => {
 type LanguageContextValue = {
     mode: LanguageMode;
     resolvedLanguage: LanguageCode;
+    direction: "ltr" | "rtl";
     setMode: (mode: LanguageMode) => void;
 };
 
@@ -40,12 +42,18 @@ export const LanguageProvider = ({children}: { children: React.ReactNode }) => {
     }, []);
 
     const resolvedLanguage: LanguageCode = mode === "system" ? systemLanguage : mode;
+    const direction: "ltr" | "rtl" = isRtlLanguage(resolvedLanguage) ? "rtl" : "ltr";
 
     React.useEffect(() => {
         void i18n.changeLanguage(resolvedLanguage);
     }, [resolvedLanguage]);
 
-    const value = React.useMemo(() => ({mode, resolvedLanguage, setMode}), [mode, resolvedLanguage, setMode]);
+    React.useEffect(() => {
+        document.documentElement.lang = resolvedLanguage;
+        document.documentElement.dir = direction;
+    }, [resolvedLanguage, direction]);
+
+    const value = React.useMemo(() => ({mode, resolvedLanguage, direction, setMode}), [mode, resolvedLanguage, direction, setMode]);
 
     return (
         <LanguageContext.Provider value={value}>

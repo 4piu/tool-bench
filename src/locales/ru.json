@@ -1,0 +1,361 @@
+{
+  "app": {
+    "tagline": "Небольшой статический набор инструментов на основе возможностей браузера.",
+    "searchLabel": "Поиск инструментов",
+    "searchPlaceholder": "Найти инструмент",
+    "noMatchingTools": "Нет подходящих инструментов.",
+    "closeSearch": "Закрыть поиск",
+    "loadingTool": "Загрузка инструмента...",
+    "footer": "Создано с использованием React 19, TypeScript, Vite, Bun, Tailwind CSS и MUI."
+  },
+  "theme": {
+    "system": "Тема: системная",
+    "light": "Тема: светлая",
+    "dark": "Тема: тёмная"
+  },
+  "language": {
+    "label": "Язык",
+    "system": "Системный"
+  },
+  "toolScaffold": {
+    "generate": "Сгенерировать",
+    "copy": "Копировать",
+    "copied": "Скопировано",
+    "download": "Скачать"
+  },
+  "tools": {
+    "uuid": {"title": "UUID", "description": "Пакетная генерация UUID"},
+    "password": {"title": "Пароль", "description": "Генерация надёжных паролей"},
+    "base64": {"title": "Base64", "description": "Кодирование и декодирование текста"},
+    "json": {"title": "JSON", "description": "Форматирование и минификация JSON"},
+    "timestamp": {"title": "Метка времени", "description": "Конвертация времени Unix"},
+    "qr": {"title": "QR-код", "description": "Создание QR-кодов"},
+    "dns": {"title": "DNS", "description": "Запрос DNS over HTTPS"},
+    "hash": {"title": "Хеш файла", "description": "Вычисление контрольных сумм"},
+    "ua": {"title": "User Agent", "description": "Информация о вашем браузере"},
+    "sound": {"title": "Звук", "description": "Генерация тона"},
+    "oui": {"title": "Поиск OUI", "description": "Поиск производителей по MAC-адресу"}
+  },
+  "password": {
+    "title": "Генератор паролей",
+    "description": "Генерирует пароли на стороне клиента с использованием случайности Web Crypto.",
+    "mode": {
+      "label": "Режим",
+      "password": "Пароль",
+      "passphrase": "Кодовая фраза"
+    },
+    "length": "Длина: {{length}}",
+    "class": {
+      "upper": "Заглавные буквы",
+      "lower": "Строчные буквы",
+      "digits": "Цифры",
+      "symbols": "Символы"
+    },
+    "minCount": "Минимальное количество",
+    "avoidConfusing": "Избегать похожих символов",
+    "avoidRepeat": "Избегать повторяющихся подряд символов",
+    "words": "Слов: {{count}}",
+    "separator": "Разделитель",
+    "capitalizeWords": "Делать слова с заглавной буквы",
+    "appendNumber": "Добавить одну цифру",
+    "batchCount": "Количество в пакете",
+    "invalidClasses": "Выберите хотя бы один используемый класс символов.",
+    "entropy": "Оценочная энтропия: {{entropy}} бит",
+    "policy": {
+      "length": "Длина ≥ {{length}}",
+      "class": "≥{{count}} {{label}}",
+      "noConfusing": "Без похожих символов",
+      "noRepeat": "Без повторов подряд"
+    },
+    "policyExceeds": "Выбранная политика требует не менее {{count}} символов. Увеличьте длину или уменьшите минимумы по классам.",
+    "output": "Результат пароля"
+  },
+  "documentTabs": {
+    "untitled": "Без названия {{n}}",
+    "newTab": "Новая вкладка",
+    "closeAllTabs": "Закрыть все вкладки"
+  },
+  "uuid": {
+    "title": "Генератор UUID",
+    "description": "Генерирует случайные, основанные на времени или детерминированные пространственно-именные UUID.",
+    "version": "Версия",
+    "versionOption": {
+      "v1": "v1 — на основе времени",
+      "v3": "v3 — пространство имён/имя MD5",
+      "v4": "v4 — случайный",
+      "v5": "v5 — пространство имён/имя SHA-1",
+      "v7": "v7 — сортируемый по времени"
+    },
+    "count": "Количество",
+    "name": "Имя",
+    "namespacePreset": "Предустановка пространства имён",
+    "namespaceUuid": "UUID пространства имён",
+    "namespaceInvalid": "Должен быть корректный UUID",
+    "namespaceHelp": "Используйте предустановку или введите собственный UUID пространства имён.",
+    "output": "Вывод",
+    "outputOption": {
+      "lines": "Построчно",
+      "json": "Массив JSON",
+      "csv": "CSV"
+    }
+  },
+  "timestamp": {
+    "title": "Конвертер меток времени",
+    "description": "Конвертирует даты, метки времени Unix и распространённые форматы строк времени.",
+    "dateTime": "Дата и время",
+    "timezoneOffset": "Смещение часового пояса",
+    "precision": "Точность",
+    "precisionOption": {
+      "seconds": "Секунды",
+      "milliseconds": "Миллисекунды"
+    },
+    "timestampFromDate": "Метка времени Unix из даты",
+    "now": "Сейчас",
+    "copyTimestamp": "Копировать метку времени",
+    "timestampInMilliseconds": "Метка времени Unix в миллисекундах",
+    "timestampInSeconds": "Метка времени Unix в секундах",
+    "format": "Формат",
+    "formatOption": {
+      "locale": "Локальный",
+      "iso8601": "ISO-8601",
+      "rfc1123": "RFC-1123"
+    },
+    "invalidTimestamp": "Некорректная метка времени",
+    "copyFormatted": "Копировать отформатированное время"
+  },
+  "dns": {
+    "title": "Поиск DNS",
+    "description": "Выполняет запрос DNS over HTTPS из вашего браузера.",
+    "enterDomain": "Введите хотя бы одно доменное имя",
+    "lookupFailed": "Ошибка DNS-запроса",
+    "domains": "Домены",
+    "domainsHelp": "Используйте пробелы, запятые или переносы строк для пакетных запросов.",
+    "type": "Тип",
+    "class": "Класс",
+    "lookup": "Найти",
+    "dohProvider": "Провайдер DoH",
+    "method": "Метод",
+    "customDohUrl": "Пользовательский URL DoH",
+    "showAdvanced": "Показать дополнительные типы записей",
+    "showRaw": "Показать необработанное DNS-сообщение",
+    "latency": "Задержка резолвера: {{latency}} мс",
+    "column": {
+      "query": "Запрос",
+      "name": "Имя",
+      "type": "Тип",
+      "class": "Класс",
+      "ttl": "TTL",
+      "data": "Данные"
+    },
+    "noAnswers": "Ответы не получены."
+  },
+  "qr": {
+    "title": "Создание QR-кода",
+    "description": "Создавайте загружаемые QR-коды с настройками формата, цвета и коррекции.",
+    "logoReadFailed": "Не удалось прочитать изображение логотипа",
+    "renderFailed": "Не удалось создать QR-код",
+    "presetBuilder": "Конструктор шаблонов",
+    "presetOption": {
+      "free": "Произвольный текст",
+      "url": "URL",
+      "wifi": "Wi-Fi",
+      "email": "Эл. почта",
+      "sms": "SMS",
+      "vcard": "vCard"
+    },
+    "field": {
+      "url": "URL",
+      "ssid": "SSID",
+      "password": "Пароль",
+      "encryption": "Шифрование",
+      "email": "Эл. почта",
+      "subject": "Тема",
+      "body": "Текст",
+      "phone": "Телефон",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "organization": "Организация",
+      "website": "Веб-сайт"
+    },
+    "applyPreset": "Применить шаблон",
+    "text": "Текст",
+    "format": "Формат",
+    "errorCorrection": "Коррекция ошибок",
+    "foreground": "Цвет переднего плана",
+    "background": "Цвет фона",
+    "logo": "Логотип",
+    "replaceLogo": "Заменить логотип",
+    "uploadLogo": "Загрузить логотип",
+    "logoPreviewAlt": "Предпросмотр логотипа",
+    "removeLogo": "Удалить логотип",
+    "logoSize": "Размер логотипа: {{percent}}%",
+    "useHighErrorCorrection": "Используйте уровень коррекции ошибок H для наиболее надёжного сканирования с логотипом.",
+    "margin": "Отступ: {{margin}}",
+    "scale": "Масштаб: {{scale}}",
+    "quality": "Качество: {{quality}}",
+    "qrCodeAlt": "QR-код",
+    "download": "Скачать {{extension}}"
+  },
+  "hash": {
+    "title": "Контрольная сумма файла",
+    "description": "Вычисляет хеши файлов локально в Web Worker.",
+    "algorithm": "Алгоритм",
+    "concurrency": "Параллелизм",
+    "addFiles": "Добавить файлы",
+    "hashAll": "Хешировать всё",
+    "cancelAll": "Отменить всё",
+    "exportJson": "Экспорт в JSON",
+    "exportCsv": "Экспорт в CSV",
+    "dragDrop": "Перетащите файлы сюда",
+    "status": {
+      "pending": "Ожидание",
+      "processing": "Обработка",
+      "done": "Готово",
+      "error": "Ошибка",
+      "cancelled": "Отменено"
+    },
+    "copyHash": "Копировать хеш",
+    "cancel": "Отмена",
+    "remove": "Удалить"
+  },
+  "ua": {
+    "title": "User Agent",
+    "description": "Просмотр и разбор строк user-agent браузера.",
+    "field": {
+      "userAgent": "User agent",
+      "platform": "Платформа",
+      "language": "Язык",
+      "languages": "Языки",
+      "cookiesEnabled": "Файлы cookie включены",
+      "online": "В сети",
+      "hardwareConcurrency": "Аппаратный параллелизм",
+      "deviceMemory": "Память устройства",
+      "maxTouchPoints": "Макс. количество точек касания",
+      "doNotTrack": "Не отслеживать",
+      "clientHints": "User-Agent Client Hints",
+      "browser": "Браузер",
+      "browserType": "Тип браузера",
+      "browserTypeDefault": "браузер",
+      "engine": "Движок",
+      "os": "ОС",
+      "deviceVendor": "Производитель устройства",
+      "deviceModel": "Модель устройства",
+      "deviceType": "Тип устройства",
+      "deviceTypeDefault": "настольный",
+      "cpuArchitecture": "Архитектура процессора"
+    },
+    "unavailable": "Недоступно",
+    "unknown": "Неизвестно",
+    "tab": {
+      "mine": "Мой UA",
+      "parse": "Разбор UA",
+      "examples": "Примеры UA"
+    },
+    "freezeNotice": "Современные браузеры могут намеренно урезать или замораживать сведения UA; Client Hints также могут зависеть от разрешений или браузера.",
+    "copyAsJson": "Копировать как JSON",
+    "parsedLabel": "Разобрано: {{label}}",
+    "parseInputLabel": "Строка User-Agent для разбора",
+    "copyParsedAsJson": "Копировать результат разбора как JSON",
+    "column": {
+      "browser": "Браузер",
+      "os": "ОС",
+      "userAgent": "User agent"
+    },
+    "parse": "Разобрать"
+  },
+  "sound": {
+    "title": "Звуковая волна",
+    "description": "Генерирует простые тона осциллятора.",
+    "waveform": "Форма волны",
+    "waveformOption": {
+      "sine": "Синусоида",
+      "square": "Прямоугольная",
+      "triangle": "Треугольная",
+      "sawtooth": "Пилообразная"
+    },
+    "frequencyHz": "Частота (Гц)",
+    "frequency": "Частота: {{frequency}} Гц",
+    "linearScale": "Линейный ползунок частоты",
+    "volume": "Громкость: {{percent}}%",
+    "pan": "Панорама: {{direction}}",
+    "panCenter": "По центру",
+    "panLeft": "{{percent}}% влево",
+    "panRight": "{{percent}}% вправо",
+    "attack": "Атака: {{value}} с",
+    "decay": "Спад: {{value}} с",
+    "sustain": "Поддержка: {{percent}}%",
+    "release": "Затухание: {{value}} с",
+    "liveAnalyser": "Анализатор звука в реальном времени",
+    "waveformPreview": "Предпросмотр формы волны",
+    "stop": "Стоп",
+    "play": "Воспроизвести"
+  },
+  "json": {
+    "title": "Форматирование JSON",
+    "description": "Форматируйте, запрашивайте и сравнивайте JSON с локальным разбором в нескольких вкладках.",
+    "invalidJson": "Некорректный JSON",
+    "validSummary": "JSON корректен\nКорневой тип: {{rootType}}\nЭлементов верхнего уровня: {{count}}",
+    "queryFailed": "Ошибка запроса JSON",
+    "noDifferences": "Различий нет",
+    "diffFailed": "Ошибка сравнения JSON",
+    "format": "Форматировать",
+    "minify": "Минифицировать",
+    "validate": "Проверить",
+    "query": "Запрос",
+    "diff": "Сравнить",
+    "indent": "Отступ",
+    "indentOption": {
+      "spaces": "{{count}} пробела(ов)",
+      "tab": "Табуляция"
+    },
+    "sortKeys": "Сортировать ключи объекта",
+    "queryMode": "Режим запроса",
+    "queryModeOption": {
+      "pointer": "JSON Pointer",
+      "jsonpath": "JSONPath",
+      "jmespath": "JMESPath"
+    },
+    "queryLabel": "Запрос",
+    "queryExample": "Пример: {{example}}",
+    "input": "Ввод",
+    "output": "Вывод",
+    "downloadOutput": "Скачать результат",
+    "diffTarget": "Целевой JSON для сравнения"
+  },
+  "base64": {
+    "title": "Кодировщик / декодировщик Base64",
+    "description": "Кодирует и декодирует текст UTF-8 в нескольких вкладках.",
+    "malformed": "Некорректный ввод Base64",
+    "fileSummary": "[{{name}}] {{bytes}} байт",
+    "urlSafe": "Base64, безопасный для URL",
+    "plainText": "Обычный текст",
+    "openFile": "Открыть файл",
+    "downloadPlainText": "Скачать обычный текст",
+    "base64": "Base64",
+    "downloadBase64Text": "Скачать текст Base64"
+  },
+  "oui": {
+    "title": "Поиск OUI",
+    "description": "Поиск производителей по MAC-адресу (MA-L / MA-M / MA-S) с помощью быстрого локального индекса.",
+    "loadFailed": "Не удалось загрузить базу данных OUI",
+    "loading": "Загрузка базы данных производителей...",
+    "entryCount": "записей: {{count}}",
+    "updatedAt": "обновлено {{date}}",
+    "refreshNow": "Обновить базу данных сейчас",
+    "staleWarning": "Не удалось обновить — показана последняя известная исправная копия от {{date}}.",
+    "earlierSession": "предыдущего сеанса",
+    "macAddresses": "MAC-адреса",
+    "macAddressesHelp": "По одному в строке. Разделители (: - . пробел) игнорируются; допускаются частичные префиксы (6, 7 или 9 шестнадцатеричных цифр).",
+    "column": {
+      "input": "Ввод",
+      "registry": "Реестр",
+      "vendor": "Производитель"
+    },
+    "noMatch": "Совпадений не найдено",
+    "parseError": {
+      "nonHex": "Содержит нешестнадцатеричные символы",
+      "tooShort": "Слишком коротко — требуется не менее 6 шестнадцатеричных цифр",
+      "tooLong": "Слишком длинно — MAC-адрес содержит не более 12 шестнадцатеричных цифр"
+    }
+  }
+}

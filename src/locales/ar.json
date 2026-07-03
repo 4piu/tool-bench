@@ -1,0 +1,361 @@
+{
+  "app": {
+    "tagline": "مجموعة أدوات ثابتة وصغيرة من الأدوات المدمجة في المتصفح.",
+    "searchLabel": "البحث عن الأدوات",
+    "searchPlaceholder": "ابحث عن أداة",
+    "noMatchingTools": "لا توجد أدوات مطابقة.",
+    "closeSearch": "إغلاق البحث",
+    "loadingTool": "جارٍ تحميل الأداة...",
+    "footer": "تم إنشاؤه باستخدام React 19 وTypeScript وVite وBun وTailwind CSS وMUI."
+  },
+  "theme": {
+    "system": "المظهر: النظام",
+    "light": "المظهر: فاتح",
+    "dark": "المظهر: داكن"
+  },
+  "language": {
+    "label": "اللغة",
+    "system": "النظام"
+  },
+  "toolScaffold": {
+    "generate": "إنشاء",
+    "copy": "نسخ",
+    "copied": "تم النسخ",
+    "download": "تنزيل"
+  },
+  "tools": {
+    "uuid": {"title": "UUID", "description": "إنشاء معرفات UUID دفعة واحدة"},
+    "password": {"title": "كلمة المرور", "description": "إنشاء كلمات مرور قوية"},
+    "base64": {"title": "Base64", "description": "ترميز النص وفك ترميزه"},
+    "json": {"title": "JSON", "description": "تنسيق JSON وضغطه"},
+    "timestamp": {"title": "الطابع الزمني", "description": "تحويل توقيت Unix"},
+    "qr": {"title": "رمز QR", "description": "إنشاء رموز QR"},
+    "dns": {"title": "DNS", "description": "استعلام DNS عبر HTTPS"},
+    "hash": {"title": "بصمة الملف", "description": "حساب مجاميع التحقق"},
+    "ua": {"title": "وكيل المستخدم", "description": "فحص متصفحك"},
+    "sound": {"title": "الصوت", "description": "إنشاء نغمة"},
+    "oui": {"title": "بحث OUI", "description": "البحث عن الشركات المصنّعة لعناوين MAC"}
+  },
+  "password": {
+    "title": "مولّد كلمات المرور",
+    "description": "يُنشئ كلمات مرور من جهة العميل باستخدام عشوائية Web Crypto.",
+    "mode": {
+      "label": "الوضع",
+      "password": "كلمة مرور",
+      "passphrase": "عبارة مرور"
+    },
+    "length": "الطول: {{length}}",
+    "class": {
+      "upper": "أحرف كبيرة",
+      "lower": "أحرف صغيرة",
+      "digits": "أرقام",
+      "symbols": "رموز"
+    },
+    "minCount": "الحد الأدنى للعدد",
+    "avoidConfusing": "تجنّب الأحرف المتشابهة",
+    "avoidRepeat": "تجنّب الأحرف المتكررة المتتالية",
+    "words": "الكلمات: {{count}}",
+    "separator": "الفاصل",
+    "capitalizeWords": "جعل الأحرف الأولى للكلمات كبيرة",
+    "appendNumber": "إضافة رقم واحد",
+    "batchCount": "عدد الدفعة",
+    "invalidClasses": "اختر فئة أحرف واحدة قابلة للاستخدام على الأقل.",
+    "entropy": "الإنتروبيا التقديرية: {{entropy}} بت",
+    "policy": {
+      "length": "الطول ≥ {{length}}",
+      "class": "≥{{count}} {{label}}",
+      "noConfusing": "بدون أحرف متشابهة",
+      "noRepeat": "بدون تكرار متتالٍ"
+    },
+    "policyExceeds": "تتطلب السياسة المحددة {{count}} حرفًا على الأقل. زد الطول أو خفّض الحد الأدنى لكل فئة.",
+    "output": "ناتج كلمة المرور"
+  },
+  "documentTabs": {
+    "untitled": "بدون عنوان {{n}}",
+    "newTab": "علامة تبويب جديدة",
+    "closeAllTabs": "إغلاق جميع علامات التبويب"
+  },
+  "uuid": {
+    "title": "مولّد UUID",
+    "description": "يُنشئ معرفات UUID عشوائية أو زمنية أو محددة بنطاق أسماء ثابت.",
+    "version": "الإصدار",
+    "versionOption": {
+      "v1": "v1 - قائم على الوقت",
+      "v3": "v3 - نطاق الأسماء/الاسم MD5",
+      "v4": "v4 - عشوائي",
+      "v5": "v5 - نطاق الأسماء/الاسم SHA-1",
+      "v7": "v7 - قابل للترتيب بالطابع الزمني"
+    },
+    "count": "العدد",
+    "name": "الاسم",
+    "namespacePreset": "إعداد نطاق الأسماء المسبق",
+    "namespaceUuid": "معرّف UUID لنطاق الأسماء",
+    "namespaceInvalid": "يجب أن يكون UUID صالحًا",
+    "namespaceHelp": "استخدم إعدادًا مسبقًا أو أدخل معرّف UUID مخصصًا لنطاق الأسماء.",
+    "output": "الناتج",
+    "outputOption": {
+      "lines": "أسطر",
+      "json": "مصفوفة JSON",
+      "csv": "CSV"
+    }
+  },
+  "timestamp": {
+    "title": "محول الطوابع الزمنية",
+    "description": "يحول التواريخ وطوابع Unix الزمنية وصيغ سلاسل الوقت الشائعة.",
+    "dateTime": "التاريخ والوقت",
+    "timezoneOffset": "إزاحة المنطقة الزمنية",
+    "precision": "الدقة",
+    "precisionOption": {
+      "seconds": "ثوانٍ",
+      "milliseconds": "ميلي ثانية"
+    },
+    "timestampFromDate": "الطابع الزمني Unix من التاريخ",
+    "now": "الآن",
+    "copyTimestamp": "نسخ الطابع الزمني",
+    "timestampInMilliseconds": "الطابع الزمني Unix بالميلي ثانية",
+    "timestampInSeconds": "الطابع الزمني Unix بالثواني",
+    "format": "الصيغة",
+    "formatOption": {
+      "locale": "محلي",
+      "iso8601": "ISO-8601",
+      "rfc1123": "RFC-1123"
+    },
+    "invalidTimestamp": "طابع زمني غير صالح",
+    "copyFormatted": "نسخ الوقت المنسق"
+  },
+  "dns": {
+    "title": "بحث DNS",
+    "description": "استعلم عن DNS عبر HTTPS من متصفحك.",
+    "enterDomain": "أدخل اسم نطاق واحدًا على الأقل",
+    "lookupFailed": "فشل استعلام DNS",
+    "domains": "النطاقات",
+    "domainsHelp": "استخدم المسافات أو الفواصل أو الأسطر الجديدة للاستعلامات الجماعية.",
+    "type": "النوع",
+    "class": "الفئة",
+    "lookup": "بحث",
+    "dohProvider": "مزوّد DoH",
+    "method": "الطريقة",
+    "customDohUrl": "رابط DoH مخصص",
+    "showAdvanced": "إظهار أنواع السجلات المتقدمة",
+    "showRaw": "إظهار رسالة DNS الخام",
+    "latency": "زمن استجابة المحلل: {{latency}} مللي ثانية",
+    "column": {
+      "query": "الاستعلام",
+      "name": "الاسم",
+      "type": "النوع",
+      "class": "الفئة",
+      "ttl": "TTL",
+      "data": "البيانات"
+    },
+    "noAnswers": "لم يتم إرجاع أي إجابات."
+  },
+  "qr": {
+    "title": "منشئ رمز QR",
+    "description": "أنشئ رموز QR قابلة للتنزيل مع عناصر تحكم في الصيغة واللون والتصحيح.",
+    "logoReadFailed": "فشل قراءة صورة الشعار",
+    "renderFailed": "فشل إنشاء رمز QR",
+    "presetBuilder": "منشئ الإعدادات المسبقة",
+    "presetOption": {
+      "free": "نص حر",
+      "url": "رابط URL",
+      "wifi": "واي فاي",
+      "email": "البريد الإلكتروني",
+      "sms": "رسالة نصية",
+      "vcard": "بطاقة vCard"
+    },
+    "field": {
+      "url": "الرابط",
+      "ssid": "SSID",
+      "password": "كلمة المرور",
+      "encryption": "التشفير",
+      "email": "البريد الإلكتروني",
+      "subject": "الموضوع",
+      "body": "النص",
+      "phone": "الهاتف",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "organization": "المؤسسة",
+      "website": "الموقع الإلكتروني"
+    },
+    "applyPreset": "تطبيق الإعداد المسبق",
+    "text": "النص",
+    "format": "الصيغة",
+    "errorCorrection": "تصحيح الأخطاء",
+    "foreground": "لون المقدمة",
+    "background": "لون الخلفية",
+    "logo": "الشعار",
+    "replaceLogo": "استبدال الشعار",
+    "uploadLogo": "رفع شعار",
+    "logoPreviewAlt": "معاينة الشعار",
+    "removeLogo": "إزالة الشعار",
+    "logoSize": "حجم الشعار: {{percent}}٪",
+    "useHighErrorCorrection": "استخدم مستوى تصحيح الأخطاء H للحصول على أفضل موثوقية للمسح مع وجود شعار.",
+    "margin": "الهامش: {{margin}}",
+    "scale": "المقياس: {{scale}}",
+    "quality": "الجودة: {{quality}}",
+    "qrCodeAlt": "رمز QR",
+    "download": "تنزيل {{extension}}"
+  },
+  "hash": {
+    "title": "بصمة الملف",
+    "description": "يحسب بصمات الملفات محليًا داخل Web Worker.",
+    "algorithm": "الخوارزمية",
+    "concurrency": "التزامن",
+    "addFiles": "إضافة ملفات",
+    "hashAll": "حساب بصمة الكل",
+    "cancelAll": "إلغاء الكل",
+    "exportJson": "تصدير JSON",
+    "exportCsv": "تصدير CSV",
+    "dragDrop": "اسحب الملفات وأفلتها هنا",
+    "status": {
+      "pending": "قيد الانتظار",
+      "processing": "قيد المعالجة",
+      "done": "تم",
+      "error": "خطأ",
+      "cancelled": "أُلغي"
+    },
+    "copyHash": "نسخ البصمة",
+    "cancel": "إلغاء",
+    "remove": "إزالة"
+  },
+  "ua": {
+    "title": "وكيل المستخدم",
+    "description": "افحص وحلّل سلاسل وكيل المستخدم للمتصفح.",
+    "field": {
+      "userAgent": "وكيل المستخدم",
+      "platform": "المنصة",
+      "language": "اللغة",
+      "languages": "اللغات",
+      "cookiesEnabled": "ملفات تعريف الارتباط مفعّلة",
+      "online": "متصل",
+      "hardwareConcurrency": "تزامن العتاد",
+      "deviceMemory": "ذاكرة الجهاز",
+      "maxTouchPoints": "الحد الأقصى لنقاط اللمس",
+      "doNotTrack": "عدم التتبع",
+      "clientHints": "تلميحات عميل وكيل المستخدم",
+      "browser": "المتصفح",
+      "browserType": "نوع المتصفح",
+      "browserTypeDefault": "متصفح",
+      "engine": "المحرك",
+      "os": "نظام التشغيل",
+      "deviceVendor": "الشركة المصنّعة للجهاز",
+      "deviceModel": "طراز الجهاز",
+      "deviceType": "نوع الجهاز",
+      "deviceTypeDefault": "سطح المكتب",
+      "cpuArchitecture": "معمارية المعالج"
+    },
+    "unavailable": "غير متاح",
+    "unknown": "غير معروف",
+    "tab": {
+      "mine": "وكيل المستخدم الخاص بي",
+      "parse": "تحليل وكيل مستخدم",
+      "examples": "أمثلة على وكيل المستخدم"
+    },
+    "freezeNotice": "قد تعمد المتصفحات الحديثة إلى تقليل أو تجميد تفاصيل وكيل المستخدم؛ كما قد تعتمد تلميحات العميل على الأذونات أو المتصفح.",
+    "copyAsJson": "نسخ كـ JSON",
+    "parsedLabel": "تم تحليله: {{label}}",
+    "parseInputLabel": "سلسلة وكيل المستخدم المراد تحليلها",
+    "copyParsedAsJson": "نسخ نتيجة التحليل كـ JSON",
+    "column": {
+      "browser": "المتصفح",
+      "os": "نظام التشغيل",
+      "userAgent": "وكيل المستخدم"
+    },
+    "parse": "تحليل"
+  },
+  "sound": {
+    "title": "الموجة الصوتية",
+    "description": "يُنشئ نغمات مذبذب بسيطة.",
+    "waveform": "شكل الموجة",
+    "waveformOption": {
+      "sine": "جيبية",
+      "square": "مربعة",
+      "triangle": "مثلثية",
+      "sawtooth": "منشارية"
+    },
+    "frequencyHz": "التردد (هرتز)",
+    "frequency": "التردد: {{frequency}} هرتز",
+    "linearScale": "شريط تمرير التردد الخطي",
+    "volume": "مستوى الصوت: {{percent}}٪",
+    "pan": "التوازن: {{direction}}",
+    "panCenter": "الوسط",
+    "panLeft": "{{percent}}٪ يسار",
+    "panRight": "{{percent}}٪ يمين",
+    "attack": "الهجوم: {{value}} ث",
+    "decay": "الانحلال: {{value}} ث",
+    "sustain": "الاستمرار: {{percent}}٪",
+    "release": "التحرير: {{value}} ث",
+    "liveAnalyser": "محلل صوت مباشر",
+    "waveformPreview": "معاينة شكل الموجة",
+    "stop": "إيقاف",
+    "play": "تشغيل"
+  },
+  "json": {
+    "title": "منسّق JSON",
+    "description": "نسّق واستعلم وقارن JSON بتحليل محلي عبر عدة علامات تبويب.",
+    "invalidJson": "JSON غير صالح",
+    "validSummary": "JSON صالح\nالنوع الجذري: {{rootType}}\nعدد العناصر العلوية: {{count}}",
+    "queryFailed": "فشل استعلام JSON",
+    "noDifferences": "لا توجد اختلافات",
+    "diffFailed": "فشلت مقارنة JSON",
+    "format": "تنسيق",
+    "minify": "ضغط",
+    "validate": "تحقق",
+    "query": "استعلام",
+    "diff": "مقارنة",
+    "indent": "المسافة البادئة",
+    "indentOption": {
+      "spaces": "{{count}} مسافات",
+      "tab": "علامة جدولة"
+    },
+    "sortKeys": "فرز مفاتيح الكائن",
+    "queryMode": "وضع الاستعلام",
+    "queryModeOption": {
+      "pointer": "JSON Pointer",
+      "jsonpath": "JSONPath",
+      "jmespath": "JMESPath"
+    },
+    "queryLabel": "الاستعلام",
+    "queryExample": "مثال: {{example}}",
+    "input": "الإدخال",
+    "output": "الناتج",
+    "downloadOutput": "تنزيل الناتج",
+    "diffTarget": "JSON الهدف للمقارنة"
+  },
+  "base64": {
+    "title": "ترميز / فك ترميز Base64",
+    "description": "يرمّز ويفك ترميز نص UTF-8 عبر عدة علامات تبويب.",
+    "malformed": "إدخال Base64 غير صحيح",
+    "fileSummary": "[{{name}}] {{bytes}} بايت",
+    "urlSafe": "Base64 آمن للرابط",
+    "plainText": "نص عادي",
+    "openFile": "فتح ملف",
+    "downloadPlainText": "تنزيل النص العادي",
+    "base64": "Base64",
+    "downloadBase64Text": "تنزيل نص Base64"
+  },
+  "oui": {
+    "title": "بحث OUI",
+    "description": "ابحث عن الشركات المصنّعة لعناوين MAC (MA-L / MA-M / MA-S) باستخدام فهرس محلي سريع.",
+    "loadFailed": "فشل تحميل قاعدة بيانات OUI",
+    "loading": "جارٍ تحميل قاعدة بيانات الشركات المصنّعة...",
+    "entryCount": "{{count}} إدخال",
+    "updatedAt": "تم التحديث {{date}}",
+    "refreshNow": "تحديث قاعدة البيانات الآن",
+    "staleWarning": "فشل التحديث — يتم عرض آخر نسخة سليمة معروفة من {{date}}.",
+    "earlierSession": "جلسة سابقة",
+    "macAddresses": "عناوين MAC",
+    "macAddressesHelp": "عنوان واحد في كل سطر. يتم تجاهل الفواصل (: - . مسافة)؛ وتُقبل البادئات الجزئية (6 أو 7 أو 9 أرقام سداسية عشرية).",
+    "column": {
+      "input": "الإدخال",
+      "registry": "السجل",
+      "vendor": "الشركة المصنّعة"
+    },
+    "noMatch": "لم يتم العثور على تطابق",
+    "parseError": {
+      "nonHex": "يحتوي على أحرف غير سداسية عشرية",
+      "tooShort": "قصير جدًا — يلزم 6 أرقام سداسية عشرية على الأقل",
+      "tooLong": "طويل جدًا — يتكون عنوان MAC من 12 رقمًا سداسيًا عشريًا كحد أقصى"
+    }
+  }
+}

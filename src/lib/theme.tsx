@@ -1,11 +1,18 @@
 import React from "react";
+import createCache from "@emotion/cache";
+import {CacheProvider} from "@emotion/react";
 import {CssBaseline} from "@mui/material";
 import {ThemeProvider, createTheme} from "@mui/material/styles";
+import rtlPlugin from "stylis-plugin-rtl";
+import {useLanguageMode} from "./language";
 import {useLocalStorageState} from "../tools/shared/hooks";
 
 export type ThemeMode = "system" | "light" | "dark";
 
 const getSystemPrefersDark = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+const ltrCache = createCache({key: "mui", prepend: true});
+const rtlCache = createCache({key: "muirtl", stylisPlugins: [rtlPlugin], prepend: true});
 
 type ThemeModeContextValue = {
     mode: ThemeMode;
@@ -22,6 +29,7 @@ export const useThemeMode = () => {
 };
 
 export const ThemeModeProvider = ({children}: { children: React.ReactNode }) => {
+    const {direction} = useLanguageMode();
     const [mode, setMode] = useLocalStorageState<ThemeMode>("toolbench-theme-mode", "system");
     const [systemPrefersDark, setSystemPrefersDark] = React.useState(() => getSystemPrefersDark());
 
@@ -33,15 +41,17 @@ export const ThemeModeProvider = ({children}: { children: React.ReactNode }) => 
     }, []);
 
     const resolvedMode: "light" | "dark" = mode === "system" ? (systemPrefersDark ? "dark" : "light") : mode;
-    const theme = React.useMemo(() => createTheme({palette: {mode: resolvedMode}}), [resolvedMode]);
+    const theme = React.useMemo(() => createTheme({palette: {mode: resolvedMode}, direction}), [resolvedMode, direction]);
     const value = React.useMemo(() => ({mode, resolvedMode, setMode}), [mode, resolvedMode, setMode]);
 
     return (
         <ThemeModeContext.Provider value={value}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline/>
-                {children}
-            </ThemeProvider>
+            <CacheProvider value={direction === "rtl" ? rtlCache : ltrCache}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline/>
+                    {children}
+                </ThemeProvider>
+            </CacheProvider>
         </ThemeModeContext.Provider>
     );
 };

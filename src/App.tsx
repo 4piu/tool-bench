@@ -1,5 +1,6 @@
 import React from "react";
 import BrightnessAutoIcon from "@mui/icons-material/BrightnessAuto";
+import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HomeIcon from "@mui/icons-material/Home";
@@ -16,6 +17,10 @@ import {
     Container,
     Grid,
     IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
     Paper,
     Stack,
     TextField,
@@ -23,6 +28,7 @@ import {
     Typography
 } from "@mui/material";
 import {useTranslation} from "react-i18next";
+import {supportedLanguages} from "./lib/i18n";
 import {findTool, tools} from "./tools/registry";
 import type {ToolId} from "./tools/types";
 import {useLanguageMode, type LanguageMode} from "./lib/language";
@@ -83,26 +89,40 @@ const ThemeToggle = () => {
     );
 };
 
-const NEXT_LANGUAGE_MODE: Record<LanguageMode, LanguageMode> = {
-    system: "en",
-    en: "zh",
-    zh: "system"
-};
-
 const LanguageToggle = () => {
     const {t} = useTranslation();
     const {mode, setMode} = useLanguageMode();
-    const label = t(`language.${mode}`);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const label = t("language.label");
+
+    const choose = (next: LanguageMode) => {
+        setMode(next);
+        setAnchorEl(null);
+    };
 
     return (
-        <IconButton
-            color="inherit"
-            aria-label={`${label}. Click to change.`}
-            title={label}
-            onClick={() => setMode(NEXT_LANGUAGE_MODE[mode])}
-        >
-            <TranslateIcon/>
-        </IconButton>
+        <>
+            <IconButton
+                color="inherit"
+                aria-label={label}
+                title={label}
+                onClick={event => setAnchorEl(event.currentTarget)}
+            >
+                <TranslateIcon/>
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+                <MenuItem selected={mode === "system"} onClick={() => choose("system")}>
+                    <ListItemIcon>{mode === "system" && <CheckIcon fontSize="small"/>}</ListItemIcon>
+                    <ListItemText>{t("language.system")}</ListItemText>
+                </MenuItem>
+                {supportedLanguages.map(language => (
+                    <MenuItem key={language.code} selected={mode === language.code} onClick={() => choose(language.code)}>
+                        <ListItemIcon>{mode === language.code && <CheckIcon fontSize="small"/>}</ListItemIcon>
+                        <ListItemText>{language.label}</ListItemText>
+                    </MenuItem>
+                ))}
+            </Menu>
+        </>
     );
 };
 

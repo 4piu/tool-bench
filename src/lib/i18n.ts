@@ -4,7 +4,11 @@ import {initReactI18next} from "react-i18next";
 
 export const supportedLanguages = [
     {code: "en", label: "English"},
-    {code: "zh", label: "中文"}
+    {code: "zh", label: "中文"},
+    {code: "ar", label: "العربية"},
+    {code: "es", label: "Español"},
+    {code: "fr", label: "Français"},
+    {code: "ru", label: "Русский"}
 ] as const;
 
 export type LanguageCode = typeof supportedLanguages[number]["code"];
