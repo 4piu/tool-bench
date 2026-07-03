@@ -17,6 +17,7 @@ import {
     Typography
 } from "@mui/material";
 import type {SelectChangeEvent} from "@mui/material/Select";
+import {useTranslation} from "react-i18next";
 import {copyText, downloadText} from "../shared/browser";
 import {useLocalStorageState} from "../shared/hooks";
 import {ActionRow, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -41,6 +42,7 @@ const passphraseWords = [
 ];
 
 type GenerationMode = "password" | "passphrase";
+type CharClassKey = "upper" | "lower" | "digits" | "symbols";
 
 const secureRandomIndex = (length: number) => {
     const values = new Uint32Array(1);
@@ -83,6 +85,7 @@ const dedupeConsecutive = (chars: string[], source: string) => {
 };
 
 const PasswordTool = () => {
+    const {t} = useTranslation();
     const [mode, setMode] = useLocalStorageState<GenerationMode>("password.mode", "password");
     const [length, setLength] = useLocalStorageState("password.length", 20);
     const [count, setCount] = useLocalStorageState("password.count", 1);
@@ -102,11 +105,11 @@ const PasswordTool = () => {
     const [appendNumber, setAppendNumber] = useLocalStorageState("password.appendNumber", true);
     const [passwords, setPasswords] = React.useState<string[]>([]);
     const usableChars = (chars: string) => chars.split("").filter(char => !avoidConfusing || !confusingCharacters.has(char)).join("");
-    const classConfig = [
-        {key: "upper", label: "Uppercase", enabled: upper, chars: charGroups.upper, min: minUpper, setMin: setMinUpper},
-        {key: "lower", label: "Lowercase", enabled: lower, chars: charGroups.lower, min: minLower, setMin: setMinLower},
-        {key: "digits", label: "Digits", enabled: digits, chars: charGroups.digits, min: minDigits, setMin: setMinDigits},
-        {key: "symbols", label: "Symbols", enabled: symbols, chars: charGroups.symbols, min: minSymbols, setMin: setMinSymbols}
+    const classConfig: Array<{key: CharClassKey; enabled: boolean; chars: string; min: number; setMin: (value: number) => void}> = [
+        {key: "upper", enabled: upper, chars: charGroups.upper, min: minUpper, setMin: setMinUpper},
+        {key: "lower", enabled: lower, chars: charGroups.lower, min: minLower, setMin: setMinLower},
+        {key: "digits", enabled: digits, chars: charGroups.digits, min: minDigits, setMin: setMinDigits},
+        {key: "symbols", enabled: symbols, chars: charGroups.symbols, min: minSymbols, setMin: setMinSymbols}
     ];
     const selectedClasses = classConfig.filter(cls => cls.enabled);
     const source = selectedClasses.map(cls => usableChars(cls.chars)).join("");
@@ -147,19 +150,19 @@ const PasswordTool = () => {
 
     return (
         <ToolSurface>
-            <ToolHeader title="Password Generator" description="Generate client-side passwords with Web Crypto randomness."/>
+            <ToolHeader title={t("password.title")} description={t("password.description")}/>
             <Stack spacing={3}>
                 <FormControl>
-                    <InputLabel>Mode</InputLabel>
-                    <Select value={mode} label="Mode" onChange={(event: SelectChangeEvent) => setMode(event.target.value as GenerationMode)}>
-                        <MenuItem value="password">Password</MenuItem>
-                        <MenuItem value="passphrase">Passphrase</MenuItem>
+                    <InputLabel>{t("password.mode.label")}</InputLabel>
+                    <Select value={mode} label={t("password.mode.label")} onChange={(event: SelectChangeEvent) => setMode(event.target.value as GenerationMode)}>
+                        <MenuItem value="password">{t("password.mode.password")}</MenuItem>
+                        <MenuItem value="passphrase">{t("password.mode.passphrase")}</MenuItem>
                     </Select>
                 </FormControl>
                 {mode === "password" ? (
                     <>
                         <Box>
-                            <Typography gutterBottom>Length: {length}</Typography>
+                            <Typography gutterBottom>{t("password.length", {length})}</Typography>
                             <Slider value={length} min={6} max={128} onChange={(_, value) => setLength(value as number)}/>
                         </Box>
                         <FormGroup>
@@ -173,11 +176,11 @@ const PasswordTool = () => {
                                             if (cls.key === "digits") setDigits(event.target.checked);
                                             if (cls.key === "symbols") setSymbols(event.target.checked);
                                         }}/>}
-                                        label={cls.label}
+                                        label={t(`password.class.${cls.key}`)}
                                     />
                                     {cls.enabled && (
                                         <TextField
-                                            label="Min count"
+                                            label={t("password.minCount")}
                                             type="number"
                                             size="small"
                                             value={cls.min}
@@ -188,53 +191,53 @@ const PasswordTool = () => {
                                     )}
                                 </Stack>
                             ))}
-                            <FormControlLabel control={<Switch checked={avoidConfusing} onChange={event => setAvoidConfusing(event.target.checked)}/>} label="Avoid confusing characters"/>
-                            <FormControlLabel control={<Switch checked={noRepeatConsecutive} onChange={event => setNoRepeatConsecutive(event.target.checked)}/>} label="Avoid repeated consecutive characters"/>
+                            <FormControlLabel control={<Switch checked={avoidConfusing} onChange={event => setAvoidConfusing(event.target.checked)}/>} label={t("password.avoidConfusing")}/>
+                            <FormControlLabel control={<Switch checked={noRepeatConsecutive} onChange={event => setNoRepeatConsecutive(event.target.checked)}/>} label={t("password.avoidRepeat")}/>
                         </FormGroup>
                         {!invalid && (
                             <Stack direction="row" spacing={1} sx={{flexWrap: "wrap"}} useFlexGap>
-                                <Chip size="small" label={`Length ≥ ${length}`}/>
+                                <Chip size="small" label={t("password.policy.length", {length})}/>
                                 {selectedClasses.map(cls => (
-                                    <Chip key={cls.key} size="small" label={`≥${Math.max(1, cls.min)} ${cls.label.toLowerCase()}`}/>
+                                    <Chip key={cls.key} size="small" label={t("password.policy.class", {count: Math.max(1, cls.min), label: t(`password.class.${cls.key}`)})}/>
                                 ))}
-                                {avoidConfusing && <Chip size="small" label="No confusing characters"/>}
-                                {noRepeatConsecutive && <Chip size="small" label="No consecutive repeats"/>}
+                                {avoidConfusing && <Chip size="small" label={t("password.policy.noConfusing")}/>}
+                                {noRepeatConsecutive && <Chip size="small" label={t("password.policy.noRepeat")}/>}
                             </Stack>
                         )}
                         {policyExceedsLength && (
                             <Alert severity="error">
-                                Selected policy requires at least {requiredTotal} characters. Increase length or lower per-class minimums.
+                                {t("password.policyExceeds", {count: requiredTotal})}
                             </Alert>
                         )}
                     </>
                 ) : (
                     <>
                         <Box>
-                            <Typography gutterBottom>Words: {wordCount}</Typography>
+                            <Typography gutterBottom>{t("password.words", {count: wordCount})}</Typography>
                             <Slider value={wordCount} min={3} max={10} step={1} onChange={(_, value) => setWordCount(value as number)}/>
                         </Box>
-                        <TextField label="Separator" value={separator} onChange={event => setSeparator(event.target.value)}/>
+                        <TextField label={t("password.separator")} value={separator} onChange={event => setSeparator(event.target.value)}/>
                         <FormGroup>
-                            <FormControlLabel control={<Switch checked={capitalizeWords} onChange={event => setCapitalizeWords(event.target.checked)}/>} label="Capitalize words"/>
-                            <FormControlLabel control={<Switch checked={appendNumber} onChange={event => setAppendNumber(event.target.checked)}/>} label="Append one digit"/>
+                            <FormControlLabel control={<Switch checked={capitalizeWords} onChange={event => setCapitalizeWords(event.target.checked)}/>} label={t("password.capitalizeWords")}/>
+                            <FormControlLabel control={<Switch checked={appendNumber} onChange={event => setAppendNumber(event.target.checked)}/>} label={t("password.appendNumber")}/>
                         </FormGroup>
                     </>
                 )}
                 <TextField
-                    label="Batch count"
+                    label={t("password.batchCount")}
                     type="number"
                     value={count}
                     slotProps={{htmlInput: {min: 1, max: 100}}}
                     onChange={event => setCount(Math.max(1, Math.min(100, Number(event.target.value) || 1)))}
                 />
-                {mode === "password" && invalid && <Alert severity="error">Select at least one usable character class.</Alert>}
-                {(mode === "passphrase" || !invalid) && <Alert severity={entropy >= 80 ? "success" : entropy >= 60 ? "info" : "warning"}>Estimated entropy: {entropy} bits</Alert>}
+                {mode === "password" && invalid && <Alert severity="error">{t("password.invalidClasses")}</Alert>}
+                {(mode === "passphrase" || !invalid) && <Alert severity={entropy >= 80 ? "success" : entropy >= 60 ? "info" : "warning"}>{t("password.entropy", {entropy})}</Alert>}
                 <ActionRow
                     onRefresh={generate}
                     onCopy={() => copyText(output)}
                     onDownload={() => downloadText("passwords.txt", output)}
                 />
-                <TextField label="Password output" value={output} multiline minRows={Math.min(10, Math.max(3, count))} fullWidth slotProps={{htmlInput: {readOnly: true}}}/>
+                <TextField label={t("password.output")} value={output} multiline minRows={Math.min(10, Math.max(3, count))} fullWidth slotProps={{htmlInput: {readOnly: true}}}/>
             </Stack>
         </ToolSurface>
     );

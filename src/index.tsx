@@ -1,8 +1,10 @@
 import "./global.css";
+import "./lib/i18n";
 import React from "react";
 import {createRoot} from "react-dom/client";
 import {StyledEngineProvider} from "@mui/material/styles";
 import App from "./App";
+import {LanguageProvider} from "./lib/language";
 import {ThemeModeProvider} from "./lib/theme";
 
 const appElement = document.getElementById("app");
@@ -13,8 +15,12 @@ if (!appElement) {
 
 createRoot(appElement).render(
     <StyledEngineProvider injectFirst>
-        <ThemeModeProvider>
-            <App/>
-        </ThemeModeProvider>
+        <LanguageProvider>
+            <ThemeModeProvider>
+                <React.Suspense fallback={null}>
+                    <App/>
+                </React.Suspense>
+            </ThemeModeProvider>
+        </LanguageProvider>
     </StyledEngineProvider>
 );

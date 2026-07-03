@@ -19,8 +19,8 @@ export type ToolModule = {
 
 export type ToolDefinition = {
     id: ToolId;
-    title: string;
-    description: string;
+    titleKey: string;
+    descriptionKey: string;
     icon: React.ReactNode;
     loader: () => Promise<ToolModule>;
 };

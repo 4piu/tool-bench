@@ -1,0 +1,73 @@
+{
+  "app": {
+    "tagline": "A tiny static workbench of browser-native utilities.",
+    "searchLabel": "Search tools",
+    "searchPlaceholder": "Find a tool",
+    "noMatchingTools": "No matching tools.",
+    "loadingTool": "Loading tool...",
+    "footer": "Built with React 19, TypeScript, Vite, Bun, Tailwind CSS, and MUI."
+  },
+  "theme": {
+    "system": "Theme: system",
+    "light": "Theme: light",
+    "dark": "Theme: dark"
+  },
+  "language": {
+    "system": "Language: System",
+    "en": "Language: English",
+    "zh": "Language: 中文"
+  },
+  "toolScaffold": {
+    "generate": "Generate",
+    "copy": "Copy",
+    "copied": "Copied",
+    "download": "Download"
+  },
+  "tools": {
+    "uuid": {"title": "UUID", "description": "Batch-generate UUIDs"},
+    "password": {"title": "Password", "description": "Generate strong passwords"},
+    "base64": {"title": "Base64", "description": "Encode and decode text"},
+    "json": {"title": "JSON", "description": "Format and minify JSON"},
+    "timestamp": {"title": "Timestamp", "description": "Convert Unix time"},
+    "qr": {"title": "QR Code", "description": "Create QR codes"},
+    "dns": {"title": "DNS", "description": "DNS over HTTPS lookup"},
+    "hash": {"title": "File Hash", "description": "Calculate checksums"},
+    "ua": {"title": "User Agent", "description": "Inspect your browser"},
+    "sound": {"title": "Sound", "description": "Generate a tone"},
+    "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
+  },
+  "password": {
+    "title": "Password Generator",
+    "description": "Generate client-side passwords with Web Crypto randomness.",
+    "mode": {
+      "label": "Mode",
+      "password": "Password",
+      "passphrase": "Passphrase"
+    },
+    "length": "Length: {{length}}",
+    "class": {
+      "upper": "Uppercase",
+      "lower": "Lowercase",
+      "digits": "Digits",
+      "symbols": "Symbols"
+    },
+    "minCount": "Min count",
+    "avoidConfusing": "Avoid confusing characters",
+    "avoidRepeat": "Avoid repeated consecutive characters",
+    "words": "Words: {{count}}",
+    "separator": "Separator",
+    "capitalizeWords": "Capitalize words",
+    "appendNumber": "Append one digit",
+    "batchCount": "Batch count",
+    "invalidClasses": "Select at least one usable character class.",
+    "entropy": "Estimated entropy: {{entropy}} bits",
+    "policy": {
+      "length": "Length ≥ {{length}}",
+      "class": "≥{{count}} {{label}}",
+      "noConfusing": "No confusing characters",
+      "noRepeat": "No consecutive repeats"
+    },
+    "policyExceeds": "Selected policy requires at least {{count}} characters. Increase length or lower per-class minimums.",
+    "output": "Password output"
+  }
+}

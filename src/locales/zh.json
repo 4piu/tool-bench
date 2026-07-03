@@ -1,0 +1,73 @@
+{
+  "app": {
+    "tagline": "一个小巧的纯浏览器端工具集合。",
+    "searchLabel": "搜索工具",
+    "searchPlaceholder": "查找工具",
+    "noMatchingTools": "没有匹配的工具。",
+    "loadingTool": "正在加载工具…",
+    "footer": "基于 React 19、TypeScript、Vite、Bun、Tailwind CSS 和 MUI 构建。"
+  },
+  "theme": {
+    "system": "主题：跟随系统",
+    "light": "主题：浅色",
+    "dark": "主题：深色"
+  },
+  "language": {
+    "system": "语言：跟随系统",
+    "en": "语言：English",
+    "zh": "语言：中文"
+  },
+  "toolScaffold": {
+    "generate": "生成",
+    "copy": "复制",
+    "copied": "已复制",
+    "download": "下载"
+  },
+  "tools": {
+    "uuid": {"title": "UUID", "description": "批量生成 UUID"},
+    "password": {"title": "密码", "description": "生成高强度密码"},
+    "base64": {"title": "Base64", "description": "编码与解码文本"},
+    "json": {"title": "JSON", "description": "格式化与压缩 JSON"},
+    "timestamp": {"title": "时间戳", "description": "转换 Unix 时间"},
+    "qr": {"title": "二维码", "description": "生成二维码"},
+    "dns": {"title": "DNS", "description": "DNS over HTTPS 查询"},
+    "hash": {"title": "文件哈希", "description": "计算文件校验和"},
+    "ua": {"title": "User Agent", "description": "查看你的浏览器信息"},
+    "sound": {"title": "音频", "description": "生成音调"},
+    "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"}
+  },
+  "password": {
+    "title": "密码生成器",
+    "description": "使用 Web Crypto 在本地生成随机密码。",
+    "mode": {
+      "label": "模式",
+      "password": "密码",
+      "passphrase": "口令短语"
+    },
+    "length": "长度：{{length}}",
+    "class": {
+      "upper": "大写字母",
+      "lower": "小写字母",
+      "digits": "数字",
+      "symbols": "符号"
+    },
+    "minCount": "最少数量",
+    "avoidConfusing": "避免容易混淆的字符",
+    "avoidRepeat": "避免连续重复字符",
+    "words": "单词数：{{count}}",
+    "separator": "分隔符",
+    "capitalizeWords": "单词首字母大写",
+    "appendNumber": "末尾附加一位数字",
+    "batchCount": "生成数量",
+    "invalidClasses": "请至少选择一种可用的字符类型。",
+    "entropy": "预估熵值：{{entropy}} 比特",
+    "policy": {
+      "length": "长度 ≥ {{length}}",
+      "class": "≥{{count}} 个{{label}}",
+      "noConfusing": "无易混淆字符",
+      "noRepeat": "无连续重复字符"
+    },
+    "policyExceeds": "所选策略至少需要 {{count}} 个字符，请增加长度或降低各类型的最少数量。",
+    "output": "密码输出"
+  }
+}

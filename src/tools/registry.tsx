@@ -14,78 +14,78 @@ import type {ToolDefinition, ToolId} from "./types";
 export const tools: ToolDefinition[] = [
     {
         id: "uuid",
-        title: "UUID",
-        description: "Batch-generate UUIDs",
+        titleKey: "tools.uuid.title",
+        descriptionKey: "tools.uuid.description",
         icon: <TagIcon/>,
         loader: () => import("./uuid/UuidTool")
     },
     {
         id: "password",
-        title: "Password",
-        description: "Generate strong passwords",
+        titleKey: "tools.password.title",
+        descriptionKey: "tools.password.description",
         icon: <KeyIcon/>,
         loader: () => import("./password/PasswordTool")
     },
     {
         id: "base64",
-        title: "Base64",
-        description: "Encode and decode text",
+        titleKey: "tools.base64.title",
+        descriptionKey: "tools.base64.description",
         icon: <TextFieldsIcon/>,
         loader: () => import("./base64/Base64Tool")
     },
     {
         id: "json",
-        title: "JSON",
-        description: "Format and minify JSON",
+        titleKey: "tools.json.title",
+        descriptionKey: "tools.json.description",
         icon: <TerminalIcon/>,
         loader: () => import("./json/JsonTool")
     },
     {
         id: "timestamp",
-        title: "Timestamp",
-        description: "Convert Unix time",
+        titleKey: "tools.timestamp.title",
+        descriptionKey: "tools.timestamp.description",
         icon: <TimerIcon/>,
         loader: () => import("./timestamp/TimestampTool")
     },
     {
         id: "qr",
-        title: "QR Code",
-        description: "Create QR codes",
+        titleKey: "tools.qr.title",
+        descriptionKey: "tools.qr.description",
         icon: <QrCodeIcon/>,
         loader: () => import("./qr/QrTool")
     },
     {
         id: "dns",
-        title: "DNS",
-        description: "DNS over HTTPS lookup",
+        titleKey: "tools.dns.title",
+        descriptionKey: "tools.dns.description",
         icon: <TravelExploreIcon/>,
         loader: () => import("./dns/DnsTool")
     },
     {
         id: "hash",
-        title: "File Hash",
-        description: "Calculate checksums",
+        titleKey: "tools.hash.title",
+        descriptionKey: "tools.hash.description",
         icon: <TagIcon/>,
         loader: () => import("./hash/HashTool")
     },
     {
         id: "ua",
-        title: "User Agent",
-        description: "Inspect your browser",
+        titleKey: "tools.ua.title",
+        descriptionKey: "tools.ua.description",
         icon: <SearchIcon/>,
         loader: () => import("./ua/UserAgentTool")
     },
     {
         id: "sound",
-        title: "Sound",
-        description: "Generate a tone",
+        titleKey: "tools.sound.title",
+        descriptionKey: "tools.sound.description",
         icon: <GraphicEqIcon/>,
         loader: () => import("./sound/SoundTool")
     },
     {
         id: "oui",
-        title: "OUI Lookup",
-        description: "Find MAC address vendors",
+        titleKey: "tools.oui.title",
+        descriptionKey: "tools.oui.description",
         icon: <SettingsEthernetIcon/>,
         loader: () => import("./oui/OuiTool")
     }

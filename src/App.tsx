@@ -4,6 +4,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HomeIcon from "@mui/icons-material/Home";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import SearchIcon from "@mui/icons-material/Search";
+import TranslateIcon from "@mui/icons-material/Translate";
 import {
     AppBar,
     Box,
@@ -20,8 +21,10 @@ import {
     Toolbar,
     Typography
 } from "@mui/material";
+import {useTranslation} from "react-i18next";
 import {findTool, tools} from "./tools/registry";
 import type {ToolId} from "./tools/types";
+import {useLanguageMode, type LanguageMode} from "./lib/language";
 import {useThemeMode, type ThemeMode} from "./lib/theme";
 
 const toolFromHash = () => {
@@ -32,6 +35,7 @@ const toolFromHash = () => {
 const LOADING_INDICATOR_DELAY_MS = 200;
 
 const LoadingTool = () => {
+    const {t} = useTranslation();
     const [show, setShow] = React.useState(false);
 
     React.useEffect(() => {
@@ -44,7 +48,7 @@ const LoadingTool = () => {
     return (
         <Container maxWidth="md" sx={{py: 6, textAlign: "center"}}>
             <CircularProgress/>
-            <Typography sx={{mt: 2}} color="text.secondary">Loading tool...</Typography>
+            <Typography sx={{mt: 2}} color="text.secondary">{t("app.loadingTool")}</Typography>
         </Container>
     );
 };
@@ -55,12 +59,6 @@ const THEME_MODE_ICONS: Record<ThemeMode, React.ReactNode> = {
     dark: <DarkModeIcon/>
 };
 
-const THEME_MODE_LABELS: Record<ThemeMode, string> = {
-    system: "Theme: system",
-    light: "Theme: light",
-    dark: "Theme: dark"
-};
-
 const NEXT_THEME_MODE: Record<ThemeMode, ThemeMode> = {
     system: "light",
     light: "dark",
@@ -68,13 +66,15 @@ const NEXT_THEME_MODE: Record<ThemeMode, ThemeMode> = {
 };
 
 const ThemeToggle = () => {
+    const {t} = useTranslation();
     const {mode, setMode} = useThemeMode();
+    const label = t(`theme.${mode}`);
 
     return (
         <IconButton
             color="inherit"
-            aria-label={`${THEME_MODE_LABELS[mode]}. Click to change.`}
-            title={THEME_MODE_LABELS[mode]}
+            aria-label={`${label}. Click to change.`}
+            title={label}
             onClick={() => setMode(NEXT_THEME_MODE[mode])}
         >
             {THEME_MODE_ICONS[mode]}
@@ -82,15 +82,39 @@ const ThemeToggle = () => {
     );
 };
 
+const NEXT_LANGUAGE_MODE: Record<LanguageMode, LanguageMode> = {
+    system: "en",
+    en: "zh",
+    zh: "system"
+};
+
+const LanguageToggle = () => {
+    const {t} = useTranslation();
+    const {mode, setMode} = useLanguageMode();
+    const label = t(`language.${mode}`);
+
+    return (
+        <IconButton
+            color="inherit"
+            aria-label={`${label}. Click to change.`}
+            title={label}
+            onClick={() => setMode(NEXT_LANGUAGE_MODE[mode])}
+        >
+            <TranslateIcon/>
+        </IconButton>
+    );
+};
+
 const Home = ({onSelectTool}: { onSelectTool: (toolId: ToolId) => void }) => {
+    const {t} = useTranslation();
     const [query, setQuery] = React.useState("");
-    const filteredTools = tools.filter(tool => `${tool.title} ${tool.description} ${tool.id}`.toLowerCase().includes(query.toLowerCase()));
+    const filteredTools = tools.filter(tool => `${t(tool.titleKey)} ${t(tool.descriptionKey)} ${tool.id}`.toLowerCase().includes(query.toLowerCase()));
 
     return (
         <Container maxWidth="lg" sx={{py: 5}}>
             <Stack spacing={2} sx={{mb: 4}}>
-                <Typography color="text.secondary">A tiny static workbench of browser-native utilities.</Typography>
-                <TextField label="Search tools" value={query} onChange={event => setQuery(event.target.value)} fullWidth/>
+                <Typography color="text.secondary">{t("app.tagline")}</Typography>
+                <TextField label={t("app.searchLabel")} value={query} onChange={event => setQuery(event.target.value)} fullWidth/>
             </Stack>
             <Grid container spacing={2}>
                 {filteredTools.map(tool => (
@@ -101,8 +125,8 @@ const Home = ({onSelectTool}: { onSelectTool: (toolId: ToolId) => void }) => {
                                     <Stack direction="row" spacing={2} sx={{alignItems: "center"}}>
                                         <Box sx={{color: "primary.main", display: "flex"}}>{tool.icon}</Box>
                                         <Box>
-                                            <Typography variant="h6">{tool.title}</Typography>
-                                            <Typography variant="body2" color="text.secondary">{tool.description}</Typography>
+                                            <Typography variant="h6">{t(tool.titleKey)}</Typography>
+                                            <Typography variant="body2" color="text.secondary">{t(tool.descriptionKey)}</Typography>
                                         </Box>
                                     </Stack>
                                 </CardContent>
@@ -119,11 +143,13 @@ const ToolSearch = ({activeTool, onSelectTool}: {
     activeTool: ToolId | "home";
     onSelectTool: (toolId: ToolId) => void;
 }) => {
+    const {t} = useTranslation();
     const [query, setQuery] = React.useState("");
     const [open, setOpen] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement | null>(null);
-    const filteredTools = tools.filter(tool => `${tool.title} ${tool.description} ${tool.id}`.toLowerCase().includes(query.toLowerCase()));
+    const filteredTools = tools.filter(tool => `${t(tool.titleKey)} ${t(tool.descriptionKey)} ${tool.id}`.toLowerCase().includes(query.toLowerCase()));
+    const activeToolDefinition = activeTool !== "home" ? findTool(activeTool) : undefined;
 
     const closeSearch = () => {
         setOpen(false);
@@ -151,7 +177,7 @@ const ToolSearch = ({activeTool, onSelectTool}: {
         <Box ref={containerRef} sx={{position: "relative", ml: {xs: "auto", sm: 2}, width: {xs: expanded ? 1 : "auto", sm: 280, md: 360}}}>
             <IconButton
                 color="inherit"
-                aria-label="Search tools"
+                aria-label={t("app.searchLabel")}
                 onClick={() => setExpanded(current => {
                     const next = !current;
                     setOpen(next);
@@ -173,7 +199,7 @@ const ToolSearch = ({activeTool, onSelectTool}: {
             >
                 <TextField
                     size="small"
-                    label="Search tools"
+                    label={t("app.searchLabel")}
                     value={query}
                     autoFocus={expanded}
                     onChange={event => {
@@ -188,7 +214,7 @@ const ToolSearch = ({activeTool, onSelectTool}: {
                         if (event.key === "Enter" && filteredTools[0]) selectTool(filteredTools[0].id);
                         if (event.key === "Escape") closeSearch();
                     }}
-                    placeholder={activeTool === "home" ? "Find a tool" : findTool(activeTool)?.title}
+                    placeholder={activeToolDefinition ? t(activeToolDefinition.titleKey) : t("app.searchPlaceholder")}
                     fullWidth
                     sx={{
                         "& .MuiInputBase-root": {
@@ -234,15 +260,15 @@ const ToolSearch = ({activeTool, onSelectTool}: {
                             <Stack direction="row" spacing={1.5} sx={{alignItems: "center"}}>
                                 <Box sx={{color: "primary.main", display: "flex"}}>{tool.icon}</Box>
                                 <Box>
-                                    <Typography variant="body2">{tool.title}</Typography>
-                                    <Typography variant="caption" color="text.secondary">{tool.description}</Typography>
+                                    <Typography variant="body2">{t(tool.titleKey)}</Typography>
+                                    <Typography variant="caption" color="text.secondary">{t(tool.descriptionKey)}</Typography>
                                 </Box>
                             </Stack>
                         </Box>
                     ))}
                     {!filteredTools.length && (
                         <Typography variant="body2" color="text.secondary" sx={{p: 1.5}}>
-                            No matching tools.
+                            {t("app.noMatchingTools")}
                         </Typography>
                     )}
                 </Paper>
@@ -252,6 +278,7 @@ const ToolSearch = ({activeTool, onSelectTool}: {
 };
 
 const App = () => {
+    const {t} = useTranslation();
     const [activeTool, setActiveTool] = React.useState<ToolId | "home">(() => toolFromHash());
     const selectedTool = findTool(activeTool);
     const ActiveComponent = React.useMemo(
@@ -260,8 +287,8 @@ const App = () => {
     );
 
     React.useEffect(() => {
-        document.title = selectedTool ? `ToolBench - ${selectedTool.title}` : "ToolBench";
-    }, [selectedTool]);
+        document.title = selectedTool ? `ToolBench - ${t(selectedTool.titleKey)}` : "ToolBench";
+    }, [selectedTool, t]);
 
     React.useEffect(() => {
         const handleHashChange = () => setActiveTool(toolFromHash());
@@ -287,6 +314,7 @@ const App = () => {
                     <Box sx={{display: {xs: "block", sm: "none"}, flex: 1}}/>
                     <SearchIcon sx={{ml: 2, mr: 1, display: {xs: "none", sm: "block"}}}/>
                     <ToolSearch activeTool={activeTool} onSelectTool={selectTool}/>
+                    <LanguageToggle/>
                     <ThemeToggle/>
                 </Toolbar>
             </AppBar>
@@ -310,7 +338,7 @@ const App = () => {
             >
                 <Container maxWidth="lg" sx={{py: 3}}>
                     <Typography variant="body2" color="inherit">
-                        Built with React 19, TypeScript, Vite, Bun, Tailwind CSS, and MUI.
+                        {t("app.footer")}
                     </Typography>
                 </Container>
             </Box>
