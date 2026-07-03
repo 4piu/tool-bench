@@ -1,5 +1,6 @@
 import React from "react";
 import BrightnessAutoIcon from "@mui/icons-material/BrightnessAuto";
+import CloseIcon from "@mui/icons-material/Close";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HomeIcon from "@mui/icons-material/Home";
 import LightModeIcon from "@mui/icons-material/LightMode";
@@ -173,8 +174,47 @@ const ToolSearch = ({activeTool, onSelectTool}: {
         return () => document.removeEventListener("mousedown", handlePointerDown);
     }, [open]);
 
+    const resultRows = (
+        <>
+            {filteredTools.map(tool => (
+                <Box
+                    key={tool.id}
+                    role="button"
+                    tabIndex={0}
+                    onMouseDown={event => event.preventDefault()}
+                    onClick={() => selectTool(tool.id)}
+                    onKeyDown={event => {
+                        if (event.key === "Enter") selectTool(tool.id);
+                    }}
+                    sx={{
+                        borderRadius: 1,
+                        cursor: "pointer",
+                        p: 1,
+                        "&:hover, &:focus": {
+                            bgcolor: "action.hover",
+                            outline: "none"
+                        }
+                    }}
+                >
+                    <Stack direction="row" spacing={1.5} sx={{alignItems: "center"}}>
+                        <Box sx={{color: "primary.main", display: "flex"}}>{tool.icon}</Box>
+                        <Box>
+                            <Typography variant="body2">{t(tool.titleKey)}</Typography>
+                            <Typography variant="caption" color="text.secondary">{t(tool.descriptionKey)}</Typography>
+                        </Box>
+                    </Stack>
+                </Box>
+            ))}
+            {!filteredTools.length && (
+                <Typography variant="body2" color="text.secondary" sx={{p: 1.5}}>
+                    {t("app.noMatchingTools")}
+                </Typography>
+            )}
+        </>
+    );
+
     return (
-        <Box ref={containerRef} sx={{position: "relative", ml: {xs: "auto", sm: 2}, width: {xs: expanded ? 1 : "auto", sm: 280, md: 360}}}>
+        <Box ref={containerRef} sx={{position: "relative", ml: {xs: "auto", sm: 2}, width: {sm: 280, md: 360}}}>
             <IconButton
                 color="inherit"
                 aria-label={t("app.searchLabel")}
@@ -187,90 +227,88 @@ const ToolSearch = ({activeTool, onSelectTool}: {
             >
                 <SearchIcon/>
             </IconButton>
-            <Box
-                sx={{
-                    display: {xs: expanded ? "block" : "none", sm: "block"},
-                    position: {xs: "absolute", sm: "relative"},
-                    right: 0,
-                    top: {xs: "calc(100% + 8px)", sm: "auto"},
-                    width: {xs: "min(420px, calc(100vw - 32px))", sm: "auto"},
-                    zIndex: theme => theme.zIndex.appBar + 1
+            <TextField
+                size="small"
+                label={t("app.searchLabel")}
+                value={query}
+                onChange={event => {
+                    setQuery(event.target.value);
+                    setOpen(true);
                 }}
-            >
-                <TextField
-                    size="small"
-                    label={t("app.searchLabel")}
-                    value={query}
-                    autoFocus={expanded}
-                    onChange={event => {
-                        setQuery(event.target.value);
-                        setOpen(true);
-                    }}
-                    onFocus={() => setOpen(true)}
-                    onBlur={() => window.setTimeout(() => {
-                        if (!containerRef.current?.contains(document.activeElement)) closeSearch();
-                    }, 0)}
-                    onKeyDown={event => {
-                        if (event.key === "Enter" && filteredTools[0]) selectTool(filteredTools[0].id);
-                        if (event.key === "Escape") closeSearch();
-                    }}
-                    placeholder={activeToolDefinition ? t(activeToolDefinition.titleKey) : t("app.searchPlaceholder")}
-                    fullWidth
-                    sx={{
-                        "& .MuiInputBase-root": {
-                            bgcolor: "background.paper"
-                        }
-                    }}
-                />
-            </Box>
+                onFocus={() => setOpen(true)}
+                onBlur={() => window.setTimeout(() => {
+                    if (!containerRef.current?.contains(document.activeElement)) closeSearch();
+                }, 0)}
+                onKeyDown={event => {
+                    if (event.key === "Enter" && filteredTools[0]) selectTool(filteredTools[0].id);
+                    if (event.key === "Escape") closeSearch();
+                }}
+                placeholder={activeToolDefinition ? t(activeToolDefinition.titleKey) : t("app.searchPlaceholder")}
+                fullWidth
+                sx={{
+                    display: {xs: "none", sm: "block"},
+                    "& .MuiInputBase-root": {
+                        bgcolor: "background.paper"
+                    }
+                }}
+            />
             {open && (
                 <Paper
                     elevation={6}
                     sx={{
+                        display: {xs: "none", sm: "block"},
                         position: "absolute",
-                        top: {xs: "calc(100% + 64px)", sm: "calc(100% + 8px)"},
+                        top: "calc(100% + 8px)",
                         right: 0,
                         zIndex: theme => theme.zIndex.appBar + 1,
-                        width: {xs: "min(420px, calc(100vw - 32px))", sm: "min(420px, 90vw)"},
+                        width: "min(420px, 90vw)",
                         maxHeight: 360,
                         overflow: "auto",
                         p: 0.5
                     }}
                 >
-                    {filteredTools.map(tool => (
-                        <Box
-                            key={tool.id}
-                            role="button"
-                            tabIndex={0}
-                            onMouseDown={event => event.preventDefault()}
-                            onClick={() => selectTool(tool.id)}
+                    {resultRows}
+                </Paper>
+            )}
+            {expanded && (
+                <Paper
+                    elevation={6}
+                    square
+                    sx={{
+                        display: {xs: "flex", sm: "none"},
+                        flexDirection: "column",
+                        position: "fixed",
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        maxHeight: "100dvh",
+                        zIndex: theme => theme.zIndex.appBar + 1
+                    }}
+                >
+                    <Stack direction="row" spacing={1} sx={{alignItems: "center", p: 1}}>
+                        <TextField
+                            size="small"
+                            label={t("app.searchLabel")}
+                            value={query}
+                            autoFocus
+                            onChange={event => {
+                                setQuery(event.target.value);
+                                setOpen(true);
+                            }}
                             onKeyDown={event => {
-                                if (event.key === "Enter") selectTool(tool.id);
+                                if (event.key === "Enter" && filteredTools[0]) selectTool(filteredTools[0].id);
+                                if (event.key === "Escape") closeSearch();
                             }}
-                            sx={{
-                                borderRadius: 1,
-                                cursor: "pointer",
-                                p: 1,
-                                "&:hover, &:focus": {
-                                    bgcolor: "action.hover",
-                                    outline: "none"
-                                }
-                            }}
-                        >
-                            <Stack direction="row" spacing={1.5} sx={{alignItems: "center"}}>
-                                <Box sx={{color: "primary.main", display: "flex"}}>{tool.icon}</Box>
-                                <Box>
-                                    <Typography variant="body2">{t(tool.titleKey)}</Typography>
-                                    <Typography variant="caption" color="text.secondary">{t(tool.descriptionKey)}</Typography>
-                                </Box>
-                            </Stack>
-                        </Box>
-                    ))}
-                    {!filteredTools.length && (
-                        <Typography variant="body2" color="text.secondary" sx={{p: 1.5}}>
-                            {t("app.noMatchingTools")}
-                        </Typography>
-                    )}
+                            placeholder={activeToolDefinition ? t(activeToolDefinition.titleKey) : t("app.searchPlaceholder")}
+                            fullWidth
+                        />
+                        <IconButton aria-label={t("app.closeSearch")} onClick={closeSearch}>
+                            <CloseIcon/>
+                        </IconButton>
+                    </Stack>
+                    <Box sx={{overflow: "auto", px: 1, pb: 1, minHeight: 0}}>
+                        {resultRows}
+                    </Box>
                 </Paper>
             )}
         </Box>

@@ -4,6 +4,7 @@
     "searchLabel": "搜索工具",
     "searchPlaceholder": "查找工具",
     "noMatchingTools": "没有匹配的工具。",
+    "closeSearch": "关闭搜索",
     "loadingTool": "正在加载工具…",
     "footer": "基于 React 19、TypeScript、Vite、Bun、Tailwind CSS 和 MUI 构建。"
   },

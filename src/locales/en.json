@@ -4,6 +4,7 @@
     "searchLabel": "Search tools",
     "searchPlaceholder": "Find a tool",
     "noMatchingTools": "No matching tools.",
+    "closeSearch": "Close search",
     "loadingTool": "Loading tool...",
     "footer": "Built with React 19, TypeScript, Vite, Bun, Tailwind CSS, and MUI."
   },
