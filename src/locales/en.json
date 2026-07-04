@@ -36,6 +36,7 @@
     "sound": {"title": "Sound", "description": "Generate a tone"},
     "noise": {"title": "Noise Generator", "description": "Shape and layer ambient noise"},
     "ruler": {"title": "Screen Ruler", "description": "Measure real-world distances on screen"},
+    "angle": {"title": "Angle Finder", "description": "Measure or set precise angles with a draggable protractor"},
     "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
   },
   "password": {
@@ -426,6 +427,25 @@
       "resetTooltip": "Reset to the default 96 DPI assumption",
       "cancel": "Cancel",
       "save": "Save"
+    }
+  },
+  "angle": {
+    "title": "Angle Finder",
+    "collapse": "Collapse panel",
+    "expand": "Expand panel",
+    "reflex": "Reflex angle",
+    "includedLabel": "Included angle",
+    "reflexLabel": "Reflex angle",
+    "snap": "Snap",
+    "snapOption": {
+      "off": "Off"
+    },
+    "resetView": "Reset",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "help": {
+      "label": "Interaction help",
+      "text": "Drag either colored handle around the dial to rotate that line. Drag the center point (or two-finger drag, middle-click drag, or right-click drag) to move the vertex. Click or tap elsewhere to snap the nearest line to that direction."
     }
   }
 }

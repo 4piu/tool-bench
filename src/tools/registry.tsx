@@ -1,5 +1,6 @@
 import React from "react";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import ExploreIcon from "@mui/icons-material/Explore";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import KeyIcon from "@mui/icons-material/Key";
 import QrCodeIcon from "@mui/icons-material/QrCode";
@@ -97,6 +98,14 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.ruler.description",
         icon: <StraightenIcon/>,
         loader: () => import("./ruler/RulerTool"),
+        fullBleed: true
+    },
+    {
+        id: "angle",
+        titleKey: "tools.angle.title",
+        descriptionKey: "tools.angle.description",
+        icon: <ExploreIcon/>,
+        loader: () => import("./angle/AngleTool"),
         fullBleed: true
     },
     {

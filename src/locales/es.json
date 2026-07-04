@@ -36,6 +36,7 @@
     "sound": {"title": "Sonido", "description": "Generar un tono"},
     "noise": {"title": "Generador de ruido", "description": "Da forma y combina ruido ambiental"},
     "ruler": {"title": "Regla de pantalla", "description": "Mide distancias reales en pantalla"},
+    "angle": {"title": "Buscador de ángulos", "description": "Mide o define ángulos precisos con un transportador arrastrable"},
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
   },
   "password": {
@@ -426,6 +427,25 @@
       "resetTooltip": "Restablecer a la suposición predeterminada de 96 DPI",
       "cancel": "Cancelar",
       "save": "Guardar"
+    }
+  },
+  "angle": {
+    "title": "Buscador de ángulos",
+    "collapse": "Contraer panel",
+    "expand": "Expandir panel",
+    "reflex": "Ángulo reflejo",
+    "includedLabel": "Ángulo incluido",
+    "reflexLabel": "Ángulo reflejo",
+    "snap": "Ajuste",
+    "snapOption": {
+      "off": "Desactivado"
+    },
+    "resetView": "Restablecer",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "help": {
+      "label": "Ayuda de interacción",
+      "text": "Arrastra cualquiera de los manejadores de color alrededor del dial para rotar esa línea. Arrastra el punto central (o arrastra con dos dedos, con el botón central o con el botón derecho) para mover el vértice. Haz clic o toca en cualquier otro lugar para ajustar la línea más cercana a esa dirección."
     }
   }
 }

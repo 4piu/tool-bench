@@ -36,6 +36,7 @@
     "sound": {"title": "音频", "description": "生成音调"},
     "noise": {"title": "噪音生成器", "description": "塑造并叠加环境噪音"},
     "ruler": {"title": "屏幕标尺", "description": "测量屏幕上的真实距离"},
+    "angle": {"title": "量角器", "description": "使用可拖拽的量角器测量或设定精确角度"},
     "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"}
   },
   "password": {
@@ -426,6 +427,25 @@
       "resetTooltip": "重置为默认的 96 DPI 假设",
       "cancel": "取消",
       "save": "保存"
+    }
+  },
+  "angle": {
+    "title": "量角器",
+    "collapse": "收起面板",
+    "expand": "展开面板",
+    "reflex": "优角",
+    "includedLabel": "夹角",
+    "reflexLabel": "优角",
+    "snap": "吸附",
+    "snapOption": {
+      "off": "关闭"
+    },
+    "resetView": "重置",
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "help": {
+      "label": "操作帮助",
+      "text": "拖动任一彩色手柄可绕表盘旋转对应的线；拖动中心点（或双指拖动、鼠标中键拖动、鼠标右键拖动）可移动顶点；点击或轻触其他位置可让最近的线吸附到该方向。"
     }
   }
 }

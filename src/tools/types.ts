@@ -13,6 +13,7 @@ export type ToolId =
     | "sound"
     | "noise"
     | "ruler"
+    | "angle"
     | "oui";
 
 export type ToolModule = {

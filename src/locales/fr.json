@@ -36,6 +36,7 @@
     "sound": {"title": "Son", "description": "Générer une tonalité"},
     "noise": {"title": "Générateur de bruit", "description": "Façonnez et superposez du bruit ambiant"},
     "ruler": {"title": "Règle à l'écran", "description": "Mesurez des distances réelles à l'écran"},
+    "angle": {"title": "Rapporteur d'angle", "description": "Mesurez ou définissez des angles précis avec un rapporteur déplaçable"},
     "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"}
   },
   "password": {
@@ -426,6 +427,25 @@
       "resetTooltip": "Réinitialiser à l'hypothèse par défaut de 96 DPI",
       "cancel": "Annuler",
       "save": "Enregistrer"
+    }
+  },
+  "angle": {
+    "title": "Rapporteur d'angle",
+    "collapse": "Réduire le panneau",
+    "expand": "Développer le panneau",
+    "reflex": "Angle rentrant",
+    "includedLabel": "Angle inclus",
+    "reflexLabel": "Angle rentrant",
+    "snap": "Alignement",
+    "snapOption": {
+      "off": "Désactivé"
+    },
+    "resetView": "Réinitialiser",
+    "fullscreen": "Plein écran",
+    "exitFullscreen": "Quitter le plein écran",
+    "help": {
+      "label": "Aide à l'interaction",
+      "text": "Faites glisser l'une des poignées colorées autour du cadran pour faire pivoter cette ligne. Faites glisser le point central (ou glissez à deux doigts, clic central ou clic droit) pour déplacer le sommet. Cliquez ou touchez ailleurs pour aligner la ligne la plus proche sur cette direction."
     }
   }
 }
