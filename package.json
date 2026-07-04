@@ -2,7 +2,7 @@
   "name": "tool-bench",
   "version": "1.0.0",
   "description": "Just a web page of some handy utilities",
-  "repository": "git@github.com:nobody-65534/ToolBench.git",
+  "repository": "git@github.com:nobody-65534/tool-bench.git",
   "author": "4piu <16668056+4piu@users.noreply.github.com>",
   "license": "UNLISENCED",
   "private": true,
