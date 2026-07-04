@@ -21,6 +21,7 @@
     "@mui/material": "^9.1.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "buffer": "^6.0.3",
     "dns-packet": "latest",
     "hash-wasm": "^4.12.0",
     "i18next": "^26.3.4",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.17",
     "@types/jmespath": "^0.15.2",
+    "@types/node": "^26.1.0",
     "@vitejs/plugin-react": "^5.1.2",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
