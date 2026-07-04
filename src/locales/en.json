@@ -376,6 +376,8 @@
     "customPresets": "Custom presets",
     "savePreset": "Save preset",
     "noCustomPresets": "No custom presets yet.",
+    "selectPreset": "Select a preset",
+    "unsavedChanges": "Unsaved changes",
     "rename": "Rename",
     "delete": "Delete",
     "equalizer": "Equalizer",
@@ -384,7 +386,8 @@
       "renameTitle": "Rename preset",
       "nameLabel": "Preset name",
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "overwrite": "Overwrite"
     }
   },
   "ruler": {

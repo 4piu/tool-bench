@@ -376,6 +376,8 @@
     "customPresets": "Préréglages personnalisés",
     "savePreset": "Enregistrer le préréglage",
     "noCustomPresets": "Aucun préréglage personnalisé pour le moment.",
+    "selectPreset": "Sélectionner un préréglage",
+    "unsavedChanges": "Modifications non enregistrées",
     "rename": "Renommer",
     "delete": "Supprimer",
     "equalizer": "Égaliseur",
@@ -384,7 +386,8 @@
       "renameTitle": "Renommer le préréglage",
       "nameLabel": "Nom du préréglage",
       "cancel": "Annuler",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "overwrite": "Écraser"
     }
   },
   "ruler": {

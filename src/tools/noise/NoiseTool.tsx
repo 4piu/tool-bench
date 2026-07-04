@@ -1,5 +1,4 @@
 import React from "react";
-import {v4 as uuidV4} from "uuid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -12,14 +11,18 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormControl,
     IconButton,
-    Paper,
+    InputLabel,
+    MenuItem,
+    Select,
     Slider,
     Stack,
     TextField,
     Tooltip,
     Typography
 } from "@mui/material";
+import type {SelectChangeEvent} from "@mui/material/Select";
 import {useTranslation} from "react-i18next";
 import {useLocalStorageState} from "../shared/hooks";
 import {ToolHeader, ToolSurface} from "../shared/ToolScaffold";
@@ -40,9 +43,14 @@ const builtinPresets = [
 ] as const;
 
 type CustomPreset = {
-    id: string;
     name: string;
     gains: number[];
+};
+
+type NameDialogState = {
+    mode: "new" | "rename";
+    targetName?: string;
+    value: string;
 };
 
 const gainsEqual = (a: number[], b: number[]) => a.length === b.length && a.every((value, index) => value === b[index]);
@@ -64,8 +72,9 @@ const NoiseTool = () => {
     const [gains, setGains] = useLocalStorageState<number[]>("noise.gains", [...builtinPresets[0].gains]);
     const [volume, setVolume] = useLocalStorageState("noise.volume", 0.5);
     const [customPresets, setCustomPresets] = useLocalStorageState<CustomPreset[]>("noise.customPresets", []);
+    const [selectedCustomPresetName, setSelectedCustomPresetName] = useLocalStorageState<string | null>("noise.activeCustomPreset", null);
     const [playing, setPlaying] = React.useState(false);
-    const [nameDialog, setNameDialog] = React.useState<{ mode: "new" | "rename"; targetId?: string; value: string } | null>(null);
+    const [nameDialog, setNameDialog] = React.useState<NameDialogState | null>(null);
 
     const audioContextRef = React.useRef<AudioContext | null>(null);
     const noiseBufferRef = React.useRef<AudioBuffer | null>(null);
@@ -133,15 +142,16 @@ const NoiseTool = () => {
         if (masterGainRef.current) masterGainRef.current.gain.value = value;
     };
 
-    const applyPreset = (presetGains: readonly number[]) => {
+    const applyPreset = (presetGains: readonly number[], customName: string | null = null) => {
         setGains([...presetGains]);
         filtersRef.current.forEach((filter, index) => {
             filter.gain.value = presetGains[index];
         });
+        setSelectedCustomPresetName(customName);
     };
 
-    const openSaveDialog = () => setNameDialog({mode: "new", value: ""});
-    const openRenameDialog = (preset: CustomPreset) => setNameDialog({mode: "rename", targetId: preset.id, value: preset.name});
+    const openSaveDialog = () => setNameDialog({mode: "new", value: selectedCustomPresetName ?? ""});
+    const openRenameDialog = (preset: CustomPreset) => setNameDialog({mode: "rename", targetName: preset.name, value: preset.name});
     const closeDialog = () => setNameDialog(null);
 
     const submitDialog = () => {
@@ -149,16 +159,31 @@ const NoiseTool = () => {
         const name = nameDialog.value.trim();
         if (!name) return;
         if (nameDialog.mode === "new") {
-            setCustomPresets(current => current.concat({id: uuidV4(), name, gains: [...gains]}));
+            setCustomPresets(current => current.filter(preset => preset.name !== name).concat({name, gains: [...gains]}));
+            setSelectedCustomPresetName(name);
         } else {
-            setCustomPresets(current => current.map(preset => preset.id === nameDialog.targetId ? {...preset, name} : preset));
+            const targetName = nameDialog.targetName;
+            setCustomPresets(current => {
+                const target = current.find(preset => preset.name === targetName);
+                if (!target) return current;
+                return current
+                    .filter(preset => preset.name !== targetName && preset.name !== name)
+                    .concat({...target, name});
+            });
+            if (selectedCustomPresetName === targetName) setSelectedCustomPresetName(name);
         }
         closeDialog();
     };
 
-    const deletePreset = (id: string) => {
-        setCustomPresets(current => current.filter(preset => preset.id !== id));
+    const deletePreset = (name: string) => {
+        setCustomPresets(current => current.filter(preset => preset.name !== name));
+        if (selectedCustomPresetName === name) setSelectedCustomPresetName(null);
     };
+
+    const trimmedDialogName = nameDialog?.value.trim() ?? "";
+    const dialogWillOverwrite = trimmedDialogName.length > 0 && customPresets.some(
+        preset => preset.name === trimmedDialogName && (nameDialog?.mode !== "rename" || preset.name !== nameDialog.targetName)
+    );
 
     return (
         <ToolSurface>
@@ -190,40 +215,84 @@ const NoiseTool = () => {
                 </Stack>
 
                 <Stack spacing={1}>
-                    <Stack direction="row" spacing={1} sx={{alignItems: "center", justifyContent: "space-between"}}>
-                        <Typography variant="subtitle2">{t("noise.customPresets")}</Typography>
+                    <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
+                        {customPresets.length === 0 ? (
+                            <Typography variant="body2" color="text.secondary" sx={{flex: 1}}>{t("noise.noCustomPresets")}</Typography>
+                        ) : (
+                        <FormControl size="small" fullWidth sx={{flex: 1}}>
+                            <InputLabel shrink>{t("noise.customPresets")}</InputLabel>
+                            <Select
+                                label={t("noise.customPresets")}
+                                notched
+                                value={selectedCustomPresetName ?? ""}
+                                displayEmpty
+                                onChange={(event: SelectChangeEvent) => {
+                                    const preset = customPresets.find(candidate => candidate.name === event.target.value);
+                                    if (preset) applyPreset(preset.gains, preset.name);
+                                }}
+                                renderValue={value => {
+                                    if (!value) return <Typography component="span" color="text.secondary">{t("noise.selectPreset")}</Typography>;
+                                    const preset = customPresets.find(candidate => candidate.name === value);
+                                    if (!preset) return value;
+                                    const modified = !gainsEqual(gains, preset.gains);
+                                    return (
+                                        <Tooltip title={modified ? t("noise.unsavedChanges") : ""}>
+                                            <Typography component="span" sx={{color: modified ? "warning.main" : "inherit"}}>
+                                                {preset.name}{modified ? " *" : ""}
+                                            </Typography>
+                                        </Tooltip>
+                                    );
+                                }}
+                            >
+                                {customPresets.map(preset => {
+                                    const isActive = preset.name === selectedCustomPresetName;
+                                    const modified = isActive && !gainsEqual(gains, preset.gains);
+                                    return (
+                                        <MenuItem key={preset.name} value={preset.name} sx={{display: "flex", alignItems: "center", gap: 0.5}}>
+                                            <Typography sx={{flex: 1, color: modified ? "warning.main" : "inherit"}} noWrap>
+                                                {preset.name}{modified ? " *" : ""}
+                                            </Typography>
+                                            <Tooltip title={t("noise.rename")}>
+                                                <IconButton size="small" onClick={event => {
+                                                    event.stopPropagation();
+                                                    openRenameDialog(preset);
+                                                }}>
+                                                    <EditIcon fontSize="small"/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title={t("noise.delete")}>
+                                                <IconButton size="small" onClick={event => {
+                                                    event.stopPropagation();
+                                                    deletePreset(preset.name);
+                                                }}>
+                                                    <DeleteIcon fontSize="small"/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
+                        )}
                         <Button size="small" startIcon={<SaveIcon/>} onClick={openSaveDialog}>{t("noise.savePreset")}</Button>
                     </Stack>
-                    {customPresets.length === 0 ? (
-                        <Typography variant="body2" color="text.secondary">{t("noise.noCustomPresets")}</Typography>
-                    ) : (
-                        <Stack direction="row" spacing={1} sx={{flexWrap: "wrap"}} useFlexGap>
-                            {customPresets.map(preset => (
-                                <Paper key={preset.id} variant="outlined" sx={{pl: 1.5, pr: 0.5, py: 0.5, display: "flex", alignItems: "center", gap: 0.5}}>
-                                    <Button size="small" variant={gainsEqual(gains, preset.gains) ? "contained" : "text"} onClick={() => applyPreset(preset.gains)} sx={{minWidth: 0}}>
-                                        {preset.name}
-                                    </Button>
-                                    <Tooltip title={t("noise.rename")}>
-                                        <IconButton size="small" onClick={() => openRenameDialog(preset)}>
-                                            <EditIcon fontSize="small"/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title={t("noise.delete")}>
-                                        <IconButton size="small" onClick={() => deletePreset(preset.id)}>
-                                            <DeleteIcon fontSize="small"/>
-                                        </IconButton>
-                                    </Tooltip>
-                                </Paper>
-                            ))}
-                        </Stack>
-                    )}
                 </Stack>
 
                 <Stack spacing={1}>
                     <Typography variant="subtitle2">{t("noise.equalizer")}</Typography>
-                    <Stack direction="row" spacing={1} sx={{justifyContent: "space-between", height: 220, px: {xs: 0, sm: 2}}}>
+                    <Box
+                        sx={{
+                            overflowX: "auto",
+                            pb: 1,
+                            "&::-webkit-scrollbar": {height: 8},
+                            "&::-webkit-scrollbar-track": {backgroundColor: "action.hover", borderRadius: 4},
+                            "&::-webkit-scrollbar-thumb": {backgroundColor: "action.disabled", borderRadius: 4},
+                            scrollbarWidth: "thin"
+                        }}
+                    >
+                    <Stack direction="row" spacing={1} sx={{justifyContent: "space-between", height: 220, px: {xs: 0, sm: 2}, py: {xs: 2, sm: 0}}}>
                         {bands.map((frequency, index) => (
-                            <Stack key={frequency} spacing={1} sx={{alignItems: "center", flex: 1}}>
+                            <Stack key={frequency} spacing={1} sx={{alignItems: "center", flex: 1, minWidth: 56}}>
                                 <Typography variant="caption" color="text.secondary">{formatGain(gains[index])}</Typography>
                                 <Slider
                                     orientation="vertical"
@@ -238,6 +307,7 @@ const NoiseTool = () => {
                             </Stack>
                         ))}
                     </Stack>
+                    </Box>
                 </Stack>
             </Stack>
 
@@ -258,7 +328,9 @@ const NoiseTool = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog}>{t("noise.dialog.cancel")}</Button>
-                    <Button variant="contained" onClick={submitDialog} disabled={!nameDialog?.value.trim()}>{t("noise.dialog.save")}</Button>
+                    <Button variant="contained" onClick={submitDialog} disabled={!nameDialog?.value.trim()}>
+                        {dialogWillOverwrite ? t("noise.dialog.overwrite") : t("noise.dialog.save")}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </ToolSurface>

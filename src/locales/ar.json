@@ -376,6 +376,8 @@
     "customPresets": "الإعدادات المسبقة المخصصة",
     "savePreset": "حفظ الإعداد المسبق",
     "noCustomPresets": "لا توجد إعدادات مسبقة مخصصة بعد.",
+    "selectPreset": "اختر إعدادًا مسبقًا",
+    "unsavedChanges": "تغييرات غير محفوظة",
     "rename": "إعادة تسمية",
     "delete": "حذف",
     "equalizer": "المعادل",
@@ -384,7 +386,8 @@
       "renameTitle": "إعادة تسمية الإعداد المسبق",
       "nameLabel": "اسم الإعداد المسبق",
       "cancel": "إلغاء",
-      "save": "حفظ"
+      "save": "حفظ",
+      "overwrite": "استبدال"
     }
   },
   "ruler": {

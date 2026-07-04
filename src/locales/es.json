@@ -376,6 +376,8 @@
     "customPresets": "Preajustes personalizados",
     "savePreset": "Guardar preajuste",
     "noCustomPresets": "Aún no hay preajustes personalizados.",
+    "selectPreset": "Selecciona un preajuste",
+    "unsavedChanges": "Cambios sin guardar",
     "rename": "Cambiar nombre",
     "delete": "Eliminar",
     "equalizer": "Ecualizador",
@@ -384,7 +386,8 @@
       "renameTitle": "Cambiar nombre del preajuste",
       "nameLabel": "Nombre del preajuste",
       "cancel": "Cancelar",
-      "save": "Guardar"
+      "save": "Guardar",
+      "overwrite": "Sobrescribir"
     }
   },
   "ruler": {

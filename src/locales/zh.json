@@ -376,6 +376,8 @@
     "customPresets": "自定义预设",
     "savePreset": "保存预设",
     "noCustomPresets": "暂无自定义预设。",
+    "selectPreset": "选择预设",
+    "unsavedChanges": "有未保存的更改",
     "rename": "重命名",
     "delete": "删除",
     "equalizer": "均衡器",
@@ -384,7 +386,8 @@
       "renameTitle": "重命名预设",
       "nameLabel": "预设名称",
       "cancel": "取消",
-      "save": "保存"
+      "save": "保存",
+      "overwrite": "覆盖"
     }
   },
   "ruler": {
