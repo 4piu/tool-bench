@@ -5,6 +5,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
+import StraightenIcon from "@mui/icons-material/Straighten";
 import TagIcon from "@mui/icons-material/Tag";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
@@ -89,6 +90,14 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.noise.description",
         icon: <EqualizerIcon/>,
         loader: () => import("./noise/NoiseTool")
+    },
+    {
+        id: "ruler",
+        titleKey: "tools.ruler.title",
+        descriptionKey: "tools.ruler.description",
+        icon: <StraightenIcon/>,
+        loader: () => import("./ruler/RulerTool"),
+        fullBleed: true
     },
     {
         id: "oui",

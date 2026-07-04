@@ -377,7 +377,7 @@ const App = () => {
                 </Toolbar>
             </AppBar>
 
-            <Box component="main" sx={{flex: 1}}>
+            <Box component="main" sx={{flex: 1, display: "flex", flexDirection: "column"}}>
                 {activeTool === "home" || !selectedTool || !ActiveComponent ? (
                     <Home onSelectTool={selectTool}/>
                 ) : (
@@ -387,19 +387,21 @@ const App = () => {
                 )}
             </Box>
 
-            <Box
-                component="footer"
-                sx={{
-                    bgcolor: theme => theme.palette.mode === "dark" ? "grey.950" : "grey.900",
-                    color: "grey.400"
-                }}
-            >
-                <Container maxWidth="lg" sx={{py: 3}}>
-                    <Typography variant="body2" color="inherit">
-                        {t("app.footer")}
-                    </Typography>
-                </Container>
-            </Box>
+            {!selectedTool?.fullBleed && (
+                <Box
+                    component="footer"
+                    sx={{
+                        bgcolor: theme => theme.palette.mode === "dark" ? "grey.950" : "grey.900",
+                        color: "grey.400"
+                    }}
+                >
+                    <Container maxWidth="lg" sx={{py: 3}}>
+                        <Typography variant="body2" color="inherit">
+                            {t("app.footer")}
+                        </Typography>
+                    </Container>
+                </Box>
+            )}
         </Box>
     );
 };

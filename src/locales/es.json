@@ -35,6 +35,7 @@
     "ua": {"title": "User Agent", "description": "Inspeccionar tu navegador"},
     "sound": {"title": "Sonido", "description": "Generar un tono"},
     "noise": {"title": "Generador de ruido", "description": "Da forma y combina ruido ambiental"},
+    "ruler": {"title": "Regla de pantalla", "description": "Mide distancias reales en pantalla"},
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
   },
   "password": {
@@ -382,6 +383,44 @@
       "newTitle": "Guardar preajuste",
       "renameTitle": "Cambiar nombre del preajuste",
       "nameLabel": "Nombre del preajuste",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    }
+  },
+  "ruler": {
+    "title": "Regla de pantalla",
+    "unitSystem": "Sistema de unidades",
+    "unitOption": {
+      "metric": "Métrico (cm)",
+      "imperial": "Imperial (in)",
+      "px": "Píxeles (px)"
+    },
+    "calibrate": "Calibrar con una tarjeta",
+    "rotate": "Girar",
+    "resetView": "Restablecer vista",
+    "collapse": "Contraer panel",
+    "expand": "Expandir panel",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "measurement": "{{value}} ({{pixels}} px)",
+    "measurementPx": "{{pixels}} px",
+    "calibratedStatus": "Calibrado: ≈ {{ppi}} PPI",
+    "notCalibrated": "Usando la suposición predeterminada de 96 DPI — los tamaños pueden ser inexactos. Calibra con una tarjeta para obtener precisión real.",
+    "help": {
+      "label": "Ayuda de interacción",
+      "text": "Desplaza la vista: arrastre con dos dedos, con el botón central o con el botón derecho"
+    },
+    "calibration": {
+      "title": "Calibrar con una tarjeta",
+      "modeCard": "Tarjeta",
+      "modeRuler": "Regla",
+      "instructions": "Sostén una tarjeta de crédito o identificación estándar (85.6 × 53.98 mm) contra tu pantalla junto al rectángulo de abajo. Arrastra el control deslizante hasta que la altura del rectángulo coincida exactamente con el lado largo de la tarjeta.",
+      "rulerInstructions": "Sostén una regla o cinta métrica contra tu pantalla, junto a la escala de abajo. Arrastra el control deslizante hasta que cada marca coincida exactamente con tu regla física.",
+      "unitCm": "cm",
+      "unitIn": "pulg",
+      "currentPpi": "≈ {{ppi}} PPI",
+      "reset": "Restablecer",
+      "resetTooltip": "Restablecer a la suposición predeterminada de 96 DPI",
       "cancel": "Cancelar",
       "save": "Guardar"
     }

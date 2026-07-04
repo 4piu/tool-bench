@@ -12,6 +12,7 @@ export type ToolId =
     | "ua"
     | "sound"
     | "noise"
+    | "ruler"
     | "oui";
 
 export type ToolModule = {
@@ -24,4 +25,5 @@ export type ToolDefinition = {
     descriptionKey: string;
     icon: React.ReactNode;
     loader: () => Promise<ToolModule>;
+    fullBleed?: boolean;
 };

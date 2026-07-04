@@ -35,6 +35,7 @@
     "ua": {"title": "User Agent", "description": "Inspecter votre navigateur"},
     "sound": {"title": "Son", "description": "Générer une tonalité"},
     "noise": {"title": "Générateur de bruit", "description": "Façonnez et superposez du bruit ambiant"},
+    "ruler": {"title": "Règle à l'écran", "description": "Mesurez des distances réelles à l'écran"},
     "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"}
   },
   "password": {
@@ -382,6 +383,44 @@
       "newTitle": "Enregistrer le préréglage",
       "renameTitle": "Renommer le préréglage",
       "nameLabel": "Nom du préréglage",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    }
+  },
+  "ruler": {
+    "title": "Règle à l'écran",
+    "unitSystem": "Système d'unités",
+    "unitOption": {
+      "metric": "Métrique (cm)",
+      "imperial": "Impérial (po)",
+      "px": "Pixels (px)"
+    },
+    "calibrate": "Étalonner avec une carte",
+    "rotate": "Pivoter",
+    "resetView": "Réinitialiser la vue",
+    "collapse": "Réduire le panneau",
+    "expand": "Développer le panneau",
+    "fullscreen": "Plein écran",
+    "exitFullscreen": "Quitter le plein écran",
+    "measurement": "{{value}} ({{pixels}} px)",
+    "measurementPx": "{{pixels}} px",
+    "calibratedStatus": "Étalonné : ≈ {{ppi}} PPI",
+    "notCalibrated": "Utilisation de l'hypothèse par défaut de 96 DPI — les tailles peuvent être inexactes. Étalonnez avec une carte pour une précision réelle.",
+    "help": {
+      "label": "Aide à l'interaction",
+      "text": "Déplacer la vue : glissement à deux doigts, clic central ou clic droit"
+    },
+    "calibration": {
+      "title": "Étalonner avec une carte",
+      "modeCard": "Carte",
+      "modeRuler": "Règle",
+      "instructions": "Tenez une carte de crédit ou d'identité standard (85,6 × 53,98 mm) contre votre écran à côté du rectangle ci-dessous. Faites glisser le curseur jusqu'à ce que la hauteur du rectangle corresponde exactement au grand côté de la carte.",
+      "rulerInstructions": "Tenez une règle ou un mètre ruban contre votre écran, à côté de l'échelle ci-dessous. Faites glisser le curseur jusqu'à ce que chaque repère corresponde exactement à votre règle physique.",
+      "unitCm": "cm",
+      "unitIn": "po",
+      "currentPpi": "≈ {{ppi}} PPI",
+      "reset": "Réinitialiser",
+      "resetTooltip": "Réinitialiser à l'hypothèse par défaut de 96 DPI",
       "cancel": "Annuler",
       "save": "Enregistrer"
     }

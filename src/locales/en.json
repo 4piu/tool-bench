@@ -35,6 +35,7 @@
     "ua": {"title": "User Agent", "description": "Inspect your browser"},
     "sound": {"title": "Sound", "description": "Generate a tone"},
     "noise": {"title": "Noise Generator", "description": "Shape and layer ambient noise"},
+    "ruler": {"title": "Screen Ruler", "description": "Measure real-world distances on screen"},
     "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
   },
   "password": {
@@ -382,6 +383,44 @@
       "newTitle": "Save preset",
       "renameTitle": "Rename preset",
       "nameLabel": "Preset name",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "ruler": {
+    "title": "Screen Ruler",
+    "unitSystem": "Unit system",
+    "unitOption": {
+      "metric": "Metric (cm)",
+      "imperial": "Imperial (in)",
+      "px": "Pixels (px)"
+    },
+    "calibrate": "Calibrate with a card",
+    "rotate": "Rotate",
+    "resetView": "Reset view",
+    "collapse": "Collapse panel",
+    "expand": "Expand panel",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "measurement": "{{value}} ({{pixels}} px)",
+    "measurementPx": "{{pixels}} px",
+    "calibratedStatus": "Calibrated: ≈ {{ppi}} PPI",
+    "notCalibrated": "Using the default 96 DPI assumption — sizes may be inaccurate. Calibrate with a card for real-world accuracy.",
+    "help": {
+      "label": "Interaction help",
+      "text": "Pan the view: two-finger drag, middle-click drag, or right-click drag"
+    },
+    "calibration": {
+      "title": "Calibrate with a card",
+      "modeCard": "Card",
+      "modeRuler": "Ruler",
+      "instructions": "Hold a standard credit or ID card (85.6 × 53.98 mm) against your screen next to the rectangle below. Drag the slider until the rectangle's height matches the card's long edge exactly.",
+      "rulerInstructions": "Hold a ruler or tape measure against your screen, next to the scale below. Drag the slider until each mark lines up exactly with your physical ruler.",
+      "unitCm": "cm",
+      "unitIn": "in",
+      "currentPpi": "≈ {{ppi}} PPI",
+      "reset": "Reset",
+      "resetTooltip": "Reset to the default 96 DPI assumption",
       "cancel": "Cancel",
       "save": "Save"
     }
