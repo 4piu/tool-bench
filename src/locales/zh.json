@@ -34,6 +34,7 @@
     "hash": {"title": "文件哈希", "description": "计算文件校验和"},
     "ua": {"title": "User Agent", "description": "查看你的浏览器信息"},
     "sound": {"title": "音频", "description": "生成音调"},
+    "noise": {"title": "噪音生成器", "description": "塑造并叠加环境噪音"},
     "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"}
   },
   "password": {
@@ -356,6 +357,33 @@
       "nonHex": "包含非十六进制字符",
       "tooShort": "过短 — 至少需要 6 位十六进制数字",
       "tooLong": "过长 — MAC 最多 12 位十六进制数字"
+    }
+  },
+  "noise": {
+    "title": "噪音生成器",
+    "description": "使用分频段均衡器生成塑形噪音，输出立体声。",
+    "play": "播放",
+    "stop": "停止",
+    "volume": "音量：{{percent}}%",
+    "presets": "预设",
+    "preset": {
+      "white": "白噪音",
+      "pink": "粉噪音",
+      "brown": "布朗噪音",
+      "grey": "灰噪音"
+    },
+    "customPresets": "自定义预设",
+    "savePreset": "保存预设",
+    "noCustomPresets": "暂无自定义预设。",
+    "rename": "重命名",
+    "delete": "删除",
+    "equalizer": "均衡器",
+    "dialog": {
+      "newTitle": "保存预设",
+      "renameTitle": "重命名预设",
+      "nameLabel": "预设名称",
+      "cancel": "取消",
+      "save": "保存"
     }
   }
 }

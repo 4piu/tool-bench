@@ -11,6 +11,7 @@ export type ToolId =
     | "hash"
     | "ua"
     | "sound"
+    | "noise"
     | "oui";
 
 export type ToolModule = {

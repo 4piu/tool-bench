@@ -34,6 +34,7 @@
     "hash": {"title": "Hachage de fichier", "description": "Calculer des sommes de contrôle"},
     "ua": {"title": "User Agent", "description": "Inspecter votre navigateur"},
     "sound": {"title": "Son", "description": "Générer une tonalité"},
+    "noise": {"title": "Générateur de bruit", "description": "Façonnez et superposez du bruit ambiant"},
     "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"}
   },
   "password": {
@@ -356,6 +357,33 @@
       "nonHex": "Contient des caractères non hexadécimaux",
       "tooShort": "Trop court — il faut au moins 6 chiffres hexadécimaux",
       "tooLong": "Trop long — une MAC comporte au maximum 12 chiffres hexadécimaux"
+    }
+  },
+  "noise": {
+    "title": "Générateur de bruit",
+    "description": "Génère du bruit façonné avec un égaliseur multibande, en sortie stéréo.",
+    "play": "Lire",
+    "stop": "Arrêter",
+    "volume": "Volume : {{percent}}%",
+    "presets": "Préréglages",
+    "preset": {
+      "white": "Blanc",
+      "pink": "Rose",
+      "brown": "Brun",
+      "grey": "Gris"
+    },
+    "customPresets": "Préréglages personnalisés",
+    "savePreset": "Enregistrer le préréglage",
+    "noCustomPresets": "Aucun préréglage personnalisé pour le moment.",
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "equalizer": "Égaliseur",
+    "dialog": {
+      "newTitle": "Enregistrer le préréglage",
+      "renameTitle": "Renommer le préréglage",
+      "nameLabel": "Nom du préréglage",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
     }
   }
 }

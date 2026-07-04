@@ -1,4 +1,5 @@
 import React from "react";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import KeyIcon from "@mui/icons-material/Key";
 import QrCodeIcon from "@mui/icons-material/QrCode";
@@ -81,6 +82,13 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.sound.description",
         icon: <GraphicEqIcon/>,
         loader: () => import("./sound/SoundTool")
+    },
+    {
+        id: "noise",
+        titleKey: "tools.noise.title",
+        descriptionKey: "tools.noise.description",
+        icon: <EqualizerIcon/>,
+        loader: () => import("./noise/NoiseTool")
     },
     {
         id: "oui",

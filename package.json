@@ -10,7 +10,7 @@
     "build": "vite build",
     "dev": "vite --open",
     "preview": "vite preview",
-    "start": "vite --open",
+    "start": "vite",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

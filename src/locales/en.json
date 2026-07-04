@@ -34,6 +34,7 @@
     "hash": {"title": "File Hash", "description": "Calculate checksums"},
     "ua": {"title": "User Agent", "description": "Inspect your browser"},
     "sound": {"title": "Sound", "description": "Generate a tone"},
+    "noise": {"title": "Noise Generator", "description": "Shape and layer ambient noise"},
     "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
   },
   "password": {
@@ -356,6 +357,33 @@
       "nonHex": "Contains non-hex characters",
       "tooShort": "Too short — need at least 6 hex digits",
       "tooLong": "Too long — a MAC is at most 12 hex digits"
+    }
+  },
+  "noise": {
+    "title": "Noise Generator",
+    "description": "Generate shaped noise with a per-band equalizer and stereo output.",
+    "play": "Play",
+    "stop": "Stop",
+    "volume": "Volume: {{percent}}%",
+    "presets": "Presets",
+    "preset": {
+      "white": "White",
+      "pink": "Pink",
+      "brown": "Brown",
+      "grey": "Grey"
+    },
+    "customPresets": "Custom presets",
+    "savePreset": "Save preset",
+    "noCustomPresets": "No custom presets yet.",
+    "rename": "Rename",
+    "delete": "Delete",
+    "equalizer": "Equalizer",
+    "dialog": {
+      "newTitle": "Save preset",
+      "renameTitle": "Rename preset",
+      "nameLabel": "Preset name",
+      "cancel": "Cancel",
+      "save": "Save"
     }
   }
 }

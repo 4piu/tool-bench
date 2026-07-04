@@ -34,6 +34,7 @@
     "hash": {"title": "Hash de archivo", "description": "Calcular sumas de verificación"},
     "ua": {"title": "User Agent", "description": "Inspeccionar tu navegador"},
     "sound": {"title": "Sonido", "description": "Generar un tono"},
+    "noise": {"title": "Generador de ruido", "description": "Da forma y combina ruido ambiental"},
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
   },
   "password": {
@@ -356,6 +357,33 @@
       "nonHex": "Contiene caracteres no hexadecimales",
       "tooShort": "Demasiado corto — se necesitan al menos 6 dígitos hexadecimales",
       "tooLong": "Demasiado largo — una MAC tiene como máximo 12 dígitos hexadecimales"
+    }
+  },
+  "noise": {
+    "title": "Generador de ruido",
+    "description": "Genera ruido con forma mediante un ecualizador por bandas, con salida estéreo.",
+    "play": "Reproducir",
+    "stop": "Detener",
+    "volume": "Volumen: {{percent}}%",
+    "presets": "Preajustes",
+    "preset": {
+      "white": "Blanco",
+      "pink": "Rosa",
+      "brown": "Marrón",
+      "grey": "Gris"
+    },
+    "customPresets": "Preajustes personalizados",
+    "savePreset": "Guardar preajuste",
+    "noCustomPresets": "Aún no hay preajustes personalizados.",
+    "rename": "Cambiar nombre",
+    "delete": "Eliminar",
+    "equalizer": "Ecualizador",
+    "dialog": {
+      "newTitle": "Guardar preajuste",
+      "renameTitle": "Cambiar nombre del preajuste",
+      "nameLabel": "Nombre del preajuste",
+      "cancel": "Cancelar",
+      "save": "Guardar"
     }
   }
 }
