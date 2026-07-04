@@ -37,6 +37,7 @@
     "noise": {"title": "Noise Generator", "description": "Shape and layer ambient noise"},
     "ruler": {"title": "Screen Ruler", "description": "Measure real-world distances on screen"},
     "angle": {"title": "Angle Finder", "description": "Measure or set precise angles with a draggable protractor"},
+    "level": {"title": "Bubble Level", "description": "Check flat or vertical surfaces with your device's accelerometer"},
     "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
   },
   "password": {
@@ -447,5 +448,21 @@
       "label": "Interaction help",
       "text": "Drag either colored handle around the dial to rotate that line. Drag the center point (or two-finger drag, middle-click drag, or right-click drag) to move the vertex. Click or tap elsewhere to snap the nearest line to that direction."
     }
+  },
+  "level": {
+    "title": "Bubble Level",
+    "enableHelp": "This tool uses your device's accelerometer to detect tilt. Grant access to get started.",
+    "enable": "Enable motion sensors",
+    "deniedHelp": "Motion sensor access was denied. Allow motion & orientation access for this site in your browser settings, then retry.",
+    "retry": "Retry",
+    "unsupported": "Motion sensors are not available on this device or browser.",
+    "insecureContext": "Motion sensors require a secure connection. This page was loaded over an insecure address (http://) — try the HTTPS deployment of this site, or use https://localhost during development.",
+    "noData": "No sensor data received yet — your device may not support this feature.",
+    "modeFlat": "Flat surface",
+    "modeVertical": "Vertical surface",
+    "axisX": "X",
+    "axisY": "Y",
+    "calibrate": "Calibrate",
+    "resetCalibration": "Reset calibration"
   }
 }

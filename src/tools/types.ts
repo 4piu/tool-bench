@@ -14,6 +14,7 @@ export type ToolId =
     | "noise"
     | "ruler"
     | "angle"
+    | "level"
     | "oui";
 
 export type ToolModule = {

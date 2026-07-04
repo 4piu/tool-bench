@@ -1,6 +1,7 @@
 import React from "react";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import ExploreIcon from "@mui/icons-material/Explore";
+import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import KeyIcon from "@mui/icons-material/Key";
 import QrCodeIcon from "@mui/icons-material/QrCode";
@@ -107,6 +108,13 @@ export const tools: ToolDefinition[] = [
         icon: <ExploreIcon/>,
         loader: () => import("./angle/AngleTool"),
         fullBleed: true
+    },
+    {
+        id: "level",
+        titleKey: "tools.level.title",
+        descriptionKey: "tools.level.description",
+        icon: <GpsFixedIcon/>,
+        loader: () => import("./level/LevelTool")
     },
     {
         id: "oui",

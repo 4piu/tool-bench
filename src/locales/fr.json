@@ -37,6 +37,7 @@
     "noise": {"title": "Générateur de bruit", "description": "Façonnez et superposez du bruit ambiant"},
     "ruler": {"title": "Règle à l'écran", "description": "Mesurez des distances réelles à l'écran"},
     "angle": {"title": "Rapporteur d'angle", "description": "Mesurez ou définissez des angles précis avec un rapporteur déplaçable"},
+    "level": {"title": "Niveau à bulle", "description": "Vérifiez des surfaces plates ou verticales avec l'accéléromètre de votre appareil"},
     "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"}
   },
   "password": {
@@ -447,5 +448,21 @@
       "label": "Aide à l'interaction",
       "text": "Faites glisser l'une des poignées colorées autour du cadran pour faire pivoter cette ligne. Faites glisser le point central (ou glissez à deux doigts, clic central ou clic droit) pour déplacer le sommet. Cliquez ou touchez ailleurs pour aligner la ligne la plus proche sur cette direction."
     }
+  },
+  "level": {
+    "title": "Niveau à bulle",
+    "enableHelp": "Cet outil utilise l'accéléromètre de votre appareil pour détecter l'inclinaison. Accordez l'accès pour commencer.",
+    "enable": "Activer les capteurs de mouvement",
+    "deniedHelp": "L'accès au capteur de mouvement a été refusé. Autorisez l'accès au mouvement et à l'orientation pour ce site dans les paramètres de votre navigateur, puis réessayez.",
+    "retry": "Réessayer",
+    "unsupported": "Les capteurs de mouvement ne sont pas disponibles sur cet appareil ou ce navigateur.",
+    "insecureContext": "Les capteurs de mouvement nécessitent une connexion sécurisée. Cette page a été chargée depuis une adresse non sécurisée (http://) — essayez le déploiement HTTPS de ce site, ou utilisez https://localhost pendant le développement.",
+    "noData": "Aucune donnée de capteur reçue pour l'instant — votre appareil ne prend peut-être pas en charge cette fonctionnalité.",
+    "modeFlat": "Surface plane",
+    "modeVertical": "Surface verticale",
+    "axisX": "X",
+    "axisY": "Y",
+    "calibrate": "Étalonner",
+    "resetCalibration": "Réinitialiser l'étalonnage"
   }
 }

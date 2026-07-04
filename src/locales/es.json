@@ -37,6 +37,7 @@
     "noise": {"title": "Generador de ruido", "description": "Da forma y combina ruido ambiental"},
     "ruler": {"title": "Regla de pantalla", "description": "Mide distancias reales en pantalla"},
     "angle": {"title": "Buscador de ángulos", "description": "Mide o define ángulos precisos con un transportador arrastrable"},
+    "level": {"title": "Nivel de burbuja", "description": "Comprueba superficies planas o verticales con el acelerómetro de tu dispositivo"},
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
   },
   "password": {
@@ -447,5 +448,21 @@
       "label": "Ayuda de interacción",
       "text": "Arrastra cualquiera de los manejadores de color alrededor del dial para rotar esa línea. Arrastra el punto central (o arrastra con dos dedos, con el botón central o con el botón derecho) para mover el vértice. Haz clic o toca en cualquier otro lugar para ajustar la línea más cercana a esa dirección."
     }
+  },
+  "level": {
+    "title": "Nivel de burbuja",
+    "enableHelp": "Esta herramienta usa el acelerómetro de tu dispositivo para detectar la inclinación. Concede acceso para comenzar.",
+    "enable": "Activar sensores de movimiento",
+    "deniedHelp": "Se denegó el acceso al sensor de movimiento. Permite el acceso a movimiento y orientación para este sitio en la configuración de tu navegador y vuelve a intentarlo.",
+    "retry": "Reintentar",
+    "unsupported": "Los sensores de movimiento no están disponibles en este dispositivo o navegador.",
+    "insecureContext": "Los sensores de movimiento requieren una conexión segura. Esta página se cargó desde una dirección insegura (http://); prueba con la implementación HTTPS de este sitio, o usa https://localhost durante el desarrollo.",
+    "noData": "Aún no se han recibido datos del sensor: tu dispositivo podría no admitir esta función.",
+    "modeFlat": "Superficie plana",
+    "modeVertical": "Superficie vertical",
+    "axisX": "X",
+    "axisY": "Y",
+    "calibrate": "Calibrar",
+    "resetCalibration": "Restablecer calibración"
   }
 }
