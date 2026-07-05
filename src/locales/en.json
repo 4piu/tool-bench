@@ -459,12 +459,15 @@
     "unsupported": "Motion sensors are not available on this device or browser.",
     "insecureContext": "Motion sensors require a secure connection. This page was loaded over an insecure address (http://) — try the HTTPS deployment of this site, or use https://localhost during development.",
     "noData": "No sensor data received yet — your device may not support this feature.",
-    "modeFlat": "Flat surface",
-    "modeVertical": "Vertical surface",
     "axisX": "X",
     "axisY": "Y",
+    "rotation": "Rotation",
     "calibrate": "Calibrate",
-    "resetCalibration": "Reset calibration"
+    "resetCalibration": "Reset calibration",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "enableVibration": "Enable vibration",
+    "disableVibration": "Disable vibration"
   },
   "spectrum": {
     "title": "Audio Spectrum",

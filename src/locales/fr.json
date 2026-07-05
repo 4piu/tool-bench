@@ -459,12 +459,15 @@
     "unsupported": "Les capteurs de mouvement ne sont pas disponibles sur cet appareil ou ce navigateur.",
     "insecureContext": "Les capteurs de mouvement nécessitent une connexion sécurisée. Cette page a été chargée depuis une adresse non sécurisée (http://) — essayez le déploiement HTTPS de ce site, ou utilisez https://localhost pendant le développement.",
     "noData": "Aucune donnée de capteur reçue pour l'instant — votre appareil ne prend peut-être pas en charge cette fonctionnalité.",
-    "modeFlat": "Surface plane",
-    "modeVertical": "Surface verticale",
     "axisX": "X",
     "axisY": "Y",
+    "rotation": "Rotation",
     "calibrate": "Étalonner",
-    "resetCalibration": "Réinitialiser l'étalonnage"
+    "resetCalibration": "Réinitialiser l'étalonnage",
+    "mute": "Couper le son",
+    "unmute": "Activer le son",
+    "enableVibration": "Activer les vibrations",
+    "disableVibration": "Désactiver les vibrations"
   },
   "spectrum": {
     "title": "Spectre audio",

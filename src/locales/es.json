@@ -459,12 +459,15 @@
     "unsupported": "Los sensores de movimiento no están disponibles en este dispositivo o navegador.",
     "insecureContext": "Los sensores de movimiento requieren una conexión segura. Esta página se cargó desde una dirección insegura (http://); prueba con la implementación HTTPS de este sitio, o usa https://localhost durante el desarrollo.",
     "noData": "Aún no se han recibido datos del sensor: tu dispositivo podría no admitir esta función.",
-    "modeFlat": "Superficie plana",
-    "modeVertical": "Superficie vertical",
     "axisX": "X",
     "axisY": "Y",
+    "rotation": "Rotación",
     "calibrate": "Calibrar",
-    "resetCalibration": "Restablecer calibración"
+    "resetCalibration": "Restablecer calibración",
+    "mute": "Silenciar",
+    "unmute": "Activar sonido",
+    "enableVibration": "Activar vibración",
+    "disableVibration": "Desactivar vibración"
   },
   "spectrum": {
     "title": "Espectro de audio",

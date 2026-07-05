@@ -459,12 +459,15 @@
     "unsupported": "此设备或浏览器不支持运动传感器。",
     "insecureContext": "运动传感器需要安全连接。此页面是通过不安全的地址（http://）加载的 — 请尝试该网站的 HTTPS 部署版本，或在开发时使用 https://localhost。",
     "noData": "尚未收到传感器数据 — 你的设备可能不支持此功能。",
-    "modeFlat": "水平面",
-    "modeVertical": "垂直面",
     "axisX": "X",
     "axisY": "Y",
+    "rotation": "旋转",
     "calibrate": "校准",
-    "resetCalibration": "重置校准"
+    "resetCalibration": "重置校准",
+    "mute": "静音",
+    "unmute": "取消静音",
+    "enableVibration": "启用振动",
+    "disableVibration": "禁用振动"
   },
   "spectrum": {
     "title": "音频频谱",
