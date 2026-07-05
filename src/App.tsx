@@ -387,7 +387,7 @@ const App = () => {
                 )}
             </Box>
 
-            {!selectedTool?.fullBleed && (
+            {activeTool === "home" && (
                 <Box
                     component="footer"
                     sx={{
