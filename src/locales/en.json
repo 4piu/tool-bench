@@ -38,6 +38,7 @@
     "ruler": {"title": "Screen Ruler", "description": "Measure real-world distances on screen"},
     "angle": {"title": "Angle Finder", "description": "Measure or set precise angles with a draggable protractor"},
     "level": {"title": "Bubble Level", "description": "Check flat or vertical surfaces with your device's accelerometer"},
+    "spectrum": {"title": "Audio Spectrum", "description": "Real-time microphone frequency spectrum and spectrogram"},
     "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
   },
   "password": {
@@ -464,5 +465,34 @@
     "axisY": "Y",
     "calibrate": "Calibrate",
     "resetCalibration": "Reset calibration"
+  },
+  "spectrum": {
+    "title": "Audio Spectrum",
+    "enableHelp": "This tool uses your microphone to analyze audio in real time. Grant access to get started. Audio is processed entirely on your device and never leaves your browser.",
+    "enable": "Enable microphone",
+    "deniedHelp": "Microphone access was denied. Allow microphone access for this site in your browser settings, then retry.",
+    "retry": "Retry",
+    "unsupported": "Microphone input is not available on this device or browser.",
+    "insecureContext": "Microphone access requires a secure connection. This page was loaded over an insecure address (http://) — try the HTTPS deployment of this site, or use https://localhost during development.",
+    "noMicFound": "No microphone was found on this device.",
+    "genericError": "Could not access the microphone.",
+    "modeSpectrum": "Spectrum",
+    "modeSpectrogram": "Spectrogram",
+    "freeze": "Freeze",
+    "resume": "Resume",
+    "resetMaxHold": "Reset max hold",
+    "maxHoldDecay": "Max hold decay",
+    "maxHoldDecayOff": "Off (hold until reset)",
+    "maxHoldDecayRate": "{{value}} dB/s",
+    "unpin": "Unpin",
+    "settings": "Settings",
+    "settingsTitle": "Spectrum settings",
+    "xAxisScale": "Frequency axis",
+    "scaleLinear": "Linear",
+    "scaleLog": "Logarithmic",
+    "fftSize": "FFT size",
+    "smoothing": "Smoothing: {{value}}",
+    "dbRange": "dB range: {{min}} to {{max}}",
+    "close": "Close"
   }
 }

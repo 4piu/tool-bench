@@ -15,6 +15,7 @@ export type ToolId =
     | "ruler"
     | "angle"
     | "level"
+    | "spectrum"
     | "oui";
 
 export type ToolModule = {

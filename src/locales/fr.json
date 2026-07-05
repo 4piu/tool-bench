@@ -38,6 +38,7 @@
     "ruler": {"title": "Règle à l'écran", "description": "Mesurez des distances réelles à l'écran"},
     "angle": {"title": "Rapporteur d'angle", "description": "Mesurez ou définissez des angles précis avec un rapporteur déplaçable"},
     "level": {"title": "Niveau à bulle", "description": "Vérifiez des surfaces plates ou verticales avec l'accéléromètre de votre appareil"},
+    "spectrum": {"title": "Spectre audio", "description": "Spectre de fréquence et spectrogramme du microphone en temps réel"},
     "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"}
   },
   "password": {
@@ -464,5 +465,34 @@
     "axisY": "Y",
     "calibrate": "Étalonner",
     "resetCalibration": "Réinitialiser l'étalonnage"
+  },
+  "spectrum": {
+    "title": "Spectre audio",
+    "enableHelp": "Cet outil utilise votre microphone pour analyser l'audio en temps réel. Accordez l'accès pour commencer. L'audio est traité entièrement sur votre appareil et ne quitte jamais votre navigateur.",
+    "enable": "Activer le microphone",
+    "deniedHelp": "L'accès au microphone a été refusé. Autorisez l'accès au microphone pour ce site dans les paramètres de votre navigateur, puis réessayez.",
+    "retry": "Réessayer",
+    "unsupported": "L'entrée microphone n'est pas disponible sur cet appareil ou ce navigateur.",
+    "insecureContext": "L'accès au microphone nécessite une connexion sécurisée. Cette page a été chargée depuis une adresse non sécurisée (http://) — essayez le déploiement HTTPS de ce site, ou utilisez https://localhost pendant le développement.",
+    "noMicFound": "Aucun microphone n'a été trouvé sur cet appareil.",
+    "genericError": "Impossible d'accéder au microphone.",
+    "modeSpectrum": "Spectre",
+    "modeSpectrogram": "Spectrogramme",
+    "freeze": "Geler",
+    "resume": "Reprendre",
+    "resetMaxHold": "Réinitialiser le maintien du maximum",
+    "maxHoldDecay": "Décroissance du maintien du maximum",
+    "maxHoldDecayOff": "Désactivée (maintien jusqu'à réinitialisation)",
+    "maxHoldDecayRate": "{{value}} dB/s",
+    "unpin": "Détacher",
+    "settings": "Paramètres",
+    "settingsTitle": "Paramètres du spectre",
+    "xAxisScale": "Axe des fréquences",
+    "scaleLinear": "Linéaire",
+    "scaleLog": "Logarithmique",
+    "fftSize": "Taille de la FFT",
+    "smoothing": "Lissage : {{value}}",
+    "dbRange": "Plage de dB : {{min}} à {{max}}",
+    "close": "Fermer"
   }
 }

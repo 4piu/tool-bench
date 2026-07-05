@@ -38,6 +38,7 @@
     "ruler": {"title": "屏幕标尺", "description": "测量屏幕上的真实距离"},
     "angle": {"title": "量角器", "description": "使用可拖拽的量角器测量或设定精确角度"},
     "level": {"title": "气泡水平仪", "description": "使用设备的加速度传感器检查水平面或垂直面"},
+    "spectrum": {"title": "音频频谱", "description": "实时麦克风频谱与声谱图"},
     "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"}
   },
   "password": {
@@ -464,5 +465,34 @@
     "axisY": "Y",
     "calibrate": "校准",
     "resetCalibration": "重置校准"
+  },
+  "spectrum": {
+    "title": "音频频谱",
+    "enableHelp": "此工具使用麦克风实时分析音频。请授权访问以开始使用。音频完全在本机处理，不会离开你的浏览器。",
+    "enable": "启用麦克风",
+    "deniedHelp": "麦克风访问被拒绝。请在浏览器设置中允许本站点访问麦克风，然后重试。",
+    "retry": "重试",
+    "unsupported": "此设备或浏览器不支持麦克风输入。",
+    "insecureContext": "麦克风访问需要安全连接。此页面是通过不安全的地址（http://）加载的 — 请尝试该网站的 HTTPS 部署版本，或在开发时使用 https://localhost。",
+    "noMicFound": "未在此设备上找到麦克风。",
+    "genericError": "无法访问麦克风。",
+    "modeSpectrum": "频谱",
+    "modeSpectrogram": "声谱图",
+    "freeze": "冻结",
+    "resume": "继续",
+    "resetMaxHold": "重置峰值保持线",
+    "maxHoldDecay": "峰值保持衰减",
+    "maxHoldDecayOff": "关闭（保持直到重置）",
+    "maxHoldDecayRate": "{{value}} dB/秒",
+    "unpin": "取消固定",
+    "settings": "设置",
+    "settingsTitle": "频谱设置",
+    "xAxisScale": "频率轴",
+    "scaleLinear": "线性",
+    "scaleLog": "对数",
+    "fftSize": "FFT 大小",
+    "smoothing": "平滑度：{{value}}",
+    "dbRange": "dB 范围：{{min}} 至 {{max}}",
+    "close": "关闭"
   }
 }

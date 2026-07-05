@@ -38,6 +38,7 @@
     "ruler": {"title": "Regla de pantalla", "description": "Mide distancias reales en pantalla"},
     "angle": {"title": "Buscador de ángulos", "description": "Mide o define ángulos precisos con un transportador arrastrable"},
     "level": {"title": "Nivel de burbuja", "description": "Comprueba superficies planas o verticales con el acelerómetro de tu dispositivo"},
+    "spectrum": {"title": "Espectro de audio", "description": "Espectro de frecuencia y espectrograma del micrófono en tiempo real"},
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
   },
   "password": {
@@ -464,5 +465,34 @@
     "axisY": "Y",
     "calibrate": "Calibrar",
     "resetCalibration": "Restablecer calibración"
+  },
+  "spectrum": {
+    "title": "Espectro de audio",
+    "enableHelp": "Esta herramienta usa tu micrófono para analizar el audio en tiempo real. Concede acceso para comenzar. El audio se procesa por completo en tu dispositivo y nunca sale de tu navegador.",
+    "enable": "Activar micrófono",
+    "deniedHelp": "Se denegó el acceso al micrófono. Permite el acceso al micrófono para este sitio en la configuración de tu navegador y vuelve a intentarlo.",
+    "retry": "Reintentar",
+    "unsupported": "La entrada de micrófono no está disponible en este dispositivo o navegador.",
+    "insecureContext": "El acceso al micrófono requiere una conexión segura. Esta página se cargó desde una dirección insegura (http://); prueba con la implementación HTTPS de este sitio, o usa https://localhost durante el desarrollo.",
+    "noMicFound": "No se encontró ningún micrófono en este dispositivo.",
+    "genericError": "No se pudo acceder al micrófono.",
+    "modeSpectrum": "Espectro",
+    "modeSpectrogram": "Espectrograma",
+    "freeze": "Congelar",
+    "resume": "Reanudar",
+    "resetMaxHold": "Restablecer retención máxima",
+    "maxHoldDecay": "Caída de la retención máxima",
+    "maxHoldDecayOff": "Desactivada (retiene hasta restablecer)",
+    "maxHoldDecayRate": "{{value}} dB/s",
+    "unpin": "Desanclar",
+    "settings": "Ajustes",
+    "settingsTitle": "Ajustes del espectro",
+    "xAxisScale": "Eje de frecuencia",
+    "scaleLinear": "Lineal",
+    "scaleLog": "Logarítmico",
+    "fftSize": "Tamaño de FFT",
+    "smoothing": "Suavizado: {{value}}",
+    "dbRange": "Rango de dB: {{min}} a {{max}}",
+    "close": "Cerrar"
   }
 }

@@ -7,6 +7,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
+import SsidChartIcon from "@mui/icons-material/SsidChart";
 import StraightenIcon from "@mui/icons-material/Straighten";
 import TagIcon from "@mui/icons-material/Tag";
 import TerminalIcon from "@mui/icons-material/Terminal";
@@ -115,6 +116,14 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.level.description",
         icon: <GpsFixedIcon/>,
         loader: () => import("./level/LevelTool")
+    },
+    {
+        id: "spectrum",
+        titleKey: "tools.spectrum.title",
+        descriptionKey: "tools.spectrum.description",
+        icon: <SsidChartIcon/>,
+        loader: () => import("./spectrum/SpectrumTool"),
+        fullBleed: true
     },
     {
         id: "oui",
