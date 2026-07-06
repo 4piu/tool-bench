@@ -39,7 +39,8 @@
     "angle": {"title": "Angle Finder", "description": "Measure or set precise angles with a draggable protractor"},
     "level": {"title": "Bubble Level", "description": "Check flat or vertical surfaces with your device's accelerometer"},
     "spectrum": {"title": "Audio Spectrum", "description": "Real-time microphone frequency spectrum and spectrogram"},
-    "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"}
+    "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"},
+    "cidr": {"title": "CIDR Calculator", "description": "Convert between IP ranges and CIDR blocks"}
   },
   "password": {
     "title": "Password Generator",
@@ -497,5 +498,45 @@
     "smoothing": "Smoothing: {{value}}",
     "dbRange": "dB range: {{min}} to {{max}}",
     "close": "Close"
+  },
+  "cidr": {
+    "title": "CIDR Calculator",
+    "description": "Convert an IP address range into minimal CIDR blocks, or expand a CIDR block into its address range. Supports IPv4 and IPv6.",
+    "error": {
+      "invalidIp": "Enter two valid IP addresses of the same version.",
+      "invalidCidr": "Enter a valid CIDR block, e.g. 192.168.1.0/24 or 2001:db8::/32.",
+      "versionMismatch": "Start and end addresses must be the same IP version.",
+      "startAfterEnd": "Start address must not be after the end address."
+    },
+    "maskConvert": {
+      "heading": "Netmask ↔ Prefix Length",
+      "prefixLength": "Prefix length (CIDR)",
+      "netmask": "Netmask",
+      "prefixHelp": "0–32",
+      "netmaskHelp": "e.g. 255.255.255.0",
+      "invalidPrefix": "Enter an integer between 0 and 32.",
+      "invalidNetmask": "Enter a valid contiguous IPv4 netmask, e.g. 255.255.255.0."
+    },
+    "rangeToCidr": {
+      "heading": "IP Range → CIDR",
+      "startIp": "Start IP",
+      "endIp": "End IP",
+      "summary": "{{blockCount}} block(s), {{totalAddresses}} addresses",
+      "blockColumn": "CIDR block"
+    },
+    "cidrToRange": {
+      "heading": "CIDR → IP Range",
+      "input": "CIDR block",
+      "version": "Version",
+      "networkAddress": "Network address",
+      "broadcastAddress": "Broadcast address",
+      "lastAddress": "Last address",
+      "firstUsable": "First usable address",
+      "lastUsable": "Last usable address",
+      "usableHosts": "Usable hosts",
+      "totalAddresses": "Total addresses",
+      "netmask": "Netmask",
+      "wildcardMask": "Wildcard mask"
+    }
   }
 }

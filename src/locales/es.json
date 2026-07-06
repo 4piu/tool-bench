@@ -39,7 +39,8 @@
     "angle": {"title": "Buscador de ángulos", "description": "Mide o define ángulos precisos con un transportador arrastrable"},
     "level": {"title": "Nivel de burbuja", "description": "Comprueba superficies planas o verticales con el acelerómetro de tu dispositivo"},
     "spectrum": {"title": "Espectro de audio", "description": "Espectro de frecuencia y espectrograma del micrófono en tiempo real"},
-    "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"}
+    "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"},
+    "cidr": {"title": "Calculadora CIDR", "description": "Convertir entre rangos de IP y bloques CIDR"}
   },
   "password": {
     "title": "Generador de contraseñas",
@@ -497,5 +498,45 @@
     "smoothing": "Suavizado: {{value}}",
     "dbRange": "Rango de dB: {{min}} a {{max}}",
     "close": "Cerrar"
+  },
+  "cidr": {
+    "title": "Calculadora CIDR",
+    "description": "Convierte un rango de direcciones IP en los bloques CIDR mínimos, o expande un bloque CIDR en su rango de direcciones. Compatible con IPv4 e IPv6.",
+    "error": {
+      "invalidIp": "Introduce dos direcciones IP válidas de la misma versión.",
+      "invalidCidr": "Introduce un bloque CIDR válido, por ejemplo 192.168.1.0/24 o 2001:db8::/32.",
+      "versionMismatch": "Las direcciones de inicio y fin deben ser de la misma versión de IP.",
+      "startAfterEnd": "La dirección de inicio no debe ser posterior a la dirección final."
+    },
+    "maskConvert": {
+      "heading": "Máscara de red ↔ Longitud de prefijo",
+      "prefixLength": "Longitud de prefijo (CIDR)",
+      "netmask": "Máscara de red",
+      "prefixHelp": "0–32",
+      "netmaskHelp": "p. ej. 255.255.255.0",
+      "invalidPrefix": "Introduce un entero entre 0 y 32.",
+      "invalidNetmask": "Introduce una máscara de red IPv4 contigua válida, p. ej. 255.255.255.0."
+    },
+    "rangeToCidr": {
+      "heading": "Rango de IP → CIDR",
+      "startIp": "IP inicial",
+      "endIp": "IP final",
+      "summary": "{{blockCount}} bloque(s), {{totalAddresses}} direcciones",
+      "blockColumn": "Bloque CIDR"
+    },
+    "cidrToRange": {
+      "heading": "CIDR → Rango de IP",
+      "input": "Bloque CIDR",
+      "version": "Versión",
+      "networkAddress": "Dirección de red",
+      "broadcastAddress": "Dirección de difusión",
+      "lastAddress": "Última dirección",
+      "firstUsable": "Primera dirección utilizable",
+      "lastUsable": "Última dirección utilizable",
+      "usableHosts": "Hosts utilizables",
+      "totalAddresses": "Total de direcciones",
+      "netmask": "Máscara de subred",
+      "wildcardMask": "Máscara comodín"
+    }
   }
 }

@@ -39,7 +39,8 @@
     "angle": {"title": "Rapporteur d'angle", "description": "Mesurez ou définissez des angles précis avec un rapporteur déplaçable"},
     "level": {"title": "Niveau à bulle", "description": "Vérifiez des surfaces plates ou verticales avec l'accéléromètre de votre appareil"},
     "spectrum": {"title": "Spectre audio", "description": "Spectre de fréquence et spectrogramme du microphone en temps réel"},
-    "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"}
+    "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"},
+    "cidr": {"title": "Calculateur CIDR", "description": "Convertir entre plages d'IP et blocs CIDR"}
   },
   "password": {
     "title": "Générateur de mots de passe",
@@ -497,5 +498,45 @@
     "smoothing": "Lissage : {{value}}",
     "dbRange": "Plage de dB : {{min}} à {{max}}",
     "close": "Fermer"
+  },
+  "cidr": {
+    "title": "Calculateur CIDR",
+    "description": "Convertissez une plage d'adresses IP en blocs CIDR minimaux, ou développez un bloc CIDR en sa plage d'adresses. Prend en charge IPv4 et IPv6.",
+    "error": {
+      "invalidIp": "Saisissez deux adresses IP valides de la même version.",
+      "invalidCidr": "Saisissez un bloc CIDR valide, par ex. 192.168.1.0/24 ou 2001:db8::/32.",
+      "versionMismatch": "Les adresses de début et de fin doivent être de la même version IP.",
+      "startAfterEnd": "L'adresse de début ne doit pas être postérieure à l'adresse de fin."
+    },
+    "maskConvert": {
+      "heading": "Masque de sous-réseau ↔ Longueur de préfixe",
+      "prefixLength": "Longueur de préfixe (CIDR)",
+      "netmask": "Masque de sous-réseau",
+      "prefixHelp": "0–32",
+      "netmaskHelp": "par ex. 255.255.255.0",
+      "invalidPrefix": "Saisissez un entier compris entre 0 et 32.",
+      "invalidNetmask": "Saisissez un masque de sous-réseau IPv4 contigu valide, par ex. 255.255.255.0."
+    },
+    "rangeToCidr": {
+      "heading": "Plage IP → CIDR",
+      "startIp": "IP de début",
+      "endIp": "IP de fin",
+      "summary": "{{blockCount}} bloc(s), {{totalAddresses}} adresses",
+      "blockColumn": "Bloc CIDR"
+    },
+    "cidrToRange": {
+      "heading": "CIDR → Plage IP",
+      "input": "Bloc CIDR",
+      "version": "Version",
+      "networkAddress": "Adresse réseau",
+      "broadcastAddress": "Adresse de diffusion",
+      "lastAddress": "Dernière adresse",
+      "firstUsable": "Première adresse utilisable",
+      "lastUsable": "Dernière adresse utilisable",
+      "usableHosts": "Hôtes utilisables",
+      "totalAddresses": "Adresses totales",
+      "netmask": "Masque de sous-réseau",
+      "wildcardMask": "Masque générique"
+    }
   }
 }

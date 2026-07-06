@@ -39,7 +39,8 @@
     "angle": {"title": "量角器", "description": "使用可拖拽的量角器测量或设定精确角度"},
     "level": {"title": "气泡水平仪", "description": "使用设备的加速度传感器检查水平面或垂直面"},
     "spectrum": {"title": "音频频谱", "description": "实时麦克风频谱与声谱图"},
-    "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"}
+    "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"},
+    "cidr": {"title": "CIDR 计算器", "description": "在 IP 范围与 CIDR 块之间转换"}
   },
   "password": {
     "title": "密码生成器",
@@ -497,5 +498,45 @@
     "smoothing": "平滑度：{{value}}",
     "dbRange": "dB 范围：{{min}} 至 {{max}}",
     "close": "关闭"
+  },
+  "cidr": {
+    "title": "CIDR 计算器",
+    "description": "将 IP 地址范围转换为最少数量的 CIDR 块，或将 CIDR 块展开为其地址范围。支持 IPv4 和 IPv6。",
+    "error": {
+      "invalidIp": "请输入两个有效且版本相同的 IP 地址。",
+      "invalidCidr": "请输入有效的 CIDR 块，例如 192.168.1.0/24 或 2001:db8::/32。",
+      "versionMismatch": "起始地址和结束地址必须是相同的 IP 版本。",
+      "startAfterEnd": "起始地址不能晚于结束地址。"
+    },
+    "maskConvert": {
+      "heading": "子网掩码 ↔ 前缀长度",
+      "prefixLength": "前缀长度（CIDR）",
+      "netmask": "子网掩码",
+      "prefixHelp": "0–32",
+      "netmaskHelp": "例如 255.255.255.0",
+      "invalidPrefix": "请输入 0 到 32 之间的整数。",
+      "invalidNetmask": "请输入有效的连续 IPv4 子网掩码，例如 255.255.255.0。"
+    },
+    "rangeToCidr": {
+      "heading": "IP 范围 → CIDR",
+      "startIp": "起始 IP",
+      "endIp": "结束 IP",
+      "summary": "{{blockCount}} 个块，共 {{totalAddresses}} 个地址",
+      "blockColumn": "CIDR 块"
+    },
+    "cidrToRange": {
+      "heading": "CIDR → IP 范围",
+      "input": "CIDR 块",
+      "version": "版本",
+      "networkAddress": "网络地址",
+      "broadcastAddress": "广播地址",
+      "lastAddress": "最后地址",
+      "firstUsable": "第一个可用地址",
+      "lastUsable": "最后一个可用地址",
+      "usableHosts": "可用主机数",
+      "totalAddresses": "地址总数",
+      "netmask": "子网掩码",
+      "wildcardMask": "通配符掩码"
+    }
   }
 }

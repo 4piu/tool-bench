@@ -16,7 +16,8 @@ export type ToolId =
     | "angle"
     | "level"
     | "spectrum"
-    | "oui";
+    | "oui"
+    | "cidr";
 
 export type ToolModule = {
     default: React.ComponentType;

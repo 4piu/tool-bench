@@ -4,6 +4,7 @@ import ExploreIcon from "@mui/icons-material/Explore";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import KeyIcon from "@mui/icons-material/Key";
+import LanIcon from "@mui/icons-material/Lan";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
@@ -131,6 +132,13 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.oui.description",
         icon: <SettingsEthernetIcon/>,
         loader: () => import("./oui/OuiTool")
+    },
+    {
+        id: "cidr",
+        titleKey: "tools.cidr.title",
+        descriptionKey: "tools.cidr.description",
+        icon: <LanIcon/>,
+        loader: () => import("./cidr/CidrTool")
     }
 ];
 

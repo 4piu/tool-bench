@@ -39,7 +39,8 @@
     "angle": {"title": "مكتشف الزوايا", "description": "قياس أو تحديد زوايا دقيقة باستخدام منقلة قابلة للسحب"},
     "level": {"title": "ميزان الفقاعة", "description": "تحقق من استواء الأسطح الأفقية أو العمودية باستخدام مقياس التسارع في جهازك"},
     "spectrum": {"title": "طيف الصوت", "description": "طيف ترددي ومخطط طيفي مباشر من الميكروفون"},
-    "oui": {"title": "بحث OUI", "description": "البحث عن الشركات المصنّعة لعناوين MAC"}
+    "oui": {"title": "بحث OUI", "description": "البحث عن الشركات المصنّعة لعناوين MAC"},
+    "cidr": {"title": "حاسبة CIDR", "description": "التحويل بين نطاقات IP وكتل CIDR"}
   },
   "password": {
     "title": "مولّد كلمات المرور",
@@ -497,5 +498,45 @@
     "smoothing": "التنعيم: {{value}}",
     "dbRange": "نطاق dB: من {{min}} إلى {{max}}",
     "close": "إغلاق"
+  },
+  "cidr": {
+    "title": "حاسبة CIDR",
+    "description": "حوّل نطاق عناوين IP إلى أصغر مجموعة من كتل CIDR، أو وسّع كتلة CIDR إلى نطاق عناوينها. يدعم IPv4 وIPv6.",
+    "error": {
+      "invalidIp": "أدخل عنواني IP صالحين من نفس الإصدار.",
+      "invalidCidr": "أدخل كتلة CIDR صالحة، مثل 192.168.1.0/24 أو 2001:db8::/32.",
+      "versionMismatch": "يجب أن يكون عنوانا البداية والنهاية من نفس إصدار IP.",
+      "startAfterEnd": "يجب ألا يكون عنوان البداية بعد عنوان النهاية."
+    },
+    "maskConvert": {
+      "heading": "قناع الشبكة ↔ طول البادئة",
+      "prefixLength": "طول البادئة (CIDR)",
+      "netmask": "قناع الشبكة",
+      "prefixHelp": "0–32",
+      "netmaskHelp": "مثال: 255.255.255.0",
+      "invalidPrefix": "أدخل عددًا صحيحًا بين 0 و32.",
+      "invalidNetmask": "أدخل قناع شبكة IPv4 متجاورًا صالحًا، مثل 255.255.255.0."
+    },
+    "rangeToCidr": {
+      "heading": "نطاق IP → CIDR",
+      "startIp": "عنوان IP للبداية",
+      "endIp": "عنوان IP للنهاية",
+      "summary": "{{blockCount}} كتلة (كتل)، {{totalAddresses}} عنوانًا",
+      "blockColumn": "كتلة CIDR"
+    },
+    "cidrToRange": {
+      "heading": "CIDR → نطاق IP",
+      "input": "كتلة CIDR",
+      "version": "الإصدار",
+      "networkAddress": "عنوان الشبكة",
+      "broadcastAddress": "عنوان البث",
+      "lastAddress": "آخر عنوان",
+      "firstUsable": "أول عنوان قابل للاستخدام",
+      "lastUsable": "آخر عنوان قابل للاستخدام",
+      "usableHosts": "المضيفون القابلون للاستخدام",
+      "totalAddresses": "إجمالي العناوين",
+      "netmask": "قناع الشبكة الفرعية",
+      "wildcardMask": "قناع البدل"
+    }
   }
 }
