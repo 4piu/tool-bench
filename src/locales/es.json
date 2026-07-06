@@ -40,7 +40,8 @@
     "level": {"title": "Nivel de burbuja", "description": "Comprueba superficies planas o verticales con el acelerómetro de tu dispositivo"},
     "spectrum": {"title": "Espectro de audio", "description": "Espectro de frecuencia y espectrograma del micrófono en tiempo real"},
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"},
-    "cidr": {"title": "Calculadora CIDR", "description": "Convertir entre rangos de IP y bloques CIDR"}
+    "cidr": {"title": "Calculadora CIDR", "description": "Convertir entre rangos de IP y bloques CIDR"},
+    "currency": {"title": "Cambio de divisas", "description": "Convertir entre divisas con tasas actualizadas a diario"}
   },
   "password": {
     "title": "Generador de contraseñas",
@@ -538,5 +539,27 @@
       "netmask": "Máscara de subred",
       "wildcardMask": "Máscara comodín"
     }
+  },
+  "currency": {
+    "title": "Cambio de divisas",
+    "description": "Convierte entre divisas usando tasas de cambio actualizadas a diario.",
+    "addPanel": "Añadir panel",
+    "removePanel": "Quitar panel",
+    "amount": "Cantidad",
+    "from": "De",
+    "to": "A",
+    "swap": "Intercambiar divisas",
+    "frequentlyUsed": "Usadas con frecuencia",
+    "allCurrencies": "Todas las divisas",
+    "rateLine": "1 {{from}} = {{rate}} {{to}}",
+    "updated": "Tasas al {{date}}",
+    "stale": "Mostrando tasas en caché, no se pudo actualizar",
+    "loading": "Cargando tasas…",
+    "loadFailed": "No se pudieron cargar los datos de divisas.",
+    "rateUnavailable": "No hay tasa disponible para este par de divisas.",
+    "refresh": "Actualizar tasas",
+    "empty": "Aún no hay paneles. Añade uno para empezar a convertir.",
+    "dataProvider": "Datos de tipo de cambio proporcionados por",
+    "dragHint": "Clic central, clic derecho o mantén pulsado para arrastrar y reordenar"
   }
 }

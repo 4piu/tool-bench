@@ -40,7 +40,8 @@
     "level": {"title": "Niveau à bulle", "description": "Vérifiez des surfaces plates ou verticales avec l'accéléromètre de votre appareil"},
     "spectrum": {"title": "Spectre audio", "description": "Spectre de fréquence et spectrogramme du microphone en temps réel"},
     "oui": {"title": "Recherche OUI", "description": "Trouver les fabricants d'adresses MAC"},
-    "cidr": {"title": "Calculateur CIDR", "description": "Convertir entre plages d'IP et blocs CIDR"}
+    "cidr": {"title": "Calculateur CIDR", "description": "Convertir entre plages d'IP et blocs CIDR"},
+    "currency": {"title": "Taux de change", "description": "Convertir entre devises avec des taux mis à jour quotidiennement"}
   },
   "password": {
     "title": "Générateur de mots de passe",
@@ -538,5 +539,27 @@
       "netmask": "Masque de sous-réseau",
       "wildcardMask": "Masque générique"
     }
+  },
+  "currency": {
+    "title": "Taux de change",
+    "description": "Convertissez entre devises à l'aide de taux de change mis à jour quotidiennement.",
+    "addPanel": "Ajouter un panneau",
+    "removePanel": "Supprimer le panneau",
+    "amount": "Montant",
+    "from": "De",
+    "to": "Vers",
+    "swap": "Inverser les devises",
+    "frequentlyUsed": "Utilisées fréquemment",
+    "allCurrencies": "Toutes les devises",
+    "rateLine": "1 {{from}} = {{rate}} {{to}}",
+    "updated": "Taux au {{date}}",
+    "stale": "Affichage des taux en cache, actualisation impossible",
+    "loading": "Chargement des taux…",
+    "loadFailed": "Échec du chargement des données de devises.",
+    "rateUnavailable": "Aucun taux disponible pour cette paire de devises.",
+    "refresh": "Actualiser les taux",
+    "empty": "Aucun panneau pour l'instant. Ajoutez-en un pour commencer à convertir.",
+    "dataProvider": "Données de taux de change fournies par",
+    "dragHint": "Clic central, clic droit ou appui long pour glisser et réorganiser"
   }
 }

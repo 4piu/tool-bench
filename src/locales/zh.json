@@ -40,7 +40,8 @@
     "level": {"title": "气泡水平仪", "description": "使用设备的加速度传感器检查水平面或垂直面"},
     "spectrum": {"title": "音频频谱", "description": "实时麦克风频谱与声谱图"},
     "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"},
-    "cidr": {"title": "CIDR 计算器", "description": "在 IP 范围与 CIDR 块之间转换"}
+    "cidr": {"title": "CIDR 计算器", "description": "在 IP 范围与 CIDR 块之间转换"},
+    "currency": {"title": "货币兑换", "description": "使用每日更新的汇率进行货币兑换"}
   },
   "password": {
     "title": "密码生成器",
@@ -538,5 +539,27 @@
       "netmask": "子网掩码",
       "wildcardMask": "通配符掩码"
     }
+  },
+  "currency": {
+    "title": "货币兑换",
+    "description": "使用每日更新的汇率在货币之间进行转换。",
+    "addPanel": "添加面板",
+    "removePanel": "删除面板",
+    "amount": "金额",
+    "from": "从",
+    "to": "到",
+    "swap": "交换货币",
+    "frequentlyUsed": "常用",
+    "allCurrencies": "所有货币",
+    "rateLine": "1 {{from}} = {{rate}} {{to}}",
+    "updated": "汇率更新于 {{date}}",
+    "stale": "正在显示缓存的汇率，刷新失败",
+    "loading": "正在加载汇率…",
+    "loadFailed": "加载货币数据失败。",
+    "rateUnavailable": "该货币对暂无汇率。",
+    "refresh": "刷新汇率",
+    "empty": "暂无面板，添加一个开始转换。",
+    "dataProvider": "汇率数据由以下提供",
+    "dragHint": "按住鼠标中键、右键或长按以拖动排序"
   }
 }

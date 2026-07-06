@@ -1,4 +1,5 @@
 import React from "react";
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import ExploreIcon from "@mui/icons-material/Explore";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
@@ -139,6 +140,13 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.cidr.description",
         icon: <LanIcon/>,
         loader: () => import("./cidr/CidrTool")
+    },
+    {
+        id: "currency",
+        titleKey: "tools.currency.title",
+        descriptionKey: "tools.currency.description",
+        icon: <CurrencyExchangeIcon/>,
+        loader: () => import("./currency/CurrencyTool")
     }
 ];
 
