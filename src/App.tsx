@@ -128,17 +128,14 @@ const LanguageToggle = () => {
 
 const Home = ({onSelectTool}: { onSelectTool: (toolId: ToolId) => void }) => {
     const {t} = useTranslation();
-    const [query, setQuery] = React.useState("");
-    const filteredTools = tools.filter(tool => `${t(tool.titleKey)} ${t(tool.descriptionKey)} ${tool.id}`.toLowerCase().includes(query.toLowerCase()));
 
     return (
         <Container maxWidth="lg" sx={{py: 5}}>
             <Stack spacing={2} sx={{mb: 4}}>
                 <Typography color="text.secondary">{t("app.tagline")}</Typography>
-                <TextField label={t("app.searchLabel")} value={query} onChange={event => setQuery(event.target.value)} fullWidth/>
             </Stack>
             <Grid container spacing={2}>
-                {filteredTools.map(tool => (
+                {tools.map(tool => (
                     <Grid key={tool.id} size={{xs: 12, sm: 6, md: 4}}>
                         <Card variant="outlined" sx={{height: "100%", borderRadius: 3}}>
                             <CardActionArea onClick={() => onSelectTool(tool.id)} sx={{height: "100%"}}>
