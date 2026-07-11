@@ -18,7 +18,8 @@ export type ToolId =
     | "spectrum"
     | "oui"
     | "cidr"
-    | "currency";
+    | "currency"
+    | "serial";
 
 export type ToolModule = {
     default: React.ComponentType;

@@ -1,4 +1,5 @@
 import React from "react";
+import CableIcon from "@mui/icons-material/Cable";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import ExploreIcon from "@mui/icons-material/Explore";
@@ -147,6 +148,13 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.currency.description",
         icon: <CurrencyExchangeIcon/>,
         loader: () => import("./currency/CurrencyTool")
+    },
+    {
+        id: "serial",
+        titleKey: "tools.serial.title",
+        descriptionKey: "tools.serial.description",
+        icon: <CableIcon/>,
+        loader: () => import("./serial/SerialTool")
     }
 ];
 
