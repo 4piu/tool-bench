@@ -126,6 +126,7 @@ const SerialTool = () => {
 
     const portRef = React.useRef<SerialPort | null>(null);
     const readerRef = React.useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null);
+    const writerRef = React.useRef<WritableStreamDefaultWriter<Uint8Array> | null>(null);
     const decoderRef = React.useRef(new TextDecoder());
     const pendingLineRef = React.useRef("");
     const pendingLogRef = React.useRef<LogEntry[]>([]);
@@ -180,13 +181,12 @@ const SerialTool = () => {
     }, [log]);
 
     const writeToPort = React.useCallback(async (text: string) => {
-        const writable = portRef.current?.writable;
-        if (!writable) return;
-        const writer = writable.getWriter();
+        const writer = writerRef.current;
+        if (!writer) return;
         try {
             await writer.write(new TextEncoder().encode(text));
-        } finally {
-            writer.releaseLock();
+        } catch {
+            // port likely disconnected; the read loop will handle cleanup
         }
     }, []);
 
@@ -289,6 +289,13 @@ const SerialTool = () => {
         readerRef.current = null;
 
         try {
+            writerRef.current?.releaseLock();
+        } catch {
+            // writer may already be released
+        }
+        writerRef.current = null;
+
+        try {
             await portRef.current?.close();
         } catch {
             // port may already be closed
@@ -333,6 +340,7 @@ const SerialTool = () => {
                 flowControl: settings.flowControl
             });
             portRef.current = port;
+            writerRef.current = port.writable ? port.writable.getWriter() : null;
             setConnected(true);
             pendingLineRef.current = "";
             decoderRef.current = new TextDecoder();
