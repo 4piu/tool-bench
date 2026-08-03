@@ -44,6 +44,24 @@ export const ThemeModeProvider = ({children}: { children: React.ReactNode }) => 
     const theme = React.useMemo(() => createTheme({palette: {mode: resolvedMode}, direction}), [resolvedMode, direction]);
     const value = React.useMemo(() => ({mode, resolvedMode, setMode}), [mode, resolvedMode, setMode]);
 
+    React.useEffect(() => {
+        const root = document.documentElement;
+        const colorSchemeMeta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
+        const darkReaderLock = document.querySelector<HTMLMetaElement>('meta[name="darkreader-lock"]');
+
+        root.dataset.theme = resolvedMode;
+        root.style.colorScheme = resolvedMode;
+        if (colorSchemeMeta) colorSchemeMeta.content = resolvedMode;
+
+        if (resolvedMode === "dark" && !darkReaderLock) {
+            const lock = document.createElement("meta");
+            lock.name = "darkreader-lock";
+            document.head.appendChild(lock);
+        } else if (resolvedMode === "light") {
+            darkReaderLock?.remove();
+        }
+    }, [resolvedMode]);
+
     return (
         <ThemeModeContext.Provider value={value}>
             <CacheProvider value={direction === "rtl" ? rtlCache : ltrCache}>

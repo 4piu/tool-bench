@@ -3,6 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <script>
+        (() => {
+            let mode = "system";
+
+            try {
+                const storedMode = JSON.parse(localStorage.getItem("toolbench-theme-mode") ?? "null");
+                if (storedMode === "light" || storedMode === "dark") mode = storedMode;
+            } catch {
+                // Use the system preference when storage is unavailable or invalid.
+            }
+
+            const resolvedMode = mode === "dark" ||
+                (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "dark"
+                : "light";
+            const root = document.documentElement;
+            const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+
+            root.dataset.theme = resolvedMode;
+            root.style.colorScheme = resolvedMode;
+            colorSchemeMeta.content = resolvedMode;
+
+            if (resolvedMode === "dark") {
+                const darkReaderLock = document.createElement("meta");
+                darkReaderLock.name = "darkreader-lock";
+                document.head.appendChild(darkReaderLock);
+            }
+        })();
+    </script>
     <title>Tool Bench</title>
 </head>
 <body>

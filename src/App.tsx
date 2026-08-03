@@ -388,8 +388,8 @@ const App = () => {
                 <Box
                     component="footer"
                     sx={{
-                        bgcolor: theme => theme.palette.mode === "dark" ? "grey.950" : "grey.900",
-                        color: "grey.400"
+                        bgcolor: theme => theme.palette.mode === "dark" ? "grey.950" : "grey.100",
+                        color: "text.secondary"
                     }}
                 >
                     <Container maxWidth="lg" sx={{py: 3}}>
