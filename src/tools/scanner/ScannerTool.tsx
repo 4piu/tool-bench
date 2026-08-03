@@ -41,6 +41,16 @@ const safeWebUrl = (value: string) => {
     }
 };
 
+const relativeDetectionTime = (timestamp: number, now: number, translate: (key: string, options: {count: number}) => string) => {
+    const seconds = Math.max(0, Math.floor((now - timestamp) / 1000));
+    if (seconds < 60) return translate("scanner.timeAgo.seconds", {count: seconds});
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return translate("scanner.timeAgo.minutes", {count: minutes});
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return translate("scanner.timeAgo.hours", {count: hours});
+    return translate("scanner.timeAgo.days", {count: Math.floor(hours / 24)});
+};
+
 const imageDataFromFile = async (file: File) => {
     const bitmap = await createImageBitmap(file);
     try {
@@ -119,6 +129,10 @@ const ScannerTool = () => {
     const [mode, setMode] = React.useState<ScannerMode>("camera");
     const [cameraActive, setCameraActive] = React.useState(false);
     const [cameraStarting, setCameraStarting] = React.useState(false);
+    const [cameraResultCurrent, setCameraResultCurrent] = React.useState(false);
+    const [lastDetectedAt, setLastDetectedAt] = React.useState<number | null>(null);
+    const [relativeTimeNow, setRelativeTimeNow] = React.useState(Date.now());
+    const [noticeVisible, setNoticeVisible] = React.useState(true);
     const [imageBusy, setImageBusy] = React.useState(false);
     const [imageScanned, setImageScanned] = React.useState(false);
     const [fileName, setFileName] = React.useState("");
@@ -130,6 +144,7 @@ const ScannerTool = () => {
     const streamRef = React.useRef<MediaStream | null>(null);
     const scanTimerRef = React.useRef<number | null>(null);
     const cameraSessionRef = React.useRef(0);
+    const cameraMissesRef = React.useRef(0);
     const workerRef = React.useRef<Worker | null>(null);
     const requestIdRef = React.useRef(0);
     const imageBusyRef = React.useRef(false);
@@ -182,6 +197,7 @@ const ScannerTool = () => {
         if (updateState) {
             setCameraActive(false);
             setCameraStarting(false);
+            setCameraResultCurrent(false);
         }
     }, []);
 
@@ -203,11 +219,18 @@ const ScannerTool = () => {
                 try {
                     const decoded = await scan(context.getImageData(0, 0, width, height), false);
                     if (decoded.length && session === cameraSessionRef.current) {
+                        cameraMissesRef.current = 0;
                         setResults(decoded);
+                        setLastDetectedAt(Date.now());
+                        setCameraResultCurrent(true);
                         setError("");
+                    } else if (session === cameraSessionRef.current) {
+                        cameraMissesRef.current += 1;
+                        if (cameraMissesRef.current >= 2) setCameraResultCurrent(false);
                     }
                 } catch (scanError) {
                     if (session === cameraSessionRef.current) {
+                        setCameraResultCurrent(false);
                         setError(scanError instanceof Error ? scanError.message : String(scanError));
                     }
                 }
@@ -226,6 +249,9 @@ const ScannerTool = () => {
         if (cameraStarting || cameraActive) return;
         setError("");
         setResults([]);
+        setLastDetectedAt(null);
+        setCameraResultCurrent(false);
+        cameraMissesRef.current = 0;
         if (!window.isSecureContext) {
             setError(t("scanner.insecureContext"));
             return;
@@ -310,6 +336,13 @@ const ScannerTool = () => {
         return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
     }, [releaseCamera]);
 
+    React.useEffect(() => {
+        if (cameraResultCurrent || lastDetectedAt === null) return;
+        setRelativeTimeNow(Date.now());
+        const timer = window.setInterval(() => setRelativeTimeNow(Date.now()), 1000);
+        return () => window.clearInterval(timer);
+    }, [cameraResultCurrent, lastDetectedAt]);
+
     React.useEffect(() => () => {
         releaseCamera(false);
         const workerError = new Error("Scanner closed");
@@ -326,6 +359,8 @@ const ScannerTool = () => {
         }
         setMode(nextMode);
         setResults([]);
+        setLastDetectedAt(null);
+        setCameraResultCurrent(false);
         setError("");
     };
 
@@ -333,7 +368,11 @@ const ScannerTool = () => {
         <ToolSurface>
             <ToolHeader title={t("scanner.title")} description={t("scanner.description")}/>
             <Stack spacing={3}>
-                <Alert severity="info">{t("scanner.privacy")}</Alert>
+                {noticeVisible && (
+                    <Alert severity="info" onClose={() => setNoticeVisible(false)}>
+                        {t("scanner.privacy")}
+                    </Alert>
+                )}
                 <Tabs value={mode} onChange={changeMode} variant="fullWidth">
                     <Tab value="camera" icon={<CameraAltIcon/>} iconPosition="start" label={t("scanner.cameraTab")}/>
                     <Tab value="image" icon={<ImageIcon/>} iconPosition="start" label={t("scanner.imageTab")}/>
@@ -381,7 +420,6 @@ const ScannerTool = () => {
                                 </Button>
                             )}
                         </Stack>
-                        <Typography variant="caption" color="text.secondary">{t("scanner.resourceNote")}</Typography>
                     </Stack>
                 )}
 
@@ -440,6 +478,15 @@ const ScannerTool = () => {
                 {error && <Alert severity="error">{error}</Alert>}
                 {mode === "image" && imageScanned && !imageBusy && !results.length && !error && (
                     <Alert severity="warning">{t("scanner.noCodes")}</Alert>
+                )}
+                {mode === "camera" && results.length > 0 && lastDetectedAt !== null && (
+                    <Alert severity={cameraResultCurrent ? "success" : "info"}>
+                        {cameraResultCurrent
+                            ? t("scanner.currentCameraResult")
+                            : t("scanner.previousCameraResult", {
+                                time: relativeDetectionTime(lastDetectedAt, relativeTimeNow, t)
+                            })}
+                    </Alert>
                 )}
                 {results.length > 0 && (
                     <>
