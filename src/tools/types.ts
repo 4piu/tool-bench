@@ -7,6 +7,7 @@ export type ToolId =
     | "json"
     | "timestamp"
     | "qr"
+    | "scanner"
     | "dns"
     | "hash"
     | "ua"

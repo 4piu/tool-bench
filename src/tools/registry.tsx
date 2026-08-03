@@ -8,6 +8,7 @@ import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import KeyIcon from "@mui/icons-material/Key";
 import LanIcon from "@mui/icons-material/Lan";
 import QrCodeIcon from "@mui/icons-material/QrCode";
+import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
 import SsidChartIcon from "@mui/icons-material/SsidChart";
@@ -61,6 +62,13 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.qr.description",
         icon: <QrCodeIcon/>,
         loader: () => import("./qr/QrTool")
+    },
+    {
+        id: "scanner",
+        titleKey: "tools.scanner.title",
+        descriptionKey: "tools.scanner.description",
+        icon: <QrCodeScannerIcon/>,
+        loader: () => import("./scanner/ScannerTool")
     },
     {
         id: "dns",

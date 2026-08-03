@@ -24,6 +24,7 @@
     "download": "Télécharger"
   },
   "tools": {
+    "scanner": {"title": "Lecteur de codes", "description": "Scanner des codes 1D et 2D"},
     "uuid": {"title": "UUID", "description": "Générer des UUID en lot"},
     "password": {"title": "Mot de passe", "description": "Générer des mots de passe robustes"},
     "base64": {"title": "Base64", "description": "Encoder et décoder du texte"},
@@ -203,6 +204,35 @@
     "quality": "Qualité : {{quality}}",
     "qrCodeAlt": "Code QR",
     "download": "Télécharger {{extension}}"
+  },
+  "scanner": {
+    "title": "Lecteur de codes",
+    "description": "Décode les codes QR, codes-barres et autres codes 1D/2D depuis une caméra ou une image.",
+    "privacy": "Les images et les vues de la caméra sont traitées localement sur cet appareil et ne sont jamais envoyées.",
+    "cameraTab": "Caméra",
+    "imageTab": "Image",
+    "cameraPrompt": "Démarrez la caméra et visez un code.",
+    "startingCamera": "Démarrage de la caméra...",
+    "startCamera": "Démarrer la caméra",
+    "stopCamera": "Arrêter la caméra",
+    "resourceNote": "L’analyse est limitée à environ deux images par seconde. La caméra s’arrête si l’onglet est masqué ou l’outil fermé.",
+    "insecureContext": "L’accès à la caméra nécessite HTTPS ou localhost.",
+    "cameraUnsupported": "Ce navigateur ne prend pas en charge l’accès à la caméra.",
+    "cameraDenied": "L’accès à la caméra a été refusé. Autorisez-le dans le navigateur puis réessayez.",
+    "noCamera": "Aucune caméra appropriée n’a été trouvée.",
+    "cameraFailed": "Impossible de démarrer la caméra.",
+    "dropPrompt": "Déposez ou collez une image ici, ou choisissez un fichier.",
+    "chooseImage": "Choisir une image",
+    "scanning": "Analyse de l’image...",
+    "imageLimits": "Les images sont réduites à 2048 px pour limiter la mémoire. Taille maximale : 20 Mo.",
+    "imageOnly": "Choisissez un fichier image.",
+    "fileTooLarge": "L’image dépasse la limite de 20 Mo.",
+    "scanFailed": "L’image n’a pas pu être analysée.",
+    "noCodes": "Aucun code compatible trouvé. Essayez une image plus nette, proche ou mieux éclairée.",
+    "results": "Résultats : {{count}}",
+    "orientation": "Rotation de {{degrees}}°",
+    "decodedValue": "Valeur décodée",
+    "openLink": "Ouvrir le lien"
   },
   "hash": {
     "title": "Somme de contrôle de fichier",

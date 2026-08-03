@@ -24,6 +24,7 @@
     "download": "下载"
   },
   "tools": {
+    "scanner": {"title": "条码扫描器", "description": "扫描一维码和二维码"},
     "uuid": {"title": "UUID", "description": "批量生成 UUID"},
     "password": {"title": "密码", "description": "生成高强度密码"},
     "base64": {"title": "Base64", "description": "编码与解码文本"},
@@ -203,6 +204,35 @@
     "quality": "质量：{{quality}}",
     "qrCodeAlt": "二维码",
     "download": "下载 {{extension}}"
+  },
+  "scanner": {
+    "title": "条码扫描器",
+    "description": "通过摄像头或图片解码二维码、条形码及其他一维码/二维码。",
+    "privacy": "图片和摄像头画面仅在此设备本地处理，绝不会上传。",
+    "cameraTab": "摄像头",
+    "imageTab": "图片",
+    "cameraPrompt": "启动摄像头并对准条码。",
+    "startingCamera": "正在启动摄像头...",
+    "startCamera": "启动摄像头",
+    "stopCamera": "停止摄像头",
+    "resourceNote": "实时扫描限制为每秒约两帧。标签页隐藏或工具关闭时摄像头会停止。",
+    "insecureContext": "摄像头访问需要 HTTPS 或 localhost。",
+    "cameraUnsupported": "此浏览器不支持摄像头访问。",
+    "cameraDenied": "摄像头访问被拒绝。请在浏览器设置中允许后重试。",
+    "noCamera": "未找到合适的摄像头。",
+    "cameraFailed": "无法启动摄像头。",
+    "dropPrompt": "将图片拖放或粘贴到此处，也可以选择文件。",
+    "chooseImage": "选择图片",
+    "scanning": "正在扫描图片...",
+    "imageLimits": "图片会缩放至最大 2048 像素以限制内存占用。文件上限：20 MB。",
+    "imageOnly": "请选择图片文件。",
+    "fileTooLarge": "图片超过 20 MB 限制。",
+    "scanFailed": "无法扫描此图片。",
+    "noCodes": "未找到支持的条码。请尝试更清晰、更近或光线更好的图片。",
+    "results": "结果：{{count}}",
+    "orientation": "旋转 {{degrees}}°",
+    "decodedValue": "解码值",
+    "openLink": "打开链接"
   },
   "hash": {
     "title": "文件校验和",

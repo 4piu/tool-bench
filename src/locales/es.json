@@ -24,6 +24,7 @@
     "download": "Descargar"
   },
   "tools": {
+    "scanner": {"title": "Escáner de códigos", "description": "Escanear códigos 1D y 2D"},
     "uuid": {"title": "UUID", "description": "Generar UUID en lote"},
     "password": {"title": "Contraseña", "description": "Generar contraseñas seguras"},
     "base64": {"title": "Base64", "description": "Codificar y decodificar texto"},
@@ -203,6 +204,35 @@
     "quality": "Calidad: {{quality}}",
     "qrCodeAlt": "Código QR",
     "download": "Descargar {{extension}}"
+  },
+  "scanner": {
+    "title": "Escáner de códigos",
+    "description": "Decodifica códigos QR, códigos de barras y otros códigos 1D/2D desde una cámara o imagen.",
+    "privacy": "Las imágenes y los fotogramas se procesan localmente en este dispositivo y nunca se suben.",
+    "cameraTab": "Cámara",
+    "imageTab": "Imagen",
+    "cameraPrompt": "Inicia la cámara y apunta a un código.",
+    "startingCamera": "Iniciando cámara...",
+    "startCamera": "Iniciar cámara",
+    "stopCamera": "Detener cámara",
+    "resourceNote": "El escaneo se limita a unos dos fotogramas por segundo. La cámara se detiene al ocultar la pestaña o cerrar la herramienta.",
+    "insecureContext": "El acceso a la cámara requiere HTTPS o localhost.",
+    "cameraUnsupported": "Este navegador no admite el acceso a la cámara.",
+    "cameraDenied": "Se denegó el acceso a la cámara. Permítelo en la configuración del navegador e inténtalo de nuevo.",
+    "noCamera": "No se encontró una cámara adecuada.",
+    "cameraFailed": "No se pudo iniciar la cámara.",
+    "dropPrompt": "Suelta o pega una imagen aquí, o elige un archivo.",
+    "chooseImage": "Elegir imagen",
+    "scanning": "Escaneando imagen...",
+    "imageLimits": "Las imágenes se reducen a 2048 px para limitar la memoria. Tamaño máximo: 20 MB.",
+    "imageOnly": "Elige un archivo de imagen.",
+    "fileTooLarge": "La imagen supera el límite de 20 MB.",
+    "scanFailed": "No se pudo escanear la imagen.",
+    "noCodes": "No se encontró un código compatible. Prueba una imagen más nítida, cercana o iluminada.",
+    "results": "Resultados: {{count}}",
+    "orientation": "Rotación de {{degrees}}°",
+    "decodedValue": "Valor decodificado",
+    "openLink": "Abrir enlace"
   },
   "hash": {
     "title": "Suma de verificación de archivos",

@@ -42,7 +42,8 @@
     "react-i18next": "^17.0.8",
     "stylis-plugin-rtl": "^2.1.1",
     "ua-parser-js": "^2.0.10",
-    "uuid": "8.0.0"
+    "uuid": "8.0.0",
+    "zxing-wasm": "^3.1.2"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.2",
