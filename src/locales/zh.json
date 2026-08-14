@@ -43,7 +43,8 @@
     "oui": {"title": "OUI 查询", "description": "查找 MAC 地址厂商"},
     "cidr": {"title": "CIDR 计算器", "description": "在 IP 范围与 CIDR 块之间转换"},
     "currency": {"title": "货币兑换", "description": "使用每日更新的汇率进行货币兑换"},
-    "serial": {"title": "串口控制台", "description": "从浏览器连接串口设备"}
+    "serial": {"title": "串口控制台", "description": "从浏览器连接串口设备"},
+    "webcam": {"title": "网络摄像头", "description": "查看、截图和录制摄像头画面"}
   },
   "password": {
     "title": "密码生成器",
@@ -640,5 +641,63 @@
     "connected": "已连接",
     "deviceDisconnected": "设备已断开",
     "readError": "连接已断开"
+  },
+  "webcam": {
+    "title": "网络摄像头",
+    "description": "查看、截图并录制摄像头画面。视频流完全保留在本设备上。",
+    "insecureContext": "使用摄像头需要安全上下文（HTTPS 或 localhost）。",
+    "cameraUnsupported": "此浏览器不支持摄像头访问。",
+    "singleTab": "单摄像头",
+    "gridTab": "网格视图",
+    "selectCamera": "摄像头",
+    "noCameraSelected": "选择一个摄像头开始",
+    "startCamera": "启动摄像头",
+    "stopCamera": "停止摄像头",
+    "noCamerasFound": "未找到摄像头",
+    "cameraFallbackLabel": "摄像头",
+    "startingCamera": "正在启动摄像头…",
+    "cameraPrompt": "正在等待摄像头…",
+    "snapshot": "拍摄快照",
+    "startRecording": "开始录制",
+    "stopRecording": "停止录制",
+    "fullscreen": "全屏",
+    "fullscreenGrid": "网格全屏",
+    "exitFullscreen": "退出全屏",
+    "fullscreenRetryHint": "未能进入全屏，请再次点击该按钮。",
+    "settings": "摄像头设置",
+    "noAdjustableSettings": "此摄像头没有可调整的设置。",
+    "removeCamera": "移除",
+    "addCamera": "添加摄像头",
+    "columns": "列数",
+    "fewerColumns": "减少列数",
+    "moreColumns": "增加列数",
+    "emptyGrid": "添加一个摄像头以开始",
+    "error": {
+      "insecure": "使用摄像头需要安全上下文（HTTPS 或 localhost）。",
+      "unsupported": "此浏览器不支持摄像头访问。",
+      "denied": "摄像头访问被拒绝。请检查浏览器中的网站权限设置。",
+      "not-found": "未找到与所选内容匹配的摄像头。",
+      "overconstrained": "此摄像头不支持所请求的设置。",
+      "disconnected": "摄像头已断开连接。",
+      "unknown": "无法访问此摄像头。"
+    },
+    "capability": {
+      "zoom": "变焦",
+      "focusMode": "对焦",
+      "focusDistance": "对焦距离",
+      "exposureMode": "曝光",
+      "exposureCompensation": "曝光补偿",
+      "exposureTime": "曝光时间",
+      "iso": "ISO",
+      "whiteBalanceMode": "白平衡",
+      "colorTemperature": "色温",
+      "brightness": "亮度",
+      "contrast": "对比度",
+      "saturation": "饱和度",
+      "sharpness": "锐度",
+      "pan": "水平转向",
+      "tilt": "垂直转向",
+      "torch": "手电筒"
+    }
   }
 }

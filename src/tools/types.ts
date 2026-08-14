@@ -20,7 +20,8 @@ export type ToolId =
     | "oui"
     | "cidr"
     | "currency"
-    | "serial";
+    | "serial"
+    | "webcam";
 
 export type ToolModule = {
     default: React.ComponentType;

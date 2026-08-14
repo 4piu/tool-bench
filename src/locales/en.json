@@ -43,7 +43,8 @@
     "oui": {"title": "OUI Lookup", "description": "Find MAC address vendors"},
     "cidr": {"title": "CIDR Calculator", "description": "Convert between IP ranges and CIDR blocks"},
     "currency": {"title": "Currency Exchange", "description": "Convert between currencies with daily updated rates"},
-    "serial": {"title": "Serial Console", "description": "Connect to serial devices from browser"}
+    "serial": {"title": "Serial Console", "description": "Connect to serial devices from browser"},
+    "webcam": {"title": "Webcam", "description": "View, snapshot, and record cameras, with a customizable multi-camera grid"}
   },
   "password": {
     "title": "Password Generator",
@@ -640,5 +641,63 @@
     "connected": "Connected",
     "deviceDisconnected": "Device disconnected",
     "readError": "Connection lost"
+  },
+  "webcam": {
+    "title": "Webcam",
+    "description": "View, snapshot, and record from your cameras. Streams stay entirely on this device.",
+    "insecureContext": "Camera access requires a secure context (HTTPS or localhost).",
+    "cameraUnsupported": "Camera access is not supported in this browser.",
+    "singleTab": "Single camera",
+    "gridTab": "Grid view",
+    "selectCamera": "Camera",
+    "noCameraSelected": "Select a camera to begin",
+    "startCamera": "Start camera",
+    "stopCamera": "Stop camera",
+    "noCamerasFound": "No cameras found",
+    "cameraFallbackLabel": "Camera",
+    "startingCamera": "Starting camera…",
+    "cameraPrompt": "Waiting for camera…",
+    "snapshot": "Take snapshot",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "fullscreen": "Fullscreen",
+    "fullscreenGrid": "Fullscreen grid",
+    "exitFullscreen": "Exit fullscreen",
+    "fullscreenRetryHint": "Fullscreen didn't start — please click the button again.",
+    "settings": "Camera settings",
+    "noAdjustableSettings": "This camera doesn't expose any adjustable settings.",
+    "removeCamera": "Remove",
+    "addCamera": "Add camera",
+    "columns": "Columns",
+    "fewerColumns": "Fewer columns",
+    "moreColumns": "More columns",
+    "emptyGrid": "Add a camera to get started",
+    "error": {
+      "insecure": "Camera access requires a secure context (HTTPS or localhost).",
+      "unsupported": "Camera access is not supported in this browser.",
+      "denied": "Camera access was denied. Check your browser's site permissions.",
+      "not-found": "No camera was found for this selection.",
+      "overconstrained": "This camera doesn't support the requested settings.",
+      "disconnected": "Camera disconnected.",
+      "unknown": "Couldn't access this camera."
+    },
+    "capability": {
+      "zoom": "Zoom",
+      "focusMode": "Focus",
+      "focusDistance": "Focus distance",
+      "exposureMode": "Exposure",
+      "exposureCompensation": "Exposure compensation",
+      "exposureTime": "Exposure time",
+      "iso": "ISO",
+      "whiteBalanceMode": "White balance",
+      "colorTemperature": "Color temperature",
+      "brightness": "Brightness",
+      "contrast": "Contrast",
+      "saturation": "Saturation",
+      "sharpness": "Sharpness",
+      "pan": "Pan",
+      "tilt": "Tilt",
+      "torch": "Torch"
+    }
   }
 }

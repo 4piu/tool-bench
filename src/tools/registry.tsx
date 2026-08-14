@@ -18,6 +18,7 @@ import TerminalIcon from "@mui/icons-material/Terminal";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import TimerIcon from "@mui/icons-material/Timer";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import type {ToolDefinition, ToolId} from "./types";
 
 export const tools: ToolDefinition[] = [
@@ -163,6 +164,14 @@ export const tools: ToolDefinition[] = [
         descriptionKey: "tools.serial.description",
         icon: <CableIcon/>,
         loader: () => import("./serial/SerialTool")
+    },
+    {
+        id: "webcam",
+        titleKey: "tools.webcam.title",
+        descriptionKey: "tools.webcam.description",
+        icon: <VideocamIcon/>,
+        loader: () => import("./webcam/WebcamTool"),
+        fullBleed: true
     }
 ];
 

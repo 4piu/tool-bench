@@ -43,7 +43,8 @@
     "oui": {"title": "Búsqueda OUI", "description": "Buscar fabricantes de direcciones MAC"},
     "cidr": {"title": "Calculadora CIDR", "description": "Convertir entre rangos de IP y bloques CIDR"},
     "currency": {"title": "Cambio de divisas", "description": "Convertir entre divisas con tasas actualizadas a diario"},
-    "serial": {"title": "Consola serie", "description": "Conéctate a dispositivos serie desde el navegador"}
+    "serial": {"title": "Consola serie", "description": "Conéctate a dispositivos serie desde el navegador"},
+    "webcam": {"title": "Webcam", "description": "Visualiza, captura instantáneas y graba con tus cámaras"}
   },
   "password": {
     "title": "Generador de contraseñas",
@@ -640,5 +641,63 @@
     "connected": "Conectado",
     "deviceDisconnected": "Dispositivo desconectado",
     "readError": "Conexión perdida"
+  },
+  "webcam": {
+    "title": "Webcam",
+    "description": "Visualiza, captura instantáneas y graba desde tus cámaras. La transmisión permanece completamente en este dispositivo.",
+    "insecureContext": "El acceso a la cámara requiere un contexto seguro (HTTPS o localhost).",
+    "cameraUnsupported": "El acceso a la cámara no es compatible con este navegador.",
+    "singleTab": "Una cámara",
+    "gridTab": "Vista en cuadrícula",
+    "selectCamera": "Cámara",
+    "noCameraSelected": "Selecciona una cámara para empezar",
+    "startCamera": "Iniciar cámara",
+    "stopCamera": "Detener cámara",
+    "noCamerasFound": "No se encontraron cámaras",
+    "cameraFallbackLabel": "Cámara",
+    "startingCamera": "Iniciando cámara…",
+    "cameraPrompt": "Esperando la cámara…",
+    "snapshot": "Tomar instantánea",
+    "startRecording": "Iniciar grabación",
+    "stopRecording": "Detener grabación",
+    "fullscreen": "Pantalla completa",
+    "fullscreenGrid": "Cuadrícula a pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "fullscreenRetryHint": "La pantalla completa no se inició — vuelve a hacer clic en el botón.",
+    "settings": "Ajustes de la cámara",
+    "noAdjustableSettings": "Esta cámara no ofrece ajustes configurables.",
+    "removeCamera": "Quitar",
+    "addCamera": "Añadir cámara",
+    "columns": "Columnas",
+    "fewerColumns": "Menos columnas",
+    "moreColumns": "Más columnas",
+    "emptyGrid": "Añade una cámara para empezar",
+    "error": {
+      "insecure": "El acceso a la cámara requiere un contexto seguro (HTTPS o localhost).",
+      "unsupported": "El acceso a la cámara no es compatible con este navegador.",
+      "denied": "Se denegó el acceso a la cámara. Revisa los permisos del sitio en tu navegador.",
+      "not-found": "No se encontró ninguna cámara para esta selección.",
+      "overconstrained": "Esta cámara no admite la configuración solicitada.",
+      "disconnected": "Cámara desconectada.",
+      "unknown": "No se pudo acceder a esta cámara."
+    },
+    "capability": {
+      "zoom": "Zoom",
+      "focusMode": "Enfoque",
+      "focusDistance": "Distancia de enfoque",
+      "exposureMode": "Exposición",
+      "exposureCompensation": "Compensación de exposición",
+      "exposureTime": "Tiempo de exposición",
+      "iso": "ISO",
+      "whiteBalanceMode": "Balance de blancos",
+      "colorTemperature": "Temperatura de color",
+      "brightness": "Brillo",
+      "contrast": "Contraste",
+      "saturation": "Saturación",
+      "sharpness": "Nitidez",
+      "pan": "Paneo",
+      "tilt": "Inclinación",
+      "torch": "Linterna"
+    }
   }
 }

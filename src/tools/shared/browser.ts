@@ -1,7 +1,10 @@
 export const copyText = (text: string) => navigator.clipboard.writeText(text);
 
 export const downloadText = (filename: string, text: string) => {
-    const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    downloadBlob(filename, new Blob([text], {type: "text/plain;charset=utf-8"}));
+};
+
+export const downloadBlob = (filename: string, blob: Blob) => {
     const url = URL.createObjectURL(blob);
     const element = document.createElement("a");
     element.href = url;

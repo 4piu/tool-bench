@@ -43,7 +43,8 @@
     "oui": {"title": "بحث OUI", "description": "البحث عن الشركات المصنّعة لعناوين MAC"},
     "cidr": {"title": "حاسبة CIDR", "description": "التحويل بين نطاقات IP وكتل CIDR"},
     "currency": {"title": "تحويل العملات", "description": "التحويل بين العملات بأسعار صرف محدثة يوميًا"},
-    "serial": {"title": "طرفية تسلسلية", "description": "الاتصال بالأجهزة التسلسلية من المتصفح"}
+    "serial": {"title": "طرفية تسلسلية", "description": "الاتصال بالأجهزة التسلسلية من المتصفح"},
+    "webcam": {"title": "كاميرا الويب", "description": "عرض والتقاط لقطات وتسجيل من الكاميرات"}
   },
   "password": {
     "title": "مولّد كلمات المرور",
@@ -640,5 +641,63 @@
     "connected": "متصل",
     "deviceDisconnected": "تم فصل الجهاز",
     "readError": "فُقد الاتصال"
+  },
+  "webcam": {
+    "title": "كاميرا الويب",
+    "description": "اعرض والتقط لقطات وسجّل من كاميراتك. يبقى البث بالكامل على هذا الجهاز.",
+    "insecureContext": "يتطلب الوصول إلى الكاميرا سياقًا آمنًا (HTTPS أو localhost).",
+    "cameraUnsupported": "الوصول إلى الكاميرا غير مدعوم في هذا المتصفح.",
+    "singleTab": "كاميرا واحدة",
+    "gridTab": "عرض الشبكة",
+    "selectCamera": "الكاميرا",
+    "noCameraSelected": "اختر كاميرا للبدء",
+    "startCamera": "تشغيل الكاميرا",
+    "stopCamera": "إيقاف الكاميرا",
+    "noCamerasFound": "لم يتم العثور على كاميرات",
+    "cameraFallbackLabel": "كاميرا",
+    "startingCamera": "جارٍ تشغيل الكاميرا…",
+    "cameraPrompt": "في انتظار الكاميرا…",
+    "snapshot": "التقاط لقطة",
+    "startRecording": "بدء التسجيل",
+    "stopRecording": "إيقاف التسجيل",
+    "fullscreen": "ملء الشاشة",
+    "fullscreenGrid": "ملء الشاشة للشبكة",
+    "exitFullscreen": "الخروج من ملء الشاشة",
+    "fullscreenRetryHint": "لم يبدأ وضع ملء الشاشة — يرجى النقر على الزر مرة أخرى.",
+    "settings": "إعدادات الكاميرا",
+    "noAdjustableSettings": "لا توفر هذه الكاميرا أي إعدادات قابلة للتعديل.",
+    "removeCamera": "إزالة",
+    "addCamera": "إضافة كاميرا",
+    "columns": "الأعمدة",
+    "fewerColumns": "أعمدة أقل",
+    "moreColumns": "أعمدة أكثر",
+    "emptyGrid": "أضف كاميرا للبدء",
+    "error": {
+      "insecure": "يتطلب الوصول إلى الكاميرا سياقًا آمنًا (HTTPS أو localhost).",
+      "unsupported": "الوصول إلى الكاميرا غير مدعوم في هذا المتصفح.",
+      "denied": "تم رفض الوصول إلى الكاميرا. تحقق من أذونات الموقع في متصفحك.",
+      "not-found": "لم يتم العثور على كاميرا لهذا الاختيار.",
+      "overconstrained": "لا تدعم هذه الكاميرا الإعدادات المطلوبة.",
+      "disconnected": "تم فصل الكاميرا.",
+      "unknown": "تعذّر الوصول إلى هذه الكاميرا."
+    },
+    "capability": {
+      "zoom": "التكبير",
+      "focusMode": "التركيز",
+      "focusDistance": "مسافة التركيز",
+      "exposureMode": "التعريض الضوئي",
+      "exposureCompensation": "تعويض التعريض الضوئي",
+      "exposureTime": "زمن التعريض الضوئي",
+      "iso": "ISO",
+      "whiteBalanceMode": "توازن اللون الأبيض",
+      "colorTemperature": "درجة حرارة اللون",
+      "brightness": "السطوع",
+      "contrast": "التباين",
+      "saturation": "التشبع",
+      "sharpness": "الحدة",
+      "pan": "الانحراف الأفقي",
+      "tilt": "الإمالة",
+      "torch": "المصباح"
+    }
   }
 }
