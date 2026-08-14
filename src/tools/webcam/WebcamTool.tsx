@@ -4,9 +4,9 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import {Alert, Box, Container, Tab, Tabs, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {useLocalStorageState} from "../shared/hooks";
+import {useCameraDevices} from "../shared/useCameraDevices";
 import {CameraGrid} from "./CameraGrid";
 import {CameraView} from "./CameraView";
-import {useCameraDevices} from "./useCameraDevices";
 
 type SupportState = "checking" | "unsupported" | "insecure" | "ready";
 type Mode = "single" | "grid";

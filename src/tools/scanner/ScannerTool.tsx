@@ -13,6 +13,7 @@ import {
     Chip,
     CircularProgress,
     Divider,
+    MenuItem,
     Stack,
     Tab,
     Tabs,
@@ -23,6 +24,7 @@ import {useTranslation} from "react-i18next";
 import CodeScannerWorker from "../../workers/codeScanner.worker.ts?worker";
 import type {CodeScannerResponse, CodeScannerResult} from "../../workers/codeScanner.worker";
 import {copyText} from "../shared/browser";
+import {useCameraDevices} from "../shared/useCameraDevices";
 import {CopyButton, ToolHeader, ToolSurface} from "../shared/ToolScaffold";
 
 type ScannerMode = "camera" | "image";
@@ -139,6 +141,8 @@ const ScannerTool = () => {
     const [results, setResults] = React.useState<CodeScannerResult[]>([]);
     const [error, setError] = React.useState("");
     const [dragging, setDragging] = React.useState(false);
+    const [selectedDeviceId, setSelectedDeviceId] = React.useState<string | null>(null);
+    const {devices, refresh: refreshDevices} = useCameraDevices();
     const videoRef = React.useRef<HTMLVideoElement | null>(null);
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
     const streamRef = React.useRef<MediaStream | null>(null);
@@ -245,8 +249,7 @@ const ScannerTool = () => {
         }
     }, [scan]);
 
-    const startCamera = async () => {
-        if (cameraStarting || cameraActive) return;
+    const beginCapture = async (deviceId: string | null) => {
         setError("");
         setResults([]);
         setLastDetectedAt(null);
@@ -266,12 +269,19 @@ const ScannerTool = () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: false,
-                video: {
-                    facingMode: {ideal: "environment"},
-                    width: {ideal: 1280, max: 1920},
-                    height: {ideal: 720, max: 1080},
-                    frameRate: {ideal: 24, max: 30}
-                }
+                video: deviceId
+                    ? {
+                        deviceId: {exact: deviceId},
+                        width: {ideal: 1280, max: 1920},
+                        height: {ideal: 720, max: 1080},
+                        frameRate: {ideal: 24, max: 30}
+                    }
+                    : {
+                        facingMode: {ideal: "environment"},
+                        width: {ideal: 1280, max: 1920},
+                        height: {ideal: 720, max: 1080},
+                        frameRate: {ideal: 24, max: 30}
+                    }
             });
             if (session !== cameraSessionRef.current || document.hidden) {
                 stream.getTracks().forEach(track => track.stop());
@@ -286,6 +296,7 @@ const ScannerTool = () => {
             video.srcObject = stream;
             await video.play();
             setCameraActive(true);
+            void refreshDevices();
             void scanCameraFrame(session);
         } catch (cameraError) {
             if (session !== cameraSessionRef.current) return;
@@ -297,6 +308,19 @@ const ScannerTool = () => {
         } finally {
             if (session === cameraSessionRef.current) setCameraStarting(false);
         }
+    };
+
+    const startCamera = () => {
+        if (cameraStarting || cameraActive) return;
+        void beginCapture(selectedDeviceId);
+    };
+
+    const changeCameraDevice = (deviceId: string) => {
+        const nextId = deviceId || null;
+        setSelectedDeviceId(nextId);
+        // Switching cameras while live restarts the stream with the new device;
+        // otherwise the choice just takes effect the next time the camera is started.
+        if (cameraActive) void beginCapture(nextId);
     };
 
     const scanFile = async (file: File | undefined) => {
@@ -410,8 +434,25 @@ const ScannerTool = () => {
                         </Box>
                         <canvas ref={canvasRef} hidden/>
                         <Stack direction={{xs: "column", sm: "row"}} spacing={1}>
+                            {devices.length > 1 && (
+                                <TextField
+                                    select
+                                    size="small"
+                                    value={selectedDeviceId ?? ""}
+                                    onChange={event => changeCameraDevice(event.target.value)}
+                                    label={t("scanner.selectCamera")}
+                                    sx={{minWidth: 220}}
+                                >
+                                    <MenuItem value="">{t("scanner.autoCamera")}</MenuItem>
+                                    {devices.map((device, index) => (
+                                        <MenuItem key={device.deviceId} value={device.deviceId}>
+                                            {device.label || `${t("scanner.cameraFallbackLabel")} ${index + 1}`}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            )}
                             {!cameraActive ? (
-                                <Button variant="contained" startIcon={<CameraAltIcon/>} disabled={cameraStarting} onClick={() => void startCamera()}>
+                                <Button variant="contained" startIcon={<CameraAltIcon/>} disabled={cameraStarting} onClick={startCamera}>
                                     {t("scanner.startCamera")}
                                 </Button>
                             ) : (
